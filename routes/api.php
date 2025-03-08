@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,4 @@ Route::post('/register-login-otp', [AuthController::class, 'registerOrLoginWithO
 Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
 Route::post('/login-pass', [AuthController::class, 'loginWithPassword']);
 
-Route::middleware('auth:sanctum')->get('/reset-password', [UserController::class, 'resetPasswordWithOTP']);
+Route::middleware('auth:sanctum')->get('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
