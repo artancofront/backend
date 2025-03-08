@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
+Route::post('/register-login-otp', [AuthController::class, 'registerOrLoginWithOTP']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
+Route::post('/login-pass', [AuthController::class, 'loginWithPassword']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:sanctum')->get('/reset-password', [UserController::class, 'resetPasswordWithOTP']);
