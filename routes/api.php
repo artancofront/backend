@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
-Route::post('/register-login-otp', [AuthController::class, 'registerOrLoginWithOTP']);
+Route::post('/ask_otp', [AuthController::class, 'askOTP']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
-Route::post('/login-pass', [AuthController::class, 'loginWithPassword']);
+Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 
 Route::middleware('auth:sanctum')->get('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
