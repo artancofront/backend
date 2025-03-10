@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 class OTPService
 {
 
-    public function sendOTP($phone)
+    public function sendOTP($phone): void
     {
         $otp = rand(100000, 999999);
         session(['otp' => $otp, 'phone' => $phone]);

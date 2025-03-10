@@ -8,11 +8,11 @@ class ResetPasswordRequest extends FormRequest
     /**
      * @var mixed
      */
-    public $otp;
+    public mixed $otp;
     /**
      * @var mixed
      */
-    public $password;
+    public mixed $password;
 
     public function authorize(): bool
     {
@@ -23,7 +23,8 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'otp' => 'required|digits:6',
-            'password' => 'nullable|required_without:otp|string',
+            'password' => 'required|string|min:8|confirmed',
+
         ];
     }
 }

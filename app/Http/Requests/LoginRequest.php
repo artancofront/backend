@@ -8,11 +8,11 @@ class LoginRequest extends FormRequest
     /**
      * @var mixed
      */
-    public $email;
+    public mixed $email;
     /**
      * @var mixed
      */
-    public $password;
+    public mixed $password;
 
     public function authorize(): bool
     {
@@ -23,8 +23,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'nullable|email|exists:users,email',
-            'password' => 'nullable|required_without:otp|string',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string',
         ];
     }
 }

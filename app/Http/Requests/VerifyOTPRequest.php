@@ -8,11 +8,11 @@ class VerifyOTPRequest extends FormRequest
     /**
      * @var mixed
      */
-    public $otp;
+    public mixed $otp;
     /**
      * @var mixed
      */
-    public $phone;
+    public mixed $phone;
 
     public function authorize(): bool
     {

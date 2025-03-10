@@ -8,7 +8,7 @@ class AskOTPRequest extends FormRequest
     /**
      * @var mixed
      */
-    public $phone;
+    public mixed $phone;
 
     public function authorize(): bool
     {

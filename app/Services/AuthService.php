@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-    protected $userRepository;
-    protected $otpService;
+    protected UserRepository $userRepository;
+    protected OTPService $otpService;
 
     public function __construct(UserRepository $userRepository, OTPService $otpService)
     {
@@ -19,7 +19,7 @@ class AuthService
     /**
      * send Otp to user's phone.
      */
-    public function sendOTP($phone)
+    public function sendOTP($phone): void
     {
         $this->otpService->sendOTP($phone);
     }
@@ -32,7 +32,10 @@ class AuthService
         if ($this->otpService->verifyOTP($phone, $code)) {
             $user = $this->userRepository->findByPhone($phone);
             if (!$user) {
-                $user = $this->userRepository->create(['phone' => $phone]);
+                $user = $this->userRepository->create([
+                    'phone' => $phone,
+                    'phone_verified_at' => now() // Set verification timestamp on creation
+                ]);
             }
             return $user->createToken('authToken')->plainTextToken;
         }
