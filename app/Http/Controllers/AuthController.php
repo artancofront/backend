@@ -9,6 +9,7 @@ use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Annotations as OA;
 
 class AuthController extends Controller
 {
@@ -20,7 +21,34 @@ class AuthController extends Controller
     }
 
     /**
-     * Get User's phone number and send them an OTP.
+     * @OA\Post(
+     *     path="/api/auth/ask-otp",
+     *     summary="Request OTP for phone number",
+     *     description="Request an OTP to be sent to the user's phone number for registration.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User's phone number to send OTP",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="1234567890")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OTP sent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="OTP sent for registration")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid phone number format",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Invalid phone number")
+     *         )
+     *     )
+     * )
      */
     public function askOTP(AskOTPRequest $request): JsonResponse
     {
@@ -34,7 +62,35 @@ class AuthController extends Controller
     }
 
     /**
-     * Verify OTP and return token.
+     * @OA\Post(
+     *     path="/api/auth/verify-otp",
+     *     summary="Verify OTP and get a token",
+     *     description="Verify OTP sent to the user's phone number and return a JWT token.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User's phone number and OTP to verify",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="1234567890"),
+     *             @OA\Property(property="otp", type="string", example="123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OTP verified successfully and token returned",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="token", type="string", example="jwt-token-here")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid OTP",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Invalid OTP")
+     *         )
+     *     )
+     * )
      */
     public function verifyOTP(VerifyOTPRequest $request): JsonResponse
     {
@@ -55,7 +111,36 @@ class AuthController extends Controller
     }
 
     /**
-     * Reset password using OTP.
+     * @OA\Post(
+     *     path="/api/auth/reset-password",
+     *     summary="Reset password using OTP",
+     *     description="Reset a user's password using OTP sent to their phone.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Password reset data including OTP and new password",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="phone", type="string", example="1234567890"),
+     *             @OA\Property(property="otp", type="string", example="123456"),
+     *             @OA\Property(property="password", type="string", example="new-password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password reset successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Password updated successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid OTP",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Invalid OTP")
+     *         )
+     *     )
+     * )
      */
     public function resetPasswordWithOTP(ResetPasswordRequest $request): JsonResponse
     {
@@ -76,7 +161,35 @@ class AuthController extends Controller
     }
 
     /**
-     * Login with email and password.
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     summary="Login using email and password",
+     *     description="Login with email and password and receive a JWT token.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Login credentials (email and password)",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", example="password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful and token returned",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="token", type="string", example="jwt-token-here")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Invalid credentials")
+     *         )
+     *     )
+     * )
      */
     public function loginWithPassword(LoginRequest $request): JsonResponse
     {
@@ -96,3 +209,4 @@ class AuthController extends Controller
         ], Response::HTTP_OK);
     }
 }
+
