@@ -5,14 +5,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ResetPasswordRequest extends FormRequest
 {
-    /**
-     * @var mixed
-     */
-    public mixed $otp;
-    /**
-     * @var mixed
-     */
-    public mixed $password;
+
 
     public function authorize(): bool
     {

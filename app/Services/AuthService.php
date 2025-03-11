@@ -48,7 +48,7 @@ class AuthService
     public function updatePassword($password, $code,$user): bool
     {
         if ($this->otpService->verifyOTP($user->phone, $code)) {
-            $this->userRepository->update($user,['password' => Hash::make($password)]);
+            $this->userRepository->update($user,['password' => $password]);
             return true;
         }
         return false;

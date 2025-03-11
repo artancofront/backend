@@ -27,10 +27,6 @@ class UserService
 
     public function updateUser(User $user, array $data): User
     {
-        // Check if password exists in the data and hash it
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
 
         // Update the user with the data
         return $this->userRepository->update($user, $data);

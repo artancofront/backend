@@ -5,14 +5,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * @var mixed
-     */
-    public mixed $email;
-    /**
-     * @var mixed
-     */
-    public mixed $password;
+
 
     public function authorize(): bool
     {

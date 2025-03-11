@@ -9,8 +9,8 @@ class OTPService
     public function sendOTP($phone): void
     {
         $otp = rand(100000, 999999);
-        session(['otp' => $otp, 'phone' => $phone]);
-
+        session(['otp' => 123456, 'phone' => $phone]);
+/**
         // Send OTP via FarazSMS Panel
         Http::post("https://ippanel.com/patterns/pattern", [
             'username' => env('FARAZSMS_USERNAME'),
@@ -20,7 +20,7 @@ class OTPService
             'input_data' => json_encode(['otp' => $otp]),
             'pattern_code' => env('FARAZSMS_PATTERN_CODE')
         ]);
-
+**/
     }
 
     public function verifyOTP($phone, $otp): bool

@@ -5,10 +5,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AskOTPRequest extends FormRequest
 {
-    /**
-     * @var mixed
-     */
-    public mixed $phone;
 
     public function authorize(): bool
     {
@@ -18,7 +14,7 @@ class AskOTPRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|digits:10|unique:users,phone',
+            'phone' => 'required|digits:10',
         ];
     }
 }

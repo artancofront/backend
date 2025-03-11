@@ -115,7 +115,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/users/profile",
+     *     path="/api/show-profile",
      *     summary="Get the authenticated user's profile",
      *     description="Retrieve the currently authenticated user's profile",
      *     @OA\Response(
@@ -217,8 +217,8 @@ class UserController extends Controller
     }
 
     /**
-     * @OA\Put(
-     *     path="/api/users/profile",
+     * @OA\Post(
+     *     path="/api/update-profile",
      *     summary="Update authenticated user's profile",
      *     description="Update the currently authenticated user's profile",
      *     @OA\RequestBody(

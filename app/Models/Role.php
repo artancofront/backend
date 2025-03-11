@@ -1,54 +1,84 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Role",
+ *     required={"name", "permissions"},
+ *     @OA\Property(property="id", type="integer", description="Role ID"),
+ *     @OA\Property(property="name", type="string", description="The name of the role"),
+ *     @OA\Property(property="description", type="string", description="The description of the role"),
+ *     @OA\Property(property="permissions", type="array", @OA\Items(type="string"), description="List of permissions for the role"),
+ *     @OA\Property(property="created_at", type="string", format="date-time", description="The timestamp when the role was created"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time", description="The timestamp when the role was last updated")
+ * )
+ */
 class Role extends Model
 {
     use HasFactory;
 
-    // Define the table name (optional if it follows Laravel's naming convention)
+    /**
+     * The name of the table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'roles';
 
-    // Define the mass-assignable attributes (whitelist the attributes that can be mass-assigned)
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'description',
         'permissions',
     ];
 
-    // Specify how to cast attributes (e.g., casting 'permissions' to an array)
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
-        'permissions' => 'array', // Casting permissions to an array
+        'permissions' => 'array', // Casting 'permissions' to an array
     ];
 
-
-
     /**
+     * The permissions array associated with the role.
+     *
      * @var array
      */
     private $permissions;
 
+    /**
+     * Get the users associated with the role.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function users()
     {
         return $this->hasMany(User::class);
     }
+
     /**
-     * Set a permission for the role.
+     * Set permissions for a specific category (e.g., 'users').
      *
-     * @param string $permission
-     * @param bool $value
+     * @param string $category The category of permissions (e.g., 'users').
+     * @param array $actions The actions associated with the category (e.g., ['read', 'create']).
      * @return void
      */
-    public function setPermission(string $permission, bool $value)
+    public function setPermission(string $category, array $actions)
     {
-        $permissions = $this->permissions ?? []; // Get the current permissions or an empty array
+        // Get the current permissions or initialize an empty array
+        $permissions = $this->permissions ?? [];
 
-        // Set or update the permission value
-        $permissions[$permission] = $value;
+        // Set the actions for the specified category
+        $permissions[$category] = $actions;
 
         // Save the updated permissions array
         $this->permissions = $permissions;
@@ -56,14 +86,16 @@ class Role extends Model
     }
 
     /**
-     * Check if the role has a specific permission.
+     * Check if the role has a specific permission in a category.
      *
-     * @param string $permission
+     * @param string $category The category of permissions (e.g., 'users').
+     * @param string $action The specific action (e.g., 'create').
      * @return bool
      */
-    public function hasPermission(string $permission): bool
+    public function hasPermission(string $category, string $action): bool
     {
-        return isset($this->permissions[$permission]) && $this->permissions[$permission] === true;
+        // Check if the category exists and if the action is within that category
+        return isset($this->permissions[$category]) && in_array($action, $this->permissions[$category]);
     }
 
     /**
@@ -73,7 +105,8 @@ class Role extends Model
      */
     public function getPermissions(): array
     {
+        // Return all permissions (categories with their respective actions)
         return $this->permissions ?? [];
     }
-
 }
+

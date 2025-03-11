@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//Register-Login
-Route::post('/ask_otp', [AuthController::class, 'askOTP']);
+//Register-Login*
+Route::post('/ask-otp', [AuthController::class, 'askOTP']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
 Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 
@@ -24,6 +24,8 @@ Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 Route::middleware('auth:sanctum')->post('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
 Route::middleware('auth:sanctum')->get('/show-profile', [UserController::class, 'showProfile']);
 Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
+
+
 
 //Users CRUD
 Route::prefix('users')->middleware('auth:sanctum')->group(function () {
@@ -39,3 +41,4 @@ Route::prefix('users')->middleware('auth:sanctum')->group(function () {
     // Delete User
     Route::delete('{id}', [UserController::class, 'destroy'])->middleware('permission:users:delete');
 });
+
