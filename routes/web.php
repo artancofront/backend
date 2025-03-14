@@ -18,7 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/api/documentation', function () {
-    return view('swagger.index');
+    return view('swagger.index', [
+        'swaggerJsonUrl' => url('/swagger.json')
+    ]);
 });
-//Route::post('/ask-otp', [AuthController::class, 'askOTP']);

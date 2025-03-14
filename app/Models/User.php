@@ -10,16 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @OA\Schema(
  *     schema="User",
  *     required={"phone", "password", "email", "name"},
- *     @OA\Property(property="id", type="integer", description="User ID"),
- *     @OA\Property(property="phone", type="string", description="User phone number"),
- *     @OA\Property(property="email", type="string", format="email", description="User email address"),
- *     @OA\Property(property="name", type="string", description="User's name"),
- *     @OA\Property(property="password", type="string", description="User password"),
- *     @OA\Property(property="phone_verified_at", type="string", format="date-time", description="Phone verification timestamp"),
- *     @OA\Property(property="email_verified_at", type="string", format="date-time", description="Email verification timestamp"),
- *     @OA\Property(property="role", ref="#/components/schemas/Role", description="User's role"),
- *     @OA\Property(property="created_at", type="string", format="date-time", description="User creation timestamp"),
- *     @OA\Property(property="updated_at", type="string", format="date-time", description="User update timestamp")
+ *     @OA\Property(property="phone", type="string", description="User phone number", example="1234567890"),
+ *     @OA\Property(property="email", type="string", format="email", description="User email address", example="user@example.com"),
+ *     @OA\Property(property="name", type="string", description="User's name", example="John Doe"),
+ *     @OA\Property(property="password", type="string", description="User password", example="secret123"),
+ *     @OA\Property(property="role", ref="#/components/schemas/Role"),
  * )
  */
 class User extends Model
@@ -36,6 +31,7 @@ class User extends Model
         'password',
         'email',
         'name',  // Add any other fields like name if applicable
+        'phone_verified_at',
     ];
 
     /**

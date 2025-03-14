@@ -9,6 +9,21 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\UpdateUserRequest;
 use OpenApi\Annotations as OA;
 
+
+/**
+ * @OA\Tag(
+ *     name="Users",
+ * )
+ */
+
+/**
+ * @OA\Tag(
+ *     name="Profile"
+ * )
+ */
+
+
+
 class UserController extends Controller
 {
     protected UserService $userService;
@@ -23,6 +38,7 @@ class UserController extends Controller
      *     path="/api/users",
      *     summary="Get all users",
      *     description="Retrieve a list of all users",
+     *     tags={"Users"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -50,7 +66,8 @@ class UserController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $users = $this->userService->getAllUsers($request->query('per_page', 10));
+        $excludeId=$request->user()->id;
+        $users = $this->userService->getAllUsers($excludeId,$request->query('per_page', 10));
 
         return response()->json([
             'success' => true,
@@ -63,6 +80,7 @@ class UserController extends Controller
      *     path="/api/users/{id}",
      *     summary="Get single user by ID",
      *     description="Retrieve a user by their ID",
+     *     tags={"Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -100,6 +118,7 @@ class UserController extends Controller
     {
         $user = $this->userService->getUserById($id);
 
+
         if (!$user) {
             return response()->json([
                 'success' => false,
@@ -118,6 +137,7 @@ class UserController extends Controller
      *     path="/api/show-profile",
      *     summary="Get the authenticated user's profile",
      *     description="Retrieve the currently authenticated user's profile",
+     *     tags={"Profile"},
      *     @OA\Response(
      *         response=200,
      *         description="User profile retrieved successfully",
@@ -157,6 +177,7 @@ class UserController extends Controller
      *     path="/api/users/{id}",
      *     summary="Update user by ID",
      *     description="Update the user information by ID",
+     *     tags={"Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -206,6 +227,13 @@ class UserController extends Controller
                 'message' => 'User not found'
             ], Response::HTTP_NOT_FOUND);
         }
+        // Prevent super admin from updating their own account
+        if (Auth::user()->id == $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Super admin cannot update their own account.'
+            ], Response::HTTP_FORBIDDEN);
+        }
 
         $updatedUser = $this->userService->updateUser($user, $request->validated());
 
@@ -221,6 +249,7 @@ class UserController extends Controller
      *     path="/api/update-profile",
      *     summary="Update authenticated user's profile",
      *     description="Update the currently authenticated user's profile",
+     *     tags={"Profile"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User profile data to update",
@@ -257,7 +286,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $validated = $request->validated();
-        unset($validated['role_id'], $validated['phone']); // Prevent role & phone updates
+        unset($validated['role_id'], $validated['phone'],$validated['password']); // Prevent role & phone updates
 
         $updatedUser = $this->userService->updateUser($user, $validated);
 
@@ -273,6 +302,7 @@ class UserController extends Controller
      *     path="/api/users/{id}",
      *     summary="Delete user by ID",
      *     description="Delete a user by their ID",
+     *     tags={"Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -311,6 +341,13 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'User not found'
             ], Response::HTTP_NOT_FOUND);
+        }
+        // Prevent super admin from deleting their own account
+        if (Auth::user()->id == $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Super admin cannot delete their own account.'
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $this->userService->deleteUser($user);

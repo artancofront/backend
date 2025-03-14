@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Tag(
+ *     name="Authentication "
+ * )
+ */
 class AuthController extends Controller
 {
     protected AuthService $authService;
@@ -25,6 +30,7 @@ class AuthController extends Controller
      *     path="/api/ask-otp",
      *     summary="Request OTP for phone number",
      *     description="Request an OTP to be sent to the user's phone number for registration.",
+     *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User's phone number to send OTP",
@@ -66,6 +72,7 @@ class AuthController extends Controller
      *     path="/api/verify-otp",
      *     summary="Verify OTP and get a token",
      *     description="Verify OTP sent to the user's phone number and return a JWT token.",
+     *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User's phone number and OTP to verify",
@@ -115,14 +122,15 @@ class AuthController extends Controller
      *     path="/api/reset-password",
      *     summary="Reset password using OTP",
      *     description="Reset a user's password using OTP sent to their phone.",
-     *     security={{    "BearerAuth": {}    }},
+     *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Password reset data including OTP and new password",
      *         @OA\JsonContent(
      *             @OA\Property(property="phone", type="string", example="1234567890"),
      *             @OA\Property(property="otp", type="string", example="123456"),
-     *             @OA\Property(property="password", type="string", example="new-password")
+     *             @OA\Property(property="password", type="string", example="new-password"),
+     *             @OA\Property(property="password_confirmation", type="string", example="new-password")
      *         )
      *     ),
      *     @OA\Response(
@@ -166,6 +174,7 @@ class AuthController extends Controller
      *     path="/api/login-password",
      *     summary="Login using email and password",
      *     description="Login with email and password and receive a JWT token.",
+     *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Login credentials (email and password)",

@@ -27,9 +27,9 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string|max:255',  // Name is optional and should be a string.
-            'email' => 'nullable|string|email|max:255|unique:users,email'. $this->route('id'),  // Email is optional but must be unique except for the current user.
+            'email' => 'nullable|string|email|max:255|unique:users,email,'. $this->route('id'),  // Email is optional but must be unique except for the current user.
             'password' => 'nullable|string|min:8', // Password is optional and should be a string.
-            'phone' => 'required|string|min:10|max:15|unique:users,phone'. $this->route('id'),  // Phone is required and must be unique except for the current user.
+            'phone' => 'required|string|min:10|max:15|unique:users,phone,'. $this->route('id'),  // Phone is required and must be unique except for the current user.
             'role_id' => 'nullable|exists:roles,id',  // Role ID is optional but should exist in the `roles` table.
 
         ];

@@ -15,9 +15,9 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function getAllUsers($perPage=10)
+    public function getAllUsers($excludeId,$perPage=10)
     {
-        return $this->userRepository->paginate($perPage);
+        return $this->userRepository->paginate($excludeId,$perPage);
     }
 
     public function getUserById(int $id)

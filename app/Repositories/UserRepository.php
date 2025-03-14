@@ -11,9 +11,9 @@ class UserRepository
         return User::where('phone', $phone)->first();
     }
 
-    public function paginate($perPage=10)
+    public function paginate($excludeId,$perPage=10)
     {
-        return User::with('role')->paginate($perPage);
+        return User::where('id','!=', $excludeId)->with('role')->paginate($perPage);
     }
 
     public function findById(int $id)

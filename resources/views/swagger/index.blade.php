@@ -13,7 +13,7 @@
 <div id="swagger-ui"></div>
 <script>
     const ui = SwaggerUIBundle({
-        url: '/artancms/public/swagger.json',  // Adjust to the correct path of your Swagger JSON
+        url: "{{ $swaggerJsonUrl }}",  // Adjust to the correct path of your Swagger JSON
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -21,6 +21,8 @@
             SwaggerUIBundle.presets.schemas
         ],
         layout: "BaseLayout"
+
+
     });
 </script>
 </body>

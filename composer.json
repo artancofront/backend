@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
+        "php": "^8.3",
         "ext-json": "*",
         "doctrine/annotations": "^1.14",
         "fruitcake/laravel-cors": "^3.0",
@@ -13,6 +13,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "nesbot/carbon": "^2.73",
         "swagger-api/swagger-ui": "^5.20",
         "zircote/swagger-php": "^5.0"
     },

@@ -21,24 +21,17 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
 Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 
 //Sanctum Authentication
-Route::middleware('auth:sanctum')->post('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
-Route::middleware('auth:sanctum')->get('/show-profile', [UserController::class, 'showProfile']);
-Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
-
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
+    Route::get('/show-profile', [UserController::class, 'showProfile']);
+    Route::post('/update-profile', [UserController::class, 'updateProfile']);
+});
 
 //Users CRUD
 Route::prefix('users')->middleware('auth:sanctum')->group(function () {
-    // Get All Users
-    Route::get('/', [UserController::class, 'index'])->middleware('permission:users:read');
-
-    // Get Single User by ID
-    Route::get('{id}', [UserController::class, 'show'])->middleware('permission:users:read');
-
-    // Update User
-    Route::put('{id}', [UserController::class, 'update'])->middleware('permission:users:update');
-
-    // Delete User
-    Route::delete('{id}', [UserController::class, 'destroy'])->middleware('permission:users:delete');
+    Route::get('/', [UserController::class, 'index'])->middleware('permission:users,read');
+    Route::get('{id}', [UserController::class, 'show'])->middleware('permission:users,read');
+    Route::put('{id}', [UserController::class, 'update'])->middleware('permission:users,update');
+    Route::delete('{id}', [UserController::class, 'destroy'])->middleware('permission:users,delete');
 });
 

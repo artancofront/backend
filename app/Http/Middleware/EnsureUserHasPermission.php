@@ -16,19 +16,11 @@ class EnsureUserHasPermission
      * @param  \Closure  $next
      * @param  string  $resource  The category of the permission (e.g., 'users')
      * @param  string  $action  The specific action (e.g., 'create')
-     * @return mixed
      */
-    public function handle(Request $request, Closure $next, $resource, $action)
+    public function handle(Request $request, Closure $next,string $resource,string $action)
     {
         // Get the authenticated user
         $user = Auth::user();
-
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not authenticated.'
-            ], Response::HTTP_UNAUTHORIZED);
-        }
 
         // Assuming the user has a 'role_id' to relate to a role
         $role = $user->role;

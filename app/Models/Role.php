@@ -8,15 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @OA\Schema(
  *     schema="Role",
- *     required={"name", "permissions"},
- *     @OA\Property(property="id", type="integer", description="Role ID"),
- *     @OA\Property(property="name", type="string", description="The name of the role"),
- *     @OA\Property(property="description", type="string", description="The description of the role"),
- *     @OA\Property(property="permissions", type="array", @OA\Items(type="string"), description="List of permissions for the role"),
- *     @OA\Property(property="created_at", type="string", format="date-time", description="The timestamp when the role was created"),
- *     @OA\Property(property="updated_at", type="string", format="date-time", description="The timestamp when the role was last updated")
+ *     required={"name", "description", "permissions"},
+ *     @OA\Property(property="name", type="string", description="Role name", example="Admin"),
+ *     @OA\Property(property="description", type="string", description="Role description", example="Administrator with full access"),
+ *     @OA\Property(
+ *         property="permissions",
+ *         type="object",
+ *         description="Permissions grouped by resource",
+ *         example={
+ *             "users": {"create", "edit", "delete"},
+ *             "posts": {"publish", "unpublish", "delete"},
+ *             "projects": {"create", "update", "assign"}
+ *         }
+ *     )
  * )
  */
+
 class Role extends Model
 {
     use HasFactory;
@@ -48,12 +55,7 @@ class Role extends Model
         'permissions' => 'array', // Casting 'permissions' to an array
     ];
 
-    /**
-     * The permissions array associated with the role.
-     *
-     * @var array
-     */
-    private $permissions;
+
 
     /**
      * Get the users associated with the role.
