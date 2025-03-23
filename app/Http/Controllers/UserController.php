@@ -13,14 +13,10 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Tag(
  *     name="Users",
- * )
- */
-
-/**
- * @OA\Tag(
  *     name="Profile"
  * )
  */
+
 
 
 
