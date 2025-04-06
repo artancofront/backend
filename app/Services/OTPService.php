@@ -31,6 +31,7 @@ class OTPService
 //        ]);
     }
 
+
     public function verifyOTP($phone, $otp): bool
     {
         // Retrieve stored OTP and expiration time
