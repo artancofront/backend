@@ -15,7 +15,8 @@
         "laravel/tinker": "^2.5",
         "nesbot/carbon": "^2.73",
         "swagger-api/swagger-ui": "^5.20",
-        "zircote/swagger-php": "^5.0"
+        "zircote/swagger-php": "^5.0",
+        "kalnoy/nestedset": "^6.0.5"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
