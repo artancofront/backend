@@ -17,10 +17,8 @@ class CreateProductVariantsTable extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('sku')->unique(); // Unique identifier for each variant
-            $table->string('barcode')->nullable()->unique(); // Optional barcode
             $table->decimal('price', 10, 2);
             $table->integer('stock')->default(0);
-            $table->decimal('weight', 8, 2)->default(0.00);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

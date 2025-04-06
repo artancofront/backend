@@ -17,6 +17,14 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->decimal('weight', 8, 2)->default(0.00);
+            $table->decimal('length', 8, 2)->default(0.00);
+            $table->decimal('width', 8, 2)->default(0.00);
+            $table->decimal('height', 8, 2)->default(0.00);
+            $table->integer('stock')->default(0);
+            $table->string('sku')->unique();
+            $table->decimal('price', 10, 2);
+            $table->boolean('has_variants')->default(false);
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

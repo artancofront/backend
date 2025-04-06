@@ -15,7 +15,7 @@ class CreateProductDiscountsTable extends Migration
     {
         Schema::create('product_discounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_variant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->decimal('discount_amount', 10, 2)->nullable();
             $table->decimal('discount_percentage', 5, 2)->nullable();
             $table->timestamp('start_date')->nullable();

@@ -16,7 +16,9 @@ class CreateCategoryAttributesTable extends Migration
         Schema::create('category_attributes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->string('name'); // Example: "Color", "Size"
+            $table->string('name'); // e.g., "Size", "Color", "Brand"
+            $table->enum('type', ['text', 'number', 'boolean']);
+            $table->boolean('is_variant_attribute')->default(false); // If true, belongs to variants
             $table->timestamps();
         });
 
