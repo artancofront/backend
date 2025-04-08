@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kalnoy\Nestedset\NodeTrait;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, NodeTrait;
 
     protected $fillable = [
         'name',
         'description',
+        'slug',
         'weight',
         'length',
         'width',
@@ -20,13 +22,40 @@ class Product extends Model
         'sku',
         'price',
         'has_variants',
-        'category_id', // category with no child
+        'category_id',
         'is_active',
+        'warranties',
+        'policies',
+        'specifications',
+        'reviews',
+        'parent_id', // for nested set
     ];
+
+    protected $casts = [
+        'warranties'=> 'array',
+        'specifications'=> 'array',
+        'reviews'=> 'array',
+        'policies' => 'array',
+        'has_variants' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+    protected $appends = ['final_price'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function variants()
+    {
+        return $this->children(); // provided by NodeTrait
     }
 
     public function attributes()
@@ -34,19 +63,14 @@ class Product extends Model
         return $this->hasMany(ProductAttribute::class);
     }
 
-    public function variants()
+    public function images()
     {
-        return $this->hasMany(ProductVariant::class);
+        return $this->hasMany(ProductImage::class);
     }
 
     public function primaryImage()
     {
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
-    }
-
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class)->where('is_primary', false);
     }
 
     public function discounts()
@@ -68,16 +92,20 @@ class Product extends Model
     {
         return $this->hasMany(ProductConversation::class);
     }
-    protected $appends = ['final_price'];
 
-    public function getFinalPriceAttribute()
+    /*
+    |--------------------------------------------------------------------------
+    | Accessors
+    |--------------------------------------------------------------------------
+    */
+
+    public function getFinalPriceAttribute(): float
     {
         $basePrice = $this->price;
 
-        // Use active product discount if exists
         $discount = $this->discounts()->active()->first();
 
-        // If no product-level discount, check category discount
+        // If no product discount, check category discount
         if (!$discount && $this->category) {
             $discount = $this->category->discounts()->active()->first();
         }
@@ -95,4 +123,31 @@ class Product extends Model
         return $basePrice;
     }
 
+    public function getResolvedPoliciesAttribute()
+    {
+        $allPolicies = Policy::all()->keyBy('id');
+        return collect($this->policies)->map(fn ($id) => $allPolicies[$id] ?? null)->filter()->values();
+    }
+
+    public function getResolvedWarrantiesAttribute()
+    {
+        $allWarranties = Warranty::all()->keyBy('id');
+        return collect($this->warranties)->map(fn ($id) => $allWarranties[$id] ?? null)->filter()->values();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+
+    public function isVariant(): bool
+    {
+        return !is_null($this->parent_id);
+    }
+
+    public function isParent(): bool
+    {
+        return is_null($this->parent_id);
+    }
 }
