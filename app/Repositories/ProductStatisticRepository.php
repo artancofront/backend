@@ -21,7 +21,7 @@ class ProductStatisticRepository
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->variant_count = $product->variants()->count();
+        $statistics->variant_count = $product->variants()->count()+1;
         $statistics->save(); // Save after updating
     }
 
@@ -32,9 +32,18 @@ class ProductStatisticRepository
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->sales_count = $product->orders()->sum('quantity');
-        $statistics->save(); // Save after updating
+        // Sum sales of the parent product
+        $parentSales = $product->orders()->sum('quantity');
+
+        // Sum sales of all variants
+        $variantSales = $product->variants()->with('orders')->get()->sum(function ($variant) {
+            return $variant->orders->sum('quantity');
+        });
+
+        $statistics->sales_count = $parentSales + $variantSales;
+        $statistics->save();
     }
+
 
     /**
      * Update the conversation count for the product.
@@ -87,10 +96,14 @@ class ProductStatisticRepository
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->min_price = $product->variants()->min('price') ?? 0;
-        $statistics->max_price = $product->variants()->max('price') ?? 0;
-        $statistics->save(); // Save after updating
+        $prices = $product->variants()->pluck('price')->toArray();
+        $prices[] = $product->price; // Include the parent product's price
+
+        $statistics->min_price = min($prices);
+        $statistics->max_price = max($prices);
+        $statistics->save();
     }
+
 }
 
 
