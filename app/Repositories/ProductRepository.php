@@ -225,5 +225,23 @@ class ProductRepository
         return $variant;
     }
 
+    /**
+     * Add a single attribute to a product (parent or variant).
+     *
+     * @param int $productId
+     * @param int $categoryAttributeId
+     * @param int $categoryAttributeValueId
+     * @return void
+     */
+    public function addAttribute(int $productId, int $categoryAttributeId, int $categoryAttributeValueId): void
+    {
+        $product = Product::findOrFail($productId);
+
+        $product->attributes()->updateOrCreate(
+            ['category_attribute_id' => $categoryAttributeId],
+            ['category_attribute_value_id' => $categoryAttributeValueId]
+        );
+    }
+
 
 }

@@ -11,7 +11,7 @@ class ProductConversation extends Model
 
     protected $fillable = [
         'product_id',
-        'user_id',
+        'customer_id',
         'parent_id',
         'message',
         'likes',
@@ -28,11 +28,11 @@ class ProductConversation extends Model
     }
 
     /**
-     * Get the user who posted the message.
+     * Get the Customer who posted the message.
      */
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class);
     }
 
     /**

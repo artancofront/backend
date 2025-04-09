@@ -11,7 +11,7 @@ class ProductCommentScore extends Model
 
     protected $fillable = [
         'product_id',
-        'user_id',
+        'customer_id',
         'comment',
         'likes',
         'dislikes',
@@ -28,11 +28,11 @@ class ProductCommentScore extends Model
     }
 
     /**
-     * Get the user who made the comment.
+     * Get the Customer who made the comment.
      */
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class);
     }
 
     /**

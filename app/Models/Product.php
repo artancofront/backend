@@ -135,6 +135,7 @@ class Product extends Model
         return collect($this->warranties)->map(fn ($id) => $allWarranties[$id] ?? null)->filter()->values();
     }
 
+
     /*
     |--------------------------------------------------------------------------
     | Helpers

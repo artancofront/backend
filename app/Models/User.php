@@ -32,6 +32,7 @@ class User extends Model
         'email',
         'name',  // Add any other fields like name if applicable
         'phone_verified_at',
+        'role_id',
     ];
 
     /**
