@@ -1,15 +1,14 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User\Auth;
 
-use App\Http\Requests\LoginRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AskOTPRequest;
-use App\Http\Requests\VerifyOTPRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\VerifyOTPRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use OpenApi\Annotations as OA;
 
 /**
  * @OA\Tag(

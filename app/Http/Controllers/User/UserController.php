@@ -1,13 +1,13 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\UpdateUserRequest;
-use OpenApi\Annotations as OA;
 
 
 /**
