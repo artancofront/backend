@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\User\Auth\AuthController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +20,7 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
 Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 
 //Sanctum Authentication
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:user')->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
     Route::get('/show-profile', [UserController::class, 'showProfile']);
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
