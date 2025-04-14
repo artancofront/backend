@@ -16,9 +16,7 @@ class CreateCategoryAttributeValuesTable extends Migration
         Schema::create('category_attribute_values', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_attribute_id')->constrained()->onDelete('cascade');
-            $table->string('text_value')->nullable(); // e.g., "Red", "XL"
-            $table->boolean('boolean_value')->nullable(); // e.g., "true"
-            $table->decimal('numeric_value', 10, 2)->nullable(); // e.g., "10.5"
+            $table->string('value')->nullable(); // e.g., "Red", "XL"
             $table->timestamps();
         });
     }

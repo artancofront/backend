@@ -84,7 +84,25 @@ class CategoryAttributeRepository
      */
     public function createValue(array $data): CategoryAttributeValue
     {
-        return CategoryAttributeValue::create($data);
+        // Find the category attribute by its ID
+        $categoryAttribute = CategoryAttribute::find($data['category_attribute_id']);
+
+        // Check if category attribute exists
+        if (!$categoryAttribute) {
+            throw new \Exception('Category attribute not found.');
+        }
+
+        // Create a new CategoryAttributeValue
+        $categoryAttributeValue = new CategoryAttributeValue();
+        $categoryAttributeValue->category_attribute_id = $data['category_attribute_id'];
+
+        // Use the setValue method to set the correct value based on attribute type
+        $categoryAttributeValue->value = $data['value']; // Automatically calls setValueAttribute
+
+        // Save the CategoryAttributeValue
+        $categoryAttributeValue->save();
+
+        return $categoryAttributeValue;
     }
 
     /**
@@ -92,13 +110,16 @@ class CategoryAttributeRepository
      */
     public function updateValue(int $id, array $data): bool
     {
+        // Find the existing CategoryAttributeValue by its ID
         $categoryAttributeValue = CategoryAttributeValue::find($id);
 
-        if ($categoryAttributeValue) {
-            return $categoryAttributeValue->update($data);
-        }
+        if (!$categoryAttributeValue) {
+            throw new \Exception('Category attribute value not found.');
+        }        // Use the setValueAttribute mutator to set the correct value based on attribute type
+        $categoryAttributeValue->value = $data['value']; // This automatically calls setValueAttribute
 
-        return false;
+        // Save the updated value
+        return $categoryAttributeValue->save();
     }
 
     /**
