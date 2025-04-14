@@ -15,10 +15,7 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade'); // Self-referencing FK
-            $table->unsignedInteger('lft')->nullable()->index();
-            $table->unsignedInteger('rgt')->nullable()->index();
-            $table->unsignedInteger('depth')->nullable();
+            $table->nestedSet(); // creates `parent_id`, `_lft`, `_rgt`
             $table->string('name');
             $table->string('slug')->unique();
             $table->timestamps();

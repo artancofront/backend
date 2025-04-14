@@ -16,17 +16,9 @@ class CategoryService
     }
 
     /**
-     * Get all categories.
-     */
-    public function getAllCategories(): Collection
-    {
-        return $this->categoryRepository->all();
-    }
-
-    /**
      * Find a category by ID.
      */
-    public function getCategoryById(int $id): ?Category
+    public function find(int $id): ?Category
     {
         return $this->categoryRepository->find($id);
     }
@@ -34,7 +26,7 @@ class CategoryService
     /**
      * Create a new category.
      */
-    public function createCategory(array $data): Category
+    public function create(array $data): Category
     {
         return $this->categoryRepository->create($data);
     }
@@ -42,21 +34,21 @@ class CategoryService
     /**
      * Update an existing category.
      */
-    public function updateCategory(int $id, array $data): bool
+    public function update(int $id, array $data): bool
     {
         return $this->categoryRepository->update($id, $data);
     }
 
     /**
-     * Delete a category.
+     * Delete a category by ID.
      */
-    public function deleteCategory(int $id): bool
+    public function delete(int $id): bool
     {
         return $this->categoryRepository->delete($id);
     }
 
     /**
-     * Get all leaf categories.
+     * Get all leaf categories (no children).
      */
     public function getLeafCategories(): Collection
     {
@@ -64,15 +56,7 @@ class CategoryService
     }
 
     /**
-     * Get all parent categories up to the root.
-     */
-    public function getParentCategories(Category $category): Collection
-    {
-        return $this->categoryRepository->getParentCategories($category);
-    }
-
-    /**
-     * Get all root categories.
+     * Get all root categories (no parent).
      */
     public function getRootCategories(): Collection
     {
@@ -80,18 +64,42 @@ class CategoryService
     }
 
     /**
-     * Get all leaf categories under a specific parent category.
+     * Get breadcrumb trail for a category.
      */
-    public function getLeafCategoriesUnder(Category $parentCategory): Collection
+    public function getBreadcrumb(int $categoryId): Collection
     {
-        return $this->categoryRepository->getLeafCategoriesUnder($parentCategory);
+        return $this->categoryRepository->getCategoryBreadcrumb($categoryId);
     }
 
     /**
-     * Get all categories in a nested hierarchy.
+     * Get all descendants of a category.
      */
-    public function getCategoryHierarchy(): array
+    public function getDescendants(int $categoryId): Collection
+    {
+        return $this->categoryRepository->getCategoryDescendants($categoryId);
+    }
+
+    /**
+     * Get all categories as a nested tree.
+     */
+    public function getHierarchy(): Collection
     {
         return $this->categoryRepository->getCategoryHierarchy();
+    }
+
+    /**
+     * Get products of a specific category.
+     */
+    public function getCategoryProducts(int $categoryId): Collection
+    {
+        return $this->categoryRepository->getCategoryProducts($categoryId);
+    }
+
+    /**
+     * Get attributes of a specific category.
+     */
+    public function getCategoryAttributes(int $categoryId): Collection
+    {
+        return $this->categoryRepository->getCategoryAttributes($categoryId);
     }
 }

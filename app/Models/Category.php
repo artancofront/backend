@@ -21,9 +21,14 @@ class Category extends Model
         return $this->hasMany(CategoryDiscount::class);
     }
 
-    public function isLeaf()
+    public function products()
     {
-        return $this->children()->count() === 0;
+        return $this->hasMany(Product::class);
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(CategoryAttribute::class);
     }
 
 }

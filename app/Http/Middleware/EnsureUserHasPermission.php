@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,13 @@ class EnsureUserHasPermission
     public function handle(Request $request, Closure $next,string $resource,string $action)
     {
         // Get the authenticated user
-        $user = Auth::user();
+        $user = Auth::guard('user')->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
 
         // Assuming the user has a 'role_id' to relate to a role
         $role = $user->role;
@@ -28,7 +35,7 @@ class EnsureUserHasPermission
         if (!$role) {
             return response()->json([
                 'success' => false,
-                'message' => 'Role not found for the user.'
+                'message' => 'Role not found for the user to check permissions on this resource'
             ], Response::HTTP_FORBIDDEN);
         }
 

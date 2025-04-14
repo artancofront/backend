@@ -15,7 +15,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        //to do on linux server terminal:
+        // crontab -e
+        // * * * * * php /var/www/html/my-project/artisan schedule:run >> /dev/null 2>&1
+        $schedule->call(function () {
+            app(\App\Services\MediaService::class)->cleanOldTempFiles(60); // e.g., delete files older than 60 mins
+        })->hourly();
+
     }
 
     /**

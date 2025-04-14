@@ -27,14 +27,14 @@ class Product extends Model
         'warranties',
         'policies',
         'specifications',
-        'reviews',
+        'expert_review',
         'parent_id', // for nested set
     ];
 
     protected $casts = [
         'warranties'=> 'array',
         'specifications'=> 'array',
-        'reviews'=> 'array',
+        'expert_review'=> 'array',
         'policies' => 'array',
         'has_variants' => 'boolean',
         'is_active' => 'boolean',
@@ -151,4 +151,6 @@ class Product extends Model
     {
         return is_null($this->parent_id);
     }
+
+
 }

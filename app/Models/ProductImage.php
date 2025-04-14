@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductImage extends Model
 {
@@ -30,6 +32,20 @@ class ProductImage extends Model
     public function scopePrimary($query)
     {
         return $query->where('is_primary', true);
+    }
+
+
+    /**
+     * Automatically delete the image file when the model is deleted.
+     */
+    protected static function booted()
+    {
+        static::deleting(function (ProductImage $image) {
+            $cleanPath = Str::replaceFirst('storage/', '', $image->image_path);
+            if (Storage::disk('public')->exists($cleanPath)) {
+                Storage::disk('public')->delete($cleanPath);
+            }
+        });
     }
 }
 

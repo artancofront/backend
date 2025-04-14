@@ -35,7 +35,7 @@ class CreateProductsTable extends Migration
 
             // Only read json columns
             $table->json('specifications')->nullable();
-            $table->json('reviews')->nullable();
+            $table->json('expert_review')->nullable();
 
             // Selectable options
             $table->json('warranties')->nullable();

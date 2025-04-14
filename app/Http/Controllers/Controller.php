@@ -14,7 +14,7 @@ use Illuminate\Routing\Controller as BaseController;
  *  )
  * @OA\Info(title="CMS manager", version="0.1")
  * @OA\Server(
- *      url="http://localhost/artancms/public",
+ *      url="http://localhost/cms-template/public",
  *      description="Local development server"
  *  )
  * @OA\SecurityScheme(

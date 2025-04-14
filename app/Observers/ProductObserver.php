@@ -50,6 +50,12 @@ class ProductObserver
      */
     public function deleted(Product $product)
     {
+        //Delete all its relations
+        $product->variants()->delete();
+        $product->attributes()->delete();
+        $product->images()->delete();
+        $product->discounts()->delete();
+        //Flush caches
         $this->flushProductCache($product->id);
         $this->flushProductFilterCache();
         // Update statistics when a product or its variant is deleted

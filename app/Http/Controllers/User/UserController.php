@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Tag(
- *     name="Users",
- *     name="Profile"
+ *     name="Admin - Users",
+ *     description="User management endpoints for the admin panel"
  * )
  */
 
@@ -31,7 +31,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/users",
+     *     path="/api/admin/users",
      *     summary="Get all users",
      *     description="Retrieve a list of all users",
      *     tags={"Users"},
@@ -73,7 +73,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/users/{id}",
+     *     path="/api/admin/users/{id}",
      *     summary="Get single user by ID",
      *     description="Retrieve a user by their ID",
      *     tags={"Users"},
@@ -130,7 +130,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/show-profile",
+     *     path="/api/admin/users/show-profile",
      *     summary="Get the authenticated user's profile",
      *     description="Retrieve the currently authenticated user's profile",
      *     tags={"Profile"},
@@ -170,7 +170,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/users/{id}",
+     *     path="/api/admin/users/{id}",
      *     summary="Update user by ID",
      *     description="Update the user information by ID",
      *     tags={"Users"},
@@ -242,7 +242,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/update-profile",
+     *     path="/api/admin/users/update-profile",
      *     summary="Update authenticated user's profile",
      *     description="Update the currently authenticated user's profile",
      *     tags={"Profile"},
@@ -295,7 +295,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/users/{id}",
+     *     path="/api/admin/users/{id}",
      *     summary="Delete user by ID",
      *     description="Delete a user by their ID",
      *     tags={"Users"},

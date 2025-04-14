@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,4 +67,6 @@ class Kernel extends HttpKernel
         'permission' => \App\Http\Middleware\EnsureUserHasPermission::class,
         'auth.customer' => \App\Http\Middleware\AuthenticateCustomer::class,
     ];
+
+
 }

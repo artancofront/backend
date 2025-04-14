@@ -52,7 +52,6 @@ class ProductRepository
         array $filters = [],
         string $sortBy = 'price',
         string $order = 'asc',
-        int $perPage = 15,
         ?bool $status = null
     ): LengthAwarePaginator {
         $query = Product::with([
@@ -185,21 +184,35 @@ class ProductRepository
         return $product->delete();
     }
 
-    public function assignAttributes(int $productId, array $attributes): void
+
+    public function syncAttributes(int $productId, array $attributes): void
     {
         $product = Product::findOrFail($productId);
 
-        foreach ($attributes as $attribute) {
+        // Prepare a map of new attributes: [category_attribute_id => category_attribute_value_id]
+        $newAttributes = collect($attributes)->keyBy('category_attribute_id')->map(fn ($item) => $item['category_attribute_value_id']);
+
+        // Get current attributes in the same format
+        $currentAttributes = $product->attributes()
+            ->get()
+            ->keyBy('category_attribute_id')
+            ->map(fn ($item) => $item->category_attribute_value_id);
+
+        // Attributes to delete
+        $toDelete = $currentAttributes->diffKeys($newAttributes)->keys();
+        if ($toDelete->isNotEmpty()) {
+            $product->attributes()->whereIn('category_attribute_id', $toDelete)->delete();
+        }
+
+        // Attributes to update or create
+        foreach ($newAttributes as $categoryAttributeId => $valueId) {
             $product->attributes()->updateOrCreate(
-                [
-                    'category_attribute_id' => $attribute['category_attribute_id'],
-                ],
-                [
-                    'category_attribute_value_id' => $attribute['category_attribute_value_id'],
-                ]
+                ['category_attribute_id' => $categoryAttributeId],
+                ['category_attribute_value_id' => $valueId]
             );
         }
     }
+
 
     public function addVariant(int $parentId, array $data): Product
     {
@@ -225,22 +238,69 @@ class ProductRepository
         return $variant;
     }
 
-    /**
-     * Add a single attribute to a product (parent or variant).
-     *
-     * @param int $productId
-     * @param int $categoryAttributeId
-     * @param int $categoryAttributeValueId
-     * @return void
-     */
-    public function addAttribute(int $productId, int $categoryAttributeId, int $categoryAttributeValueId): void
+    public function updateVariant(int $variantId, array $data): Product
+    {
+        $variant = Product::whereNotNull('parent_id')->findOrFail($variantId);
+
+        $variant->update([
+            'price' => $data['price'],
+            'sku' => $data['sku'] ?? null,
+            'stock' => $data['stock'] ?? 0,
+            'is_active' => $data['is_active'] ?? true,
+        ]);
+
+        if (isset($data['attributes'])) {
+            // Delete existing attributes
+            $variant->attributes()->delete();
+
+            // Re-add new ones
+            foreach ($data['attributes'] as $attribute) {
+                $variant->attributes()->create([
+                    'category_attribute_id' => $attribute['category_attribute_id'],
+                    'category_attribute_value_id' => $attribute['category_attribute_value_id'],
+                ]);
+            }
+        }
+
+        return $variant;
+    }
+
+    public function deleteVariant(int $variantId): void
+    {
+        $variant = Product::whereNotNull('parent_id')->findOrFail($variantId);
+
+        // Delete related attributes first (if not using cascade)
+        $variant->attributes()->delete();
+
+        // Delete the variant itself
+        $variant->delete();
+    }
+
+    public function syncDiscount(int $productId, array $discountData): void
     {
         $product = Product::findOrFail($productId);
 
-        $product->attributes()->updateOrCreate(
-            ['category_attribute_id' => $categoryAttributeId],
-            ['category_attribute_value_id' => $categoryAttributeValueId]
-        );
+        // Remove existing discounts if no valid data is provided
+        if (empty($discountData['discount_amount']) && empty($discountData['discount_percentage'])) {
+            $product->discounts()->delete();
+            return;
+        }
+
+        $existingDiscount = $product->discounts()->first();
+
+        $data = [
+            'product_id' => $productId,
+            'discount_amount' => $discountData['discount_amount'] ?? null,
+            'discount_percentage' => $discountData['discount_percentage'] ?? null,
+            'start_date' => $discountData['start_date'] ?? null,
+            'end_date' => $discountData['end_date'] ?? null,
+        ];
+
+        if ($existingDiscount) {
+            $existingDiscount->update($data);
+        } else {
+            $product->discounts()->create($data);
+        }
     }
 
 

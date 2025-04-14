@@ -17,11 +17,8 @@ class CreateCategoryAttributesTable extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('name'); // e.g., "Size", "Color", "Brand"
-            $table->enum('type', ['text', 'number', 'boolean']);
-            $table->boolean('is_variant_attribute')->default(false); // If true, belongs to variants
             $table->timestamps();
         });
-
     }
 
     /**

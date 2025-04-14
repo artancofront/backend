@@ -14,19 +14,19 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(
  *         property="permissions",
  *         type="object",
- *         description="Permissions grouped by resource",
+ *         description="Permissions grouped by resource like users, products, ..., actions: [full, read, create, update, delete]",
  *         example={
- *             "users": {"create", "edit", "delete"},
- *             "posts": {"publish", "unpublish", "delete"},
- *             "projects": {"create", "update", "assign"}
+ *             "users": {"read", "create", "update", "delete"},
+ *             "products": {"create", "delete"},
+ *             "categories": {"full"},
  *         }
  *     )
  * )
  */
-
 class Role extends Model
 {
     use HasFactory;
+    public const ALLOWED_ACTIONS = ['all', 'read', 'create', 'update', 'delete'];
 
     /**
      * The name of the table associated with the model.
@@ -70,22 +70,27 @@ class Role extends Model
     /**
      * Set permissions for a specific category (e.g., 'users').
      *
-     * @param string $category The category of permissions (e.g., 'users').
-     * @param array $actions The actions associated with the category (e.g., ['read', 'create']).
+     * Only allows "read", "create", "update", "delete" actions.
+     *
+     * @param string $category
+     * @param array $actions
      * @return void
      */
-    public function setPermission(string $category, array $actions)
+    public function setPermission(string $category, array $actions): void
     {
-        // Get the current permissions or initialize an empty array
+        $filteredActions = array_values(array_intersect($actions, self::ALLOWED_ACTIONS));
         $permissions = $this->permissions ?? [];
 
-        // Set the actions for the specified category
-        $permissions[$category] = $actions;
+        if (empty($filteredActions)) {
+            unset($permissions[$category]);
+        } else {
+            $permissions[$category] = $filteredActions;
+        }
 
-        // Save the updated permissions array
         $this->permissions = $permissions;
         $this->save();
     }
+
 
     /**
      * Check if the role has a specific permission in a category.
@@ -96,9 +101,21 @@ class Role extends Model
      */
     public function hasPermission(string $category, string $action): bool
     {
-        // Check if the category exists and if the action is within that category
-        return isset($this->permissions[$category]) && in_array($action, $this->permissions[$category]);
+        $permissions = $this->permissions ?? [];
+
+        return (
+            (isset($permissions[$category]) && (
+                    in_array($action, $permissions[$category]) ||
+                    in_array('full', $permissions[$category])
+                )) ||
+            (isset($permissions['full']) && (
+                    in_array('full', $permissions['full']) ||
+                    in_array($action, $permissions['full'])
+                ))
+        );
     }
+
+
 
     /**
      * Get all permissions for the role.

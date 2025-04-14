@@ -12,8 +12,6 @@ class CategoryAttribute extends Model
     protected $fillable = [
         'category_id',
         'name',
-        'type',
-        'is_variant_attribute',
     ];
 
     /**
@@ -31,4 +29,5 @@ class CategoryAttribute extends Model
     {
         return $this->hasMany(CategoryAttributeValue::class);
     }
+
 }
