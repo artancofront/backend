@@ -588,6 +588,12 @@
                 "responses": {
                     "200": {
                         "description": "Product updated successfully."
+                    },
+                    "400": {
+                        "description": "Bad request, validation failed."
+                    },
+                    "404": {
+                        "description": "Product not found."
                     }
                 },
                 "security": [
@@ -729,13 +735,13 @@
                 ]
             }
         },
-        "/api/admin/products/image/upload": {
+        "/api/admin/products/upload-image/upload": {
             "post": {
                 "tags": [
                     "Products"
                 ],
                 "summary": "Upload a product image to temp",
-                "operationId": "6baf3137358f9e5d529ac48f3a75aee5",
+                "operationId": "74ac30589d97897c800c25596da64699",
                 "requestBody": {
                     "required": true,
                     "content": {

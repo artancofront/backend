@@ -67,12 +67,23 @@ class ProductController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Product updated successfully."
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request, validation failed."
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found."
      *     )
      * )
      */
-    public function update(UpdateProductRequest $request, int $id): JsonResponse
+
+    public function update(UpdateProductRequest $request,int $id): JsonResponse
     {
-        $this->productService->updateProductWithRelations($id, $request->validated());
+//        $data=$request->validate([
+//        ]);
+        $this->productService->updateProductWithRelations($id,$request->validated());
 
         return response()->json([
             'message' => 'Product updated successfully.'
@@ -188,7 +199,7 @@ class ProductController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/products/image/upload",
+     *     path="/api/admin/products/upload-image/upload",
      *     summary="Upload a product image to temp",
      *     tags={"Products"},
      *     security={{"BearerAuth":{}}},

@@ -99,8 +99,8 @@ Route::prefix('admin/category-attributes')->middleware(['auth:user'])->group(fun
 
 
 Route::prefix('products')->controller(ShopProductController::class)->group(function () {
-    Route::get('/', 'index');       // GET /admin/products
-    Route::get('{id}', 'show');     // GET /admin/products/{id}
+    Route::get('/', 'index');
+    Route::get('{id}', 'show');
 });
 
 Route::prefix('categories')->group(function () {
