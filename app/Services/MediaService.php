@@ -40,6 +40,16 @@ class MediaService
         }
     }
 
+    public function cleanOldTempFilesIfDue(int $minutes = 5): void
+    {
+        $lastRun = cache()->get('media_cleanup_last_run');
+
+        if (!$lastRun || now()->diffInMinutes($lastRun) >= $minutes) {
+            $this->cleanOldTempFiles($minutes); // your actual cleanup logic
+            cache()->put('media_cleanup_last_run', now());
+        }
+    }
+
     /**
      * Move a file from temp directory to final destination.
      */

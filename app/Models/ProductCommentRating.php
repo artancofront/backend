@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductCommentScore extends Model
+class ProductCommentRating extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class ProductCommentScore extends Model
         'likes',
         'dislikes',
         'is_approved',
-        'score',
+        'rating',
     ];
 
     /**
@@ -33,6 +33,14 @@ class ProductCommentScore extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get admin replies related to this comment.
+     */
+    public function adminReplies()
+    {
+        return $this->hasMany(AdminReply::class);
     }
 
     /**

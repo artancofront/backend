@@ -899,21 +899,186 @@
                 ]
             }
         },
+        "/payment/pay/{gateway}": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Initiate a payment",
+                "description": "Redirects user to the payment gateway for the given order.",
+                "operationId": "pay",
+                "parameters": [
+                    {
+                        "name": "gateway",
+                        "in": "path",
+                        "description": "Payment gateway (e.g., idpay, zarinpal)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "zarinpal"
+                        }
+                    },
+                    {
+                        "name": "order_number",
+                        "in": "query",
+                        "description": "The order number to initiate payment for",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "ORD123456789"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirect to the selected gateway"
+                    }
+                }
+            }
+        },
+        "/payment/idpay/callback": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Handle IDPay callback",
+                "description": "Handles the payment verification callback from IDPay.",
+                "operationId": "idpayCallback",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "query",
+                        "description": "The order number associated with the payment",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "ORD123456789"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirects to payment result page"
+                    }
+                }
+            }
+        },
+        "/payment/zarinpal/callback": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Handle Zarinpal callback",
+                "description": "Handles the payment verification callback from Zarinpal.",
+                "operationId": "zarinpalCallback",
+                "parameters": [
+                    {
+                        "name": "Authority",
+                        "in": "query",
+                        "description": "Zarinpal authority code used to find the order",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "A00000123456789"
+                        }
+                    }
+                ],
+                "responses": {
+                    "302": {
+                        "description": "Redirects to payment result page"
+                    }
+                }
+            }
+        },
+        "/payment/result": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Show payment result",
+                "description": "Displays the result of a payment, including success or failure message.",
+                "operationId": "paymentResult",
+                "responses": {
+                    "200": {
+                        "description": "Returns the payment result view"
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
                     "Products"
                 ],
-                "summary": "List products with filters, sorting and pagination",
-                "operationId": "d7830d9453a5c68aa4d4f7eb40f8f700",
+                "summary": "Get a filtered list of products",
+                "operationId": "getFilteredProducts",
                 "parameters": [
                     {
-                        "name": "filters",
+                        "name": "category_id",
                         "in": "query",
-                        "description": "Search filters (e.g., name, category_id, etc.)",
+                        "description": "Filter by category ID",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "integer",
+                            "example": 3
+                        }
+                    },
+                    {
+                        "name": "price_min",
+                        "in": "query",
+                        "description": "Minimum price filter",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 10.5
+                        }
+                    },
+                    {
+                        "name": "price_max",
+                        "in": "query",
+                        "description": "Maximum price filter",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float",
+                            "example": 299.99
+                        }
+                    },
+                    {
+                        "name": "attributes[1][]",
+                        "in": "query",
+                        "description": "Filter by attribute ID 1 (example value IDs: 1, 2)",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "name": "attributes[2][]",
+                        "in": "query",
+                        "description": "Filter by attribute ID 2 (example value IDs: 3, 4)",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    {
+                        "name": "attributes[3][]",
+                        "in": "query",
+                        "description": "Filter by attribute ID 3 (example value IDs: 5, 6)",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
                         }
                     },
                     {
@@ -923,21 +1088,27 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "default": "price"
+                            "enum": [
+                                "price",
+                                "created_at",
+                                "sales",
+                                "rating"
+                            ],
+                            "example": "price"
                         }
                     },
                     {
                         "name": "order",
                         "in": "query",
-                        "description": "Sort order (asc or desc)",
+                        "description": "Sort direction",
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "default": "asc",
                             "enum": [
                                 "asc",
                                 "desc"
-                            ]
+                            ],
+                            "example": "asc"
                         }
                     },
                     {
@@ -947,29 +1118,43 @@
                         "required": false,
                         "schema": {
                             "type": "integer",
-                            "default": 15
+                            "example": 15
                         }
                     },
                     {
                         "name": "status",
                         "in": "query",
-                        "description": "Product status (1=active, 0=inactive)",
+                        "description": "Filter by active status",
                         "required": false,
                         "schema": {
-                            "type": "boolean"
+                            "type": "boolean",
+                            "example": true
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of products"
+                        "description": "Filtered product list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Product"
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/products/{id}": {
@@ -997,12 +1182,7 @@
                     "404": {
                         "description": "Product not found"
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/users/ask-otp": {
@@ -1857,6 +2037,35 @@
     },
     "components": {
         "schemas": {
+            "PaginationMeta": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "from": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "to": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 150
+                    }
+                },
+                "type": "object"
+            },
             "CategoryRequest": {
                 "required": [
                     "name",
@@ -2207,6 +2416,231 @@
                 },
                 "type": "object"
             },
+            "Order": {
+                "title": "Order",
+                "description": "Order model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "order_number": {
+                        "type": "string",
+                        "example": "ORD-20250417-001"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "payment_status": {
+                        "type": "string",
+                        "example": "unpaid"
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "example": "card"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 150
+                    },
+                    "discount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 10
+                    },
+                    "tax": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 12
+                    },
+                    "shipping_cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 5
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 157
+                    },
+                    "notes": {
+                        "type": "string",
+                        "example": "Leave at the front door"
+                    },
+                    "placed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-17T14:00:00Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderItem": {
+                "title": "Order Item",
+                "description": "Order item model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "example": 55
+                    },
+                    "product_name": {
+                        "type": "string",
+                        "example": "Wireless Mouse"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 29.99
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 59.98
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderTransaction": {
+                "title": "Order Transaction",
+                "description": "Represents a payment transaction related to an order",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": 101
+                    },
+                    "transaction_id": {
+                        "type": "string",
+                        "example": "trx_ABC123456"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "success",
+                            "failed",
+                            "refunded"
+                        ],
+                        "example": "success"
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "enum": [
+                            "cash",
+                            "card",
+                            "online"
+                        ],
+                        "example": "card"
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "gateway": {
+                        "type": "string",
+                        "example": "Zarinpal"
+                    },
+                    "meta": {
+                        "type": "object"
+                    },
+                    "payload": {
+                        "type": "object"
+                    },
+                    "paid_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Red T-Shirt"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Comfortable cotton t-shirt"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 19.99
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "category_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-04-15T12:34:56Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-04-15T12:34:56Z"
+                    }
+                },
+                "type": "object"
+            },
             "Role": {
                 "required": [
                     "name",
@@ -2225,7 +2659,7 @@
                         "example": "Administrator with full access"
                     },
                     "permissions": {
-                        "description": "Permissions grouped by resource like users, products, ..., actions: [full, read, create, update, delete]",
+                        "description": "Permissions grouped by resource like users, products, ..., actions: [all, read, create, update, delete]",
                         "type": "object",
                         "example": {
                             "users": [
@@ -2239,7 +2673,7 @@
                                 "delete"
                             ],
                             "categories": [
-                                "full"
+                                "all"
                             ]
                         }
                     }
@@ -2376,6 +2810,10 @@
         {
             "name": "Products",
             "description": "Products"
+        },
+        {
+            "name": "Payments",
+            "description": "Payments"
         },
         {
             "name": "Authentication",

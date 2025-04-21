@@ -6,11 +6,12 @@ use App\Models\CategoryAttribute;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductConversation;
-use App\Models\ProductCommentScore;
+use App\Models\ProductCommentRating;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Kalnoy\Nestedset\QueryBuilder;
 
 class ProductRepository
 {
@@ -44,7 +45,6 @@ class ProductRepository
             return $this->buildProductQuery($filters, $sortBy, $order, $status)->paginate($perPage);
         });
     }
-
     /**
      * Build the product query used in 'getProducts' method.
      */
@@ -53,18 +53,17 @@ class ProductRepository
         string $sortBy = 'price',
         string $order = 'asc',
         ?bool $status = null
-    ): LengthAwarePaginator {
+    ): QueryBuilder {
         $query = Product::with([
             'primaryImage',
             'category.discounts' => fn($q) => $q->active(),
             'discounts' => fn($q) => $q->active(),
-            'variants',
             'category',
             'statistics'
         ])
             ->whereNull('parent_id') // only parent products
             ->when(!is_null($status), fn($query) => $query->where('is_active', $status))
-            // Filter by Category whether its leaf category or parent one.
+            // Filter by Category whether it's leaf category or parent one.
             ->when(isset($filters['category_id']), function ($query) use ($filters) {
                 $category = $this->categoryRepository->find($filters['category_id']);
                 if ($category) {
@@ -75,62 +74,39 @@ class ProductRepository
                 }
             });
 
-        // Filter by attributes (handling both parent & variant level)
+        // Filter by attributes (handling both parent & variant level using value IDs)
         if (isset($filters['attributes']) && !empty($filters['attributes'])) {
-            foreach ($filters['attributes'] as $attributeId => $filter) {
-                $type = $filter['type'];
-                $value = $filter['value'];
-                if (!isset($value) || $value === '' || (is_array($value) && empty($value))) {
+            foreach ($filters['attributes'] as $attributeId => $valueIds) {
+                if (empty($valueIds) || !is_array($valueIds)) {
                     continue;
                 }
-                $query->where(function ($q) use ($attributeId, $type, $value) {
-                    $attributeFilter = function ($query) use ($attributeId, $type, $value) {
-                        $query->where('category_attribute_id', $attributeId)
-                            ->whereHas('categoryAttributeValue', function ($q) use ($type, $value) {
-                                switch ($type) {
-                                    case 'text':
-                                        $q->where('text_value', $value);
-                                        break;
-                                    case 'boolean':
-                                        $q->where('boolean_value', filter_var($value, FILTER_VALIDATE_BOOLEAN));
-                                        break;
-                                    case 'number':
-                                        if (is_array($value) && isset($value['min'], $value['max'])) {
-                                            $q->whereBetween('numeric_value', [$value['min'], $value['max']]);
-                                        } else {
-                                            $q->where('numeric_value', $value);
-                                        }
-                                        break;
-                                }
-                            });
-                    };
 
-                    // Apply to product attributes
-                    $q->whereHas('attributes', $attributeFilter);
+                $query->where(function ($q) use ($attributeId, $valueIds) {
+                    $attributeFilter = fn($q) =>
+                    $q->where('category_attribute_id', $attributeId)
+                        ->whereIn('category_attribute_value_id', $valueIds);
 
-                    // Apply to variant attributes
-                    $q->orWhereHas('variants.attributes', $attributeFilter);
+                    $q->whereHas('attributes', $attributeFilter)
+                        ->orWhereHas('variants.attributes', $attributeFilter);
                 });
             }
         }
 
         // Filter by price range
-        if (isset($filters['price_range']) && is_array($filters['price_range'])) {
-            $min = $filters['price_range']['min'] ?? null;
-            $max = $filters['price_range']['max'] ?? null;
-
-            if (!is_null($min) && !is_null($max)) {
-                $query->whereBetween('price', [$min, $max]);
-            } elseif (!is_null($min)) {
-                $query->where('price', '>=', $min);
-            } elseif (!is_null($max)) {
-                $query->where('price', '<=', $max);
-            }
+        $min= $filters['price_min']?? null;
+        $max = $filters['price_max'] ?? null;
+        if (!is_null($min) && !is_null($max)) {
+            $query->whereBetween('price', [$min, $max]);
+        } elseif (!is_null($min)) {
+            $query->where('price', '>=', $min);
+        } elseif (!is_null($max)) {
+            $query->where('price', '<=', $max);
         }
+
 
         // Sorting
         $query->when($sortBy === 'sales', fn($q) => $q->orderBy('statistics.sales_count', $order))
-            ->when($sortBy === 'score', fn($q) => $q->orderBy('statistics.avg_score', $order))
+            ->when($sortBy === 'rating', fn($q) => $q->orderBy('statistics.avg_rating', $order))
             ->when(in_array($sortBy, ['price', 'created_at']), fn($q) => $q->orderBy($sortBy, $order));
 
         return $query;
@@ -155,8 +131,10 @@ class ProductRepository
                 'discounts' => function ($q) {
                     $q->active();
                 },
+                'variants',
+                'variants.attributes.categoryAttribute',
+                'variants.attributes.categoryAttributeValue',
                 'category',      // The category this product belongs to
-                'orders',        // Orders related to this product (for sales stats)
                 'statistics',
                 'attributes.categoryAttribute', // Attribute names
                 'attributes.categoryAttributeValue', // Attribute values

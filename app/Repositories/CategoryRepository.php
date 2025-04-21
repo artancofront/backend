@@ -64,6 +64,15 @@ class CategoryRepository
         return Category::doesntHave('children')->get();
     }
 
+
+    /**
+     * Get all leaf categories under a specific parent category.
+     */
+    public function getLeafDescendant(Category $parentCategory): Collection
+    {
+        return Category::whereDescendantOf($parentCategory)->doesntHave('children')->get();
+    }
+
     /**
      * Get all root categories (categories without a parent).
      *
@@ -83,7 +92,7 @@ class CategoryRepository
     public function getCategoryBreadcrumb(int $categoryId): Collection
     {
         $category = $this->find($categoryId);
-        return $category ? $category->ancestors : collect();
+        return $category ? $category->ancestors : new Collection();
     }
 
     /**
@@ -113,11 +122,13 @@ class CategoryRepository
      * @param int $categoryId
      * @return Collection
      */
-    public function getCategoryProducts(int $categoryId): Collection
-    {
-        $category = Category::with('products')->find($categoryId);
-        return $category ? $category->products : collect();
-    }
+
+public function getCategoryProducts(int $categoryId): Collection
+{
+    $category = Category::with('products')->find($categoryId);
+    return $category ? $category->products : new Collection();
+}
+
 
     /**
      * Get all attributes assigned to a specific category.
@@ -128,6 +139,6 @@ class CategoryRepository
     public function getCategoryAttributes(int $categoryId): Collection
     {
         $category = Category::with('attributes')->find($categoryId);
-        return $category ? $category->attributes : collect();
+        return $category ? $category->attributes : new Collection();
     }
 }

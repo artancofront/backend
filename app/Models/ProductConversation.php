@@ -52,6 +52,14 @@ class ProductConversation extends Model
     }
 
     /**
+     * Get admin replies related to this comment.
+     */
+    public function adminReplies()
+    {
+        return $this->hasMany(AdminReply::class);
+    }
+
+    /**
      * Scope for only approved conversations.
      */
     public function scopeApproved($query)

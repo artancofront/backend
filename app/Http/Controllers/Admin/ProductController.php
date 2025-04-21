@@ -221,6 +221,8 @@ class ProductController extends Controller
      */
     public function uploadProductImage(Request $request)
     {
+        $this->mediaService->cleanOldTempFilesIfDue(5);
+
         $request->validate([
             'image' => 'required|file|image|max:5120',
         ]);

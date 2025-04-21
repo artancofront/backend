@@ -19,15 +19,90 @@ class ProductController extends Controller
     /**
      * @OA\Get(
      *     path="/api/products",
-     *     summary="List products with filters, sorting and pagination",
+     *     summary="Get a filtered list of products",
+     *     operationId="getFilteredProducts",
      *     tags={"Products"},
-     *     security={{"BearerAuth":{}}},
-     *     @OA\Parameter(name="filters", in="query", description="Search filters (e.g., name, category_id, etc.)", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="sort_by", in="query", description="Field to sort by", required=false, @OA\Schema(type="string", default="price")),
-     *     @OA\Parameter(name="order", in="query", description="Sort order (asc or desc)", required=false, @OA\Schema(type="string", enum={"asc", "desc"}, default="asc")),
-     *     @OA\Parameter(name="per_page", in="query", description="Items per page", required=false, @OA\Schema(type="integer", default=15)),
-     *     @OA\Parameter(name="status", in="query", description="Product status (1=active, 0=inactive)", required=false, @OA\Schema(type="boolean")),
-     *     @OA\Response(response=200, description="List of products")
+     *
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by category ID",
+     *         @OA\Schema(type="integer", example=3)
+     *     ),
+     *     @OA\Parameter(
+     *         name="price_min",
+     *         in="query",
+     *         required=false,
+     *         description="Minimum price filter",
+     *         @OA\Schema(type="number", format="float", example=10.50)
+     *     ),
+     *     @OA\Parameter(
+     *         name="price_max",
+     *         in="query",
+     *         required=false,
+     *         description="Maximum price filter",
+     *         @OA\Schema(type="number", format="float", example=299.99)
+     *     ),
+     *     @OA\Parameter(
+     *        name="attributes[1][]",
+     *        in="query",
+     *        required=false,
+     *        description="Filter by attribute ID 1 (example value IDs: 1, 2)",
+     *        @OA\Schema(type="array", @OA\Items(type="integer"))
+     *     ),
+     *     @OA\Parameter(
+     *         name="attributes[2][]",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by attribute ID 2 (example value IDs: 3, 4)",
+     *         @OA\Schema(type="array", @OA\Items(type="integer"))
+     *     ),
+     *     @OA\Parameter(
+     *         name="attributes[3][]",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by attribute ID 3 (example value IDs: 5, 6)",
+     *         @OA\Schema(type="array", @OA\Items(type="integer"))
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         required=false,
+     *         description="Field to sort by",
+     *         @OA\Schema(type="string", enum={"price", "created_at", "sales", "rating"}, example="price")
+     *     ),
+     *     @OA\Parameter(
+     *         name="order",
+     *         in="query",
+     *         required=false,
+     *         description="Sort direction",
+     *         @OA\Schema(type="string", enum={"asc", "desc"}, example="asc")
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         description="Items per page",
+     *         @OA\Schema(type="integer", example=15)
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         required=false,
+     *         description="Filter by active status",
+     *         @OA\Schema(type="boolean", example=true)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Filtered product list",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Product")),
+     *             @OA\Property(property="meta", type="object")
+     *         )
+     *     )
      * )
      */
     public function index(Request $request)
@@ -48,7 +123,6 @@ class ProductController extends Controller
      *     path="/api/products/{id}",
      *     summary="Get product details by ID",
      *     tags={"Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

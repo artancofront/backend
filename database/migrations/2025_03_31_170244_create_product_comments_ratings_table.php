@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductCommentsScoresTable extends Migration
+class CreateProductCommentsRatingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProductCommentsScoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_comments_scores', function (Blueprint $table) {
+        Schema::create('product_comment_ratings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -21,7 +21,7 @@ class CreateProductCommentsScoresTable extends Migration
             $table->unsignedInteger('likes')->nullable();
             $table->unsignedInteger('dislikes')->nullable();
             $table->boolean('is_approved')->default(false);
-            $table->unsignedTinyInteger('score'); // Score between 1-5
+            $table->unsignedTinyInteger('rating'); // Rating between 1-5
             $table->timestamps();
         });
 
@@ -34,6 +34,6 @@ class CreateProductCommentsScoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_comments_scores');
+        Schema::dropIfExists('product_comment_ratings');
     }
 }

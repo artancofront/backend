@@ -14,8 +14,8 @@ class ProductStatistic extends Model
         'sales_count',
         'conversation_count',
         'comment_count',
-        'score_count',
-        'avg_score',
+        'rating_count',
+        'avg_rating',
         'min_price',
         'max_price',
     ];

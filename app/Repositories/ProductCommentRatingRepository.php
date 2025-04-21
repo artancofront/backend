@@ -1,30 +1,30 @@
 <?php
 namespace App\Repositories;
 
-use App\Models\ProductCommentScore;
+use App\Models\ProductCommentRating;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class ProductCommentScoreRepository
+class ProductCommentRatingRepository
 {
     /**
      * Get all product comments (with optional approval filter).
      */
     public function getAll(?bool $isApproved = null, int $perPage = 15): LengthAwarePaginator
     {
-        return ProductCommentScore::when(!is_null($isApproved), function ($query) use ($isApproved) {
+        return ProductCommentRating::when(!is_null($isApproved), function ($query) use ($isApproved) {
             $query->where('is_approved', $isApproved);
         })
             ->whereNotNull('comment') // Ensure it has a comment
-            ->with(['product', 'user'])
+            ->with(['product', 'user', 'adminReplies'])
             ->paginate($perPage);
     }
 
     /**
      * Find a comment by its ID.
      */
-    public function find(int $id): ?ProductCommentScore
+    public function find(int $id)
     {
-        return ProductCommentScore::with(['product', 'user'])->find($id);
+        return ProductCommentRating::with(['product', 'user', 'adminReplies'])->find($id);
     }
 
     /**
@@ -32,21 +32,21 @@ class ProductCommentScoreRepository
      */
     public function getByProduct(int $productId, ?bool $isApproved = null, int $perPage = 15): LengthAwarePaginator
     {
-        return ProductCommentScore::where('product_id', $productId)
+        return ProductCommentRating::where('product_id', $productId)
             ->when(!is_null($isApproved), function ($query) use ($isApproved) {
                 $query->where('is_approved', $isApproved);
             })
             ->whereNotNull('comment') // Ensure it has a comment
-            ->with('user')
+            ->with(['user', 'adminReplies'])
             ->paginate($perPage);
     }
 
     /**
      * Create a new product comment.
      */
-    public function create(array $data): ProductCommentScore
+    public function create(array $data): ProductCommentRating
     {
-        return ProductCommentScore::create($data);
+        return ProductCommentRating::create($data);
     }
 
     /**

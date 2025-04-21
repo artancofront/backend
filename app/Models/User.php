@@ -19,8 +19,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Model
 {
-    use HasApiTokens;
-
+    use HasApiTokens,HasFactory;
     /**
      * The attributes that are mass assignable.
      *

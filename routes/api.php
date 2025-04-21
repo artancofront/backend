@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryAttributeController;
+use App\Http\Controllers\Customer\CustomerOrderController;
 use App\Http\Controllers\User\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -112,3 +113,70 @@ Route::prefix('categories')->group(function () {
     Route::get('{id}/descendants', [CategoryController::class, 'descendants'])->name('descendants'); // Get descendants of a category
     Route::get('{id}/attributes', [CategoryController::class, 'attributes'])->name('attributes'); // Get attributes of a category
 });
+
+use App\Http\Controllers\Shop\CartController;
+
+Route::prefix('cart')->middleware(['auth:customer'])->group(function () {
+    Route::get('/', [CartController::class, 'index']); // Get all cart items
+    Route::post('/', [CartController::class, 'store']); // Add to cart
+    Route::put('{cartId}', [CartController::class, 'update']); // Update cart item quantity
+    Route::delete('{cartId}', [CartController::class, 'destroy']); // Remove cart item
+    Route::delete('/', [CartController::class, 'clear']); // Clear customer cart
+    Route::get('/summary', [CartController::class, 'summary']); // Get cart summary
+});
+
+use App\Http\Controllers\Customer\ShipmentController as CustomerShipmentController;
+
+Route::prefix('customer')->middleware(['auth:customer'])->group(function () {
+    Route::get('/shipments/{shipmentId}', [CustomerShipmentController::class, 'show']);
+    Route::post('/shipments', [CustomerShipmentController::class, 'store']);
+    Route::put('/shipments/{shipmentId}', [CustomerShipmentController::class, 'update']);
+});
+
+use App\Http\Controllers\Admin\ShipmentController;
+
+Route::prefix('admin')->middleware('auth:api')->group(function () {
+    // Shipments Routes
+    Route::get('/shipments', [ShipmentController::class, 'index'])->middleware('permission:shipments,read');
+    Route::get('/shipments/{id}', [ShipmentController::class, 'show'])->middleware('permission:shipments,read');
+    Route::post('/shipments', [ShipmentController::class, 'store'])->middleware('permission:shipments,create');
+    Route::put('/shipments/{id}', [ShipmentController::class, 'update'])->middleware('permission:shipments,update');
+    Route::delete('/shipments/{id}', [ShipmentController::class, 'destroy'])->middleware('permission:shipments,delete');
+
+    // Carriers Routes
+    Route::get('/carriers', [ShipmentController::class, 'getAllCarriers'])->middleware('permission:shipments,read');
+    Route::get('/carriers/{id}', [ShipmentController::class, 'getCarrierById'])->middleware('permission:shipments,read');
+    Route::post('/carriers', [ShipmentController::class, 'storeCarrier'])->middleware('permission:shipments,create');
+    Route::put('/carriers/{id}', [ShipmentController::class, 'updateCarrier'])->middleware('permission:shipments,update');
+    Route::delete('/carriers/{id}', [ShipmentController::class, 'deleteCarrier'])->middleware('permission:shipments,delete');
+});
+
+Route::prefix('customer/orders')->middleware('auth:customer')->group(function () {
+    Route::get('/', [CustomerOrderController::class, 'index']);
+    Route::post('/', [CustomerOrderController::class, 'store']);
+    Route::put('/update-from-cart/{orderId}', [CustomerOrderController::class, 'update']);
+});
+
+
+use App\Http\Controllers\Admin\OrderController;
+
+// Order Routes
+Route::prefix('admin/orders')->name('admin.orders.')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('index')->middleware('permission:orders,read');
+    Route::get('{id}', [OrderController::class, 'show'])->name('show')->middleware('permission:orders,read');
+    Route::get('order-number/{orderNumber}', [OrderController::class, 'showByOrderNumber'])->name('showByOrderNumber')->middleware('permission:orders,read');
+    Route::post('/', [OrderController::class, 'store'])->name('store')->middleware('permission:orders,create');
+    Route::put('{id}', [OrderController::class, 'update'])->name('update')->middleware('permission:orders,update');
+    Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy')->middleware('permission:orders,delete');
+    Route::get('customer/{customerId}', [OrderController::class, 'getCustomerOrders'])->name('getCustomerOrders')->middleware('permission:orders,read');
+    Route::get('recent/{limit?}', [OrderController::class, 'getRecentOrders'])->name('getRecentOrders')->middleware('permission:orders,read');
+    Route::get('expired', [OrderController::class, 'getExpiredOrders'])->name('getExpiredOrders')->middleware('permission:orders,read');
+    Route::get('active', [OrderController::class, 'getActiveOrders'])->name('getActiveOrders')->middleware('permission:orders,read');
+    Route::post('{id}/paid', [OrderController::class, 'markAsPaid'])->name('markAsPaid')->middleware('permission:orders,update');
+    Route::post('{orderId}/items', [OrderController::class, 'createOrderItems'])->name('createOrderItems')->middleware('permission:orders,create');
+    Route::delete('{orderId}/items/{itemId}', [OrderController::class, 'deleteOrderItem'])->name('deleteOrderItem')->middleware('permission:orders,delete');
+    Route::put('{id}/status', [OrderController::class, 'updateStatus'])->name('updateStatus')->middleware('permission:orders,update');
+    Route::put('{id}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('updatePaymentStatus')->middleware('permission:orders,update');
+    Route::put('{id}/payment-method', [OrderController::class, 'updatePaymentMethod'])->name('updatePaymentMethod')->middleware('permission:orders,update');
+});
+

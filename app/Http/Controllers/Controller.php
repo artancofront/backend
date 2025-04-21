@@ -34,6 +34,16 @@ use Illuminate\Routing\Controller as BaseController;
  * @OA\Security(
  *     securityScheme="cookieSession"
  * )
+ * @OA\Schema(
+ *     schema="PaginationMeta",
+ *     type="object",
+ *     @OA\Property(property="current_page", type="integer", example=1),
+ *     @OA\Property(property="from", type="integer", example=1),
+ *     @OA\Property(property="last_page", type="integer", example=10),
+ *     @OA\Property(property="per_page", type="integer", example=15),
+ *     @OA\Property(property="to", type="integer", example=15),
+ *     @OA\Property(property="total", type="integer", example=150)
+ * )
  */
 class Controller extends BaseController
 {

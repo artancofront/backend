@@ -63,29 +63,29 @@ class ProductStatisticRepository
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->comment_count = $product->commentScores()->whereNotNull('comment')->count();
+        $statistics->comment_count = $product->commentRatings()->whereNotNull('comment')->count();
         $statistics->save(); // Save after updating
     }
 
     /**
-     * Update the score count for the product.
+     * Update the rating count for the product.
      */
-    public function updateScoreCount(Product $product): void
+    public function updateRatingCount(Product $product): void
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->score_count = $product->commentScores()->count();
+        $statistics->rating_count = $product->commentRatings()->count();
         $statistics->save(); // Save after updating
     }
 
     /**
-     * Update the average score for the product.
+     * Update the average rating for the product.
      */
-    public function updateAvgScore(Product $product): void
+    public function updateAvgRating(Product $product): void
     {
         $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
 
-        $statistics->avg_score = $product->commentScores()->where('is_approved', true)->avg('score') ?? 0;
+        $statistics->avg_rating = $product->commentRatings()->where('is_approved', true)->avg('rating') ?? 0;
         $statistics->save(); // Save after updating
     }
 

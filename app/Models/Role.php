@@ -14,11 +14,11 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(
  *         property="permissions",
  *         type="object",
- *         description="Permissions grouped by resource like users, products, ..., actions: [full, read, create, update, delete]",
+ *         description="Permissions grouped by resource like users, products, ..., actions: [all, read, create, update, delete]",
  *         example={
  *             "users": {"read", "create", "update", "delete"},
  *             "products": {"create", "delete"},
- *             "categories": {"full"},
+ *             "categories": {"all"},
  *         }
  *     )
  * )
@@ -106,11 +106,11 @@ class Role extends Model
         return (
             (isset($permissions[$category]) && (
                     in_array($action, $permissions[$category]) ||
-                    in_array('full', $permissions[$category])
+                    in_array('all', $permissions[$category])
                 )) ||
-            (isset($permissions['full']) && (
-                    in_array('full', $permissions['full']) ||
-                    in_array($action, $permissions['full'])
+            (isset($permissions['all']) && (
+                    in_array('all', $permissions['all']) ||
+                    in_array($action, $permissions['all'])
                 ))
         );
     }

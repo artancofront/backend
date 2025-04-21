@@ -13,8 +13,8 @@ return new class extends Migration {
             $table->integer('sales_count')->default(0);
             $table->integer('conversation_count')->default(0);
             $table->integer('comment_count')->default(0);
-            $table->integer('score_count')->default(0);
-            $table->decimal('avg_score', 4, 2)->default(0);
+            $table->integer('rating_count')->default(0);
+            $table->decimal('avg_rating', 4, 2)->default(0);
             $table->decimal('min_price', 10, 2)->default(0);
             $table->decimal('max_price', 10, 2)->default(0);
             $table->timestamps();

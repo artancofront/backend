@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Customer;
+use App\Models\Cart;
 
 class CustomerRepository
 {
@@ -11,9 +12,9 @@ class CustomerRepository
         return Customer::where('phone', $phone)->first();
     }
 
-    public function paginate($perPage=10)
+    public function paginate($perPage = 10)
     {
-        return Customer::all()->paginate($perPage);
+        return Customer::paginate($perPage);
     }
 
     public function findById(int $id)
@@ -26,15 +27,22 @@ class CustomerRepository
         return Customer::create($data);
     }
 
-    public function update(Customer $Customer, array $data)
+    public function update(Customer $customer, array $data)
     {
-        $Customer->update($data);
-        return $Customer;
+        $customer->update($data);
+        return $customer;
     }
 
-    public function delete(Customer $Customer)
+    public function delete(Customer $customer)
     {
-        return $Customer->delete();
+        return $customer->delete();
     }
+
+
+    public function getDefaultAddress(Customer $customer)
+    {
+        return $customer->addresses()->where('is_default', true)->first();
+    }
+
+
 }
-

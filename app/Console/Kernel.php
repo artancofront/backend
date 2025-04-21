@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\RestoreStockForExpiredOrders;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             app(\App\Services\MediaService::class)->cleanOldTempFiles(60); // e.g., delete files older than 60 mins
         })->hourly();
+        $schedule->job(RestoreStockForExpiredOrders::class)->everyFifteenMinutes();
 
     }
 

@@ -17,7 +17,7 @@ class ProductConversationRepository
             $query->where('is_approved', $isApproved);
         })
             ->whereNull('parent_id') // Only top-level questions
-            ->with(['product', 'user', 'replies'])
+            ->with(['product', 'user', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -26,9 +26,9 @@ class ProductConversationRepository
     /**
      * Find a conversation by its ID.
      */
-    public function find(int $id): ?ProductConversation
+    public function find(int $id)
     {
-        return ProductConversation::with(['product', 'user', 'parent', 'replies'])->find($id);
+        return ProductConversation::with(['product', 'user', 'parent', 'replies', 'adminReplies'])->find($id);
     }
 
     /**
@@ -41,7 +41,7 @@ class ProductConversationRepository
             ->when(!is_null($isApproved), function ($query) use ($isApproved) {
                 $query->where('is_approved', $isApproved);
             })
-            ->with(['user', 'replies'])
+            ->with(['user', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -54,7 +54,7 @@ class ProductConversationRepository
             ->when(!is_null($isApproved), function ($query) use ($isApproved) {
                 $query->where('is_approved', $isApproved);
             })
-            ->with(['user', 'replies'])
+            ->with(['user', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 

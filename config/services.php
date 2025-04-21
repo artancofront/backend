@@ -29,5 +29,19 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'idpay' => [
+        'api_key' => env('IDPAY_API_KEY'),
+        'callback_url' => env('IDPAY_CALLBACK_URL'),
+        'sandbox' => env('IDPAY_SANDBOX', true),
+        'base_url' => env('IDPAY_BASE_URL', 'https://api.idpay.ir/v1.1'),
+    ],
+    'zarinpal' => [
+        'merchant_id' => env('ZARINPAL_MERCHANT_ID'),
+        'callback_url' => env('ZARINPAL_CALLBACK_URL'),
+        'sandbox' => env('ZARINPAL_SANDBOX', true),
+        'zaringate' => env('ZARINPAL_ZARINGATE', false),
+        'base_url' => env('ZARINPAL_BASE_URL', 'https://api.zarinpal.com/pg/v4'),
+    ],
+
 
 ];

@@ -60,8 +60,8 @@ class AuthService
      */
     public function loginWithPassword($email, $password)
     {
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return Auth::user()->createToken('authToken')->plainTextToken;
+        if (Auth::guard('user')->attempt(['email' => $email, 'password' => $password])) {
+            return Auth::guard('user')->user()->createToken('authToken')->plainTextToken;
         }
         return null;
     }
