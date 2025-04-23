@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ShipmentService;
 use App\Http\Requests\StoreShipmentRequest;
 use App\Http\Requests\UpdateShipmentRequest;
+use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Tag(
@@ -65,37 +66,12 @@ class ShipmentController extends Controller
      *     summary="Create a new shipment",
      *     tags={"Shipments"},
      *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"order_id", "carrier_id", "status", "cost"},
-     *             @OA\Property(property="order_id", type="integer", description="Order ID"),
-     *             @OA\Property(property="carrier_id", type="integer", description="Carrier ID"),
-     *             @OA\Property(property="tracking_number", type="string", description="Tracking number"),
-     *             @OA\Property(property="status", type="string", description="Shipment status"),
-     *             @OA\Property(property="cost", type="number", format="float", description="Shipment cost"),
-     *             @OA\Property(property="shipped_at", type="string", format="date-time"),
-     *             @OA\Property(property="delivered_at", type="string", format="date-time"),
-     *             @OA\Property(property="notes", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Shipment created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Shipment")
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Forbidden",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="You do not have permission to create a shipment for this order.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request"
-     *     )
-     * )
-     */
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/StoreShipmentRequest")
+     *      ),
+     *      @OA\Response(response=201, description="Shipment created")
+     *  )
+ */
     public function store(StoreShipmentRequest $request)
     {
         $data = $request->validated();
@@ -115,34 +91,18 @@ class ShipmentController extends Controller
      *     summary="Update shipment details",
      *     tags={"Shipments"},
      *     @OA\Parameter(
-     *         name="shipmentId",
+     *         name="id",
      *         in="path",
      *         required=true,
+     *         description="Shipment ID",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", description="Shipment status"),
-     *             @OA\Property(property="tracking_number", type="string"),
-     *             @OA\Property(property="cost", type="number", format="float"),
-     *             @OA\Property(property="shipped_at", type="string", format="date-time"),
-     *             @OA\Property(property="delivered_at", type="string", format="date-time"),
-     *             @OA\Property(property="notes", type="string")
-     *         )
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateShipmentRequest")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Shipment updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Shipment")
-     *     ),
-     *     @OA\Response(
-     *         response=403,
-     *         description="Forbidden"
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Bad Request"
-     *     )
+     *     @OA\Response(response=200, description="Shipment updated"),
+     *     @OA\Response(response=404, description="Shipment not found")
      * )
      */
     public function update(UpdateShipmentRequest $request, $shipmentId)
@@ -158,5 +118,26 @@ class ShipmentController extends Controller
         $updated = $this->shipmentService->updateShipment($shipmentId, $data);
 
         return response()->json(['message' => 'Shipment updated successfully', 'data' => $updated]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/carriers",
+     *     summary="Get all carriers",
+     *     tags={"Shipments"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of all carriers",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Carrier"))
+     *     )
+     * )
+     */
+    public function getAllCarriers(): JsonResponse
+    {
+        $carriers = $this->shipmentService->getAllCarriers();
+
+        return response()->json([
+            'data' => $carriers
+        ], 200);
     }
 }

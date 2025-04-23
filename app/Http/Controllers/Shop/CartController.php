@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
  * @OA\Tag(
  *     name="Cart",
  *     description="Shopping cart management"
+ * )
  */
 class CartController extends Controller
 {

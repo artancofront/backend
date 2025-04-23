@@ -17,6 +17,7 @@ class CreateShipmentsTable extends Migration
             $table->id();
             $table->foreignId('order_id')->unique()->constrained()->cascadeOnDelete();
             $table->foreignId('carrier_id')->constrained('carriers')->restrictOnDelete();
+            $table->foreignId('shipping_address_id')->nullable()->constrained('customer_addresses')->nullOnDelete();
             $table->string('tracking_number')->nullable();
             $table->string('status')->default('pending'); // e.g., pending, shipped, delivered, returned
             $table->decimal('cost', 10, 2)->default(0); // Shipment cost

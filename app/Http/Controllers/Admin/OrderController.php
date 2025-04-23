@@ -42,7 +42,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/{id}",
+     *     path="/api/admin/orders/{id}",
      *     summary="Display the specified order by ID",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -66,7 +66,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/order-number/{orderNumber}",
+     *     path="/api/admin/orders/order-number/{orderNumber}",
      *     summary="Display the specified order by order number",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -90,7 +90,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/admin/orders",
+     *     path="/api/admin/orders",
      *     summary="Create a new order",
      *     tags={"Orders"},
      *     @OA\RequestBody(
@@ -113,7 +113,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/admin/orders/{id}",
+     *     path="/api/admin/orders/{id}",
      *     summary="Update the specified order",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -152,7 +152,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/admin/orders/{id}",
+     *     path="/api/admin/orders/{id}",
      *     summary="Delete the specified order",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -185,7 +185,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/customer/{customerId}",
+     *     path="/api/admin/orders/customer/{customerId}",
      *     summary="Get orders for a specific customer",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -209,7 +209,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/recent/{limit}",
+     *     path="/api/admin/orders/recent/{limit}",
      *     summary="Get the most recent orders",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -233,7 +233,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/expired",
+     *     path="/api/admin/orders/expired",
      *     summary="Get expired orders",
      *     tags={"Orders"},
      *     @OA\Response(
@@ -251,7 +251,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders/active",
+     *     path="/api/admin/orders/active",
      *     summary="Get active orders",
      *     tags={"Orders"},
      *     @OA\Response(
@@ -269,7 +269,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/admin/orders/{id}/paid",
+     *     path="/api/admin/orders/{id}/paid",
      *     summary="Mark an order as paid",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -307,7 +307,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/admin/orders/{orderId}/items",
+     *     path="/api/admin/orders/{orderId}/items",
      *     summary="Create order items from cart items",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -336,7 +336,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/admin/orders/{orderId}/items/{itemId}",
+     *     path="/api/admin/orders/{orderId}/items/{itemId}",
      *     summary="Delete an order item",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -376,7 +376,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/admin/orders/{id}/status",
+     *     path="/api/admin/orders/{id}/status",
      *     summary="Update the status of an order",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -414,7 +414,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/admin/orders/{id}/payment-status",
+     *     path="/api/admin/orders/{id}/payment-status",
      *     summary="Update the payment status of an order",
      *     tags={"Orders"},
      *     @OA\Parameter(
@@ -452,7 +452,7 @@ class OrderController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/admin/orders/{id}/payment-method",
+     *     path="/api/admin/orders/{id}/payment-method",
      *     summary="Update the payment method of an order",
      *     tags={"Orders"},
      *     @OA\Parameter(

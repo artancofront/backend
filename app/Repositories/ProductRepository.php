@@ -23,6 +23,7 @@ class ProductRepository
     }
 
 
+
     /**
      * Get all products with filtering and sorting options.
      */
@@ -73,6 +74,16 @@ class ProductRepository
                         $leafCategories->isNotEmpty() ? $leafCategories : [$category->id]);
                 }
             });
+
+        // Product with search query in title or description
+        if(isset($filters['search'])) {
+            $searchQuery=$filters['search'];
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('name', 'like', "%$searchQuery%")
+                    ->orWhere('description', 'like', "%$searchQuery%");
+            });
+        }
+
 
         // Filter by attributes (handling both parent & variant level using value IDs)
         if (isset($filters['attributes']) && !empty($filters['attributes'])) {

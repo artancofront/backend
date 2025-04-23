@@ -23,7 +23,7 @@ class CustomerOrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/customer/orders",
+     *     path="/api/customer/orders",
      *     summary="Get all orders for the authenticated customer",
      *     tags={"Customer Orders"},
      *     security={{"customer":{}}},
@@ -39,7 +39,7 @@ class CustomerOrderController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/customer/orders",
+     *     path="/api/customer/orders",
      *     summary="Create an order from the customer's cart",
      *     tags={"Customer Orders"},
      *     security={{"customer":{}}},
@@ -76,7 +76,7 @@ class CustomerOrderController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/customer/orders/update-from-cart/{orderId}",
+     *     path="/api/customer/orders/update-from-cart/{orderId}",
      *     summary="Update an order to match the customer's current cart",
      *     tags={"Customer Orders"},
      *     security={{"customer":{}}},

@@ -133,7 +133,7 @@ class UserController extends Controller
      *     path="/api/admin/users/show-profile",
      *     summary="Get the authenticated user's profile",
      *     description="Retrieve the currently authenticated user's profile",
-     *     tags={"Profile"},
+     *     tags={"Users"},
      *     @OA\Response(
      *         response=200,
      *         description="User profile retrieved successfully",
@@ -245,7 +245,7 @@ class UserController extends Controller
      *     path="/api/admin/users/update-profile",
      *     summary="Update authenticated user's profile",
      *     description="Update the currently authenticated user's profile",
-     *     tags={"Profile"},
+     *     tags={"Users"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User profile data to update",

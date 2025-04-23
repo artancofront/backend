@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Models\AdminReply;
 use App\Models\ProductCommentRating;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -15,7 +16,7 @@ class ProductCommentRatingRepository
             $query->where('is_approved', $isApproved);
         })
             ->whereNotNull('comment') // Ensure it has a comment
-            ->with(['product', 'user', 'adminReplies'])
+            ->with(['product', 'customer', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -24,7 +25,7 @@ class ProductCommentRatingRepository
      */
     public function find(int $id)
     {
-        return ProductCommentRating::with(['product', 'user', 'adminReplies'])->find($id);
+        return ProductCommentRating::with(['product', 'customer', 'adminReplies'])->find($id);
     }
 
     /**
@@ -37,7 +38,7 @@ class ProductCommentRatingRepository
                 $query->where('is_approved', $isApproved);
             })
             ->whereNotNull('comment') // Ensure it has a comment
-            ->with(['user', 'adminReplies'])
+            ->with(['customer', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -75,6 +76,73 @@ class ProductCommentRatingRepository
         return $this->update($id, ['is_approved' => $status]);
     }
 
+
+    /**
+     * Increment likes for a comment.
+     */
+    public function like(int $id): bool
+    {
+        $comment = $this->find($id);
+        if ($comment) {
+            $comment->increment('likes');
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Increment dislikes for a comment.
+     */
+    public function dislike(int $id): bool
+    {
+        $comment = $this->find($id);
+        if ($comment) {
+            $comment->increment('dislikes');
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Optionally allow unliking/disliking.
+     */
+    public function unlike(int $id): bool
+    {
+        $comment = $this->find($id);
+        if ($comment && $comment->likes > 0) {
+            $comment->decrement('likes');
+            return true;
+        }
+        return false;
+    }
+
+    public function undislike(int $id): bool
+    {
+        $comment = $this->find($id);
+        if ($comment && $comment->dislikes > 0) {
+            $comment->decrement('dislikes');
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Add an admin reply to a product comment.
+     */
+    public function addAdminReply(int $commentId, array $data): AdminReply
+    {
+        $comment = ProductCommentRating::findOrFail($commentId);
+        return $comment->adminReplies()->create($data);
+    }
+
+    /**
+     * Delete an admin reply by its ID.
+     */
+    public function deleteAdminReply(int $replyId): bool
+    {
+        $reply = AdminReply::find($replyId);
+        return $reply ? $reply->delete() : false;
+    }
 
 
 

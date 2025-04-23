@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\AdminReply;
 use App\Models\ProductConversation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,7 +18,7 @@ class ProductConversationRepository
             $query->where('is_approved', $isApproved);
         })
             ->whereNull('parent_id') // Only top-level questions
-            ->with(['product', 'user', 'replies', 'adminReplies'])
+            ->with(['product', 'customer', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -28,7 +29,7 @@ class ProductConversationRepository
      */
     public function find(int $id)
     {
-        return ProductConversation::with(['product', 'user', 'parent', 'replies', 'adminReplies'])->find($id);
+        return ProductConversation::with(['product', 'customer', 'parent', 'replies', 'adminReplies'])->find($id);
     }
 
     /**
@@ -41,7 +42,7 @@ class ProductConversationRepository
             ->when(!is_null($isApproved), function ($query) use ($isApproved) {
                 $query->where('is_approved', $isApproved);
             })
-            ->with(['user', 'replies', 'adminReplies'])
+            ->with(['customer', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -54,7 +55,7 @@ class ProductConversationRepository
             ->when(!is_null($isApproved), function ($query) use ($isApproved) {
                 $query->where('is_approved', $isApproved);
             })
-            ->with(['user', 'replies', 'adminReplies'])
+            ->with(['customer', 'replies', 'adminReplies'])
             ->paginate($perPage);
     }
 
@@ -91,4 +92,47 @@ class ProductConversationRepository
     {
         return $this->update($id, ['is_approved' => $status]);
     }
+
+    public function like(int $id): bool
+    {
+        $conversation = $this->find($id);
+        return $conversation ? $conversation->increment('likes') : false;
+    }
+
+    public function dislike(int $id): bool
+    {
+        $conversation = $this->find($id);
+        return $conversation ? $conversation->increment('dislikes') : false;
+    }
+
+    public function undoLike(int $id): bool
+    {
+        $conversation = $this->find($id);
+        return $conversation && $conversation->likes > 0 ? $conversation->decrement('likes') : false;
+    }
+
+    public function undoDislike(int $id): bool
+    {
+        $conversation = $this->find($id);
+        return $conversation && $conversation->dislikes > 0 ? $conversation->decrement('dislikes') : false;
+    }
+
+    /**
+     * Add an admin reply to a product conversation.
+     */
+    public function addAdminReply(int $conversationId, array $data): AdminReply
+    {
+        $conversation = ProductConversation::findOrFail($conversationId);
+        return $conversation->adminReplies()->create($data);
+    }
+
+    /**
+     * Delete an admin reply by its ID.
+     */
+    public function deleteAdminReply(int $replyId): bool
+    {
+        $reply = AdminReply::find($replyId);
+        return $reply ? $reply->delete() : false;
+    }
+
 }

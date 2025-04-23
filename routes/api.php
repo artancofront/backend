@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryAttributeController;
 use App\Http\Controllers\Customer\CustomerOrderController;
 use App\Http\Controllers\User\Auth\AuthController;
@@ -131,11 +132,13 @@ Route::prefix('customer')->middleware(['auth:customer'])->group(function () {
     Route::get('/shipments/{shipmentId}', [CustomerShipmentController::class, 'show']);
     Route::post('/shipments', [CustomerShipmentController::class, 'store']);
     Route::put('/shipments/{shipmentId}', [CustomerShipmentController::class, 'update']);
+    Route::get('/carriers', [CustomerShipmentController::class, 'getAllCarriers']);
+
 });
 
 use App\Http\Controllers\Admin\ShipmentController;
 
-Route::prefix('admin')->middleware('auth:api')->group(function () {
+Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     // Shipments Routes
     Route::get('/shipments', [ShipmentController::class, 'index'])->middleware('permission:shipments,read');
     Route::get('/shipments/{id}', [ShipmentController::class, 'show'])->middleware('permission:shipments,read');
@@ -161,7 +164,7 @@ Route::prefix('customer/orders')->middleware('auth:customer')->group(function ()
 use App\Http\Controllers\Admin\OrderController;
 
 // Order Routes
-Route::prefix('admin/orders')->name('admin.orders.')->group(function () {
+Route::prefix('admin/orders')->middleware(['auth:user'])->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('index')->middleware('permission:orders,read');
     Route::get('{id}', [OrderController::class, 'show'])->name('show')->middleware('permission:orders,read');
     Route::get('order-number/{orderNumber}', [OrderController::class, 'showByOrderNumber'])->name('showByOrderNumber')->middleware('permission:orders,read');
@@ -178,5 +181,94 @@ Route::prefix('admin/orders')->name('admin.orders.')->group(function () {
     Route::put('{id}/status', [OrderController::class, 'updateStatus'])->name('updateStatus')->middleware('permission:orders,update');
     Route::put('{id}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('updatePaymentStatus')->middleware('permission:orders,update');
     Route::put('{id}/payment-method', [OrderController::class, 'updatePaymentMethod'])->name('updatePaymentMethod')->middleware('permission:orders,update');
+});
+
+Route::get('/blogs', [BlogController::class, 'index']);
+Route::get('/blogs/{id}', [BlogController::class, 'show']);
+
+Route::prefix('admin')->middleware(['auth:user'])->group(function () {
+    Route::post('/blogs', [BlogController::class, 'store'])->middleware('permission:blogs,create');
+    Route::put('/blogs/{id}', [BlogController::class, 'update'])->middleware('permission:blogs,update');
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware('permission:blogs,delete');
+});
+
+use App\Http\Controllers\Admin\CustomerController;
+
+Route::prefix('admin')->middleware(['auth:user'])->group(function () {
+    Route::get('/customers', [CustomerController::class, 'index'])->middleware('permission:customers,read');
+    Route::get('/customers/{id}', [CustomerController::class, 'show'])->middleware('permission:customers,read');
+    Route::put('/customers/{id}', [CustomerController::class, 'update'])->middleware('permission:customers,update');
+    Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->middleware('permission:customers,delete');
+});
+
+use App\Http\Controllers\Customer\Auth\AuthController as CustomerAuthController;
+
+Route::prefix('customers')->group(function () {
+    // Public routes
+    Route::post('/ask-otp', [CustomerAuthController::class, 'askOTP']);
+    Route::post('/verify-otp', [CustomerAuthController::class, 'verifyOTP']);
+    Route::post('/login-password', [CustomerAuthController::class, 'loginWithPassword']);
+
+    // Protected routes
+    Route::middleware('auth:customer')->group(function () {
+        Route::post('/reset-password', [CustomerAuthController::class, 'resetPasswordWithOTP']);
+        Route::get('/show-profile', [CustomerAuthController::class, 'showProfile']);
+        Route::post('/update-profile', [CustomerAuthController::class, 'updateProfile']);
+    });
+});
+
+use App\Http\Controllers\Customer\CustomerProductCommentRatingController;
+
+Route::prefix('customer/product-comments')->group(function () {
+    Route::get('/{productId}', [CustomerProductCommentRatingController::class, 'index']);
+    Route::get('/view/{id}', [CustomerProductCommentRatingController::class, 'show']);
+    Route::middleware(['auth:customer'])->group(function () {
+        Route::post('/', [CustomerProductCommentRatingController::class, 'store']);
+        Route::put('/{id}', [CustomerProductCommentRatingController::class, 'update']);
+        Route::delete('/{id}', [CustomerProductCommentRatingController::class, 'destroy']);
+        Route::post('/{id}/like', [CustomerProductCommentRatingController::class, 'like']);
+        Route::post('/{id}/dislike', [CustomerProductCommentRatingController::class, 'dislike']);
+        Route::post('/{id}/unlike', [CustomerProductCommentRatingController::class, 'unlike']);
+        Route::post('/{id}/undislike', [CustomerProductCommentRatingController::class, 'undislike']);
+    });
+});
+
+use App\Http\Controllers\Admin\AdminProductCommentRatingController;
+
+
+Route::prefix('admin')->middleware(['auth:user'])->group(function () {
+    Route::get('product-comments', [AdminProductCommentRatingController::class, 'index'])->middleware('permission:comments,read');
+    Route::get('product-comments/{productId}', [AdminProductCommentRatingController::class, 'getByProduct'])->middleware('permission:comments,read');
+    Route::get('product-comments/{id}', [AdminProductCommentRatingController::class, 'show'])->middleware('permission:comments,read');
+    Route::delete('product-comments/{id}', [AdminProductCommentRatingController::class, 'destroy'])->middleware('permission:comments,delete');
+    Route::put('product-comments/{id}/approval', [AdminProductCommentRatingController::class, 'setApprovalStatus'])->middleware('permission:comments,update');
+});
+
+use App\Http\Controllers\Customer\CustomerProductConversationController;
+
+Route::prefix('customer')->group(function () {
+    Route::get('product-conversations/{productId}', [CustomerProductConversationController::class, 'index']);
+    Route::middleware(['auth:customer'])->group(function () {
+        Route::post('product-conversations', [CustomerProductConversationController::class, 'store']);
+        Route::put('product-conversations/{id}', [CustomerProductConversationController::class, 'update']);
+        Route::delete('product-conversations/{id}', [CustomerProductConversationController::class, 'destroy']);
+        Route::post('product-conversations/{id}/like', [CustomerProductConversationController::class, 'like']);
+        Route::post('product-conversations/{id}/dislike', [CustomerProductConversationController::class, 'dislike']);
+        Route::post('product-conversations/{id}/undo-like', [CustomerProductConversationController::class, 'undoLike']);
+        Route::post('product-conversations/{id}/undo-dislike', [CustomerProductConversationController::class, 'undoDislike']);
+    });
+});
+
+use App\Http\Controllers\Admin\AdminProductConversationController;
+
+Route::prefix('admin')->middleware(['auth:user'])->group(function () {
+    Route::get('product-conversations', [AdminProductConversationController::class, 'getAllConversations'])->middleware('permission:conversations,read');
+    Route::get('product-conversations/{id}', [AdminProductConversationController::class, 'getConversation'])->middleware('permission:conversations,read');
+    Route::get('product-conversations/product/{productId}', [AdminProductConversationController::class, 'getConversationsByProduct'])->middleware('permission:conversations,read');
+    Route::get('product-conversations/{conversationId}/replies', [AdminProductConversationController::class, 'getReplies'])->middleware('permission:conversations,read');
+    Route::delete('product-conversations/{id}', [AdminProductConversationController::class, 'deleteConversation'])->middleware('permission:conversations,delete');
+    Route::put('product-conversations/{id}/approval', [AdminProductConversationController::class, 'approveConversation'])->middleware('permission:conversations,update');
+    Route::post('product-conversations/{id}/admin-reply', [AdminProductConversationController::class, 'addAdminReply'])->middleware('permission:conversations,create');
+    Route::delete('product-conversations/{conversationId}/admin-reply/{replyId}', [AdminProductConversationController::class, 'deleteAdminReply'])->middleware('permission:conversations,delete');
 });
 

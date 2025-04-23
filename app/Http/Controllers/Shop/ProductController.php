@@ -24,6 +24,13 @@ class ProductController extends Controller
      *     tags={"Products"},
      *
      *     @OA\Parameter(
+     *          name="search",
+     *          in="query",
+     *          required=false,
+     *          description="Search query to look for matches",
+     *          @OA\Schema(type="string", example="samsung")
+     *      ),
+     *     @OA\Parameter(
      *         name="category_id",
      *         in="query",
      *         required=false,

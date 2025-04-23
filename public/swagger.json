@@ -11,6 +11,724 @@
         }
     ],
     "paths": {
+        "/api/admin/product-comments": {
+            "get": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Get all product comments",
+                "operationId": "a0e6557fb6b1d409b28b4220b9b065d8",
+                "parameters": [
+                    {
+                        "name": "is_approved",
+                        "in": "query",
+                        "description": "Filter by approval status",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product comments"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-comments/{productId}": {
+            "get": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Get product comments by product ID",
+                "operationId": "280b4db03e9662a965ee3a3ec84ce96c",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The ID of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_approved",
+                        "in": "query",
+                        "description": "Filter by approval status",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product comments for the specified product"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-comments/{id}": {
+            "get": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Show a specific product comment",
+                "operationId": "ba6716e41cfd7e9856730a6bd7b75567",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product comment details"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Delete a product comment",
+                "operationId": "2eb0b6723f0c5c53806cb487747dd9b8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete result"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-comments/{id}/approval": {
+            "put": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Set approval status of a comment",
+                "operationId": "7feca476b6330f7f0c4ae6bc9ee974ce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "description": "Approval status",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Approval status updated"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-comments/{commentId}/admin-reply": {
+            "post": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Add an admin reply to a product comment",
+                "operationId": "7f24abeee1cd8b0883199ee318639b77",
+                "parameters": [
+                    {
+                        "name": "commentId",
+                        "in": "path",
+                        "description": "The ID of the product comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "description": "The admin's reply text",
+                                        "type": "string"
+                                    },
+                                    "product_comment_rating_id": {
+                                        "description": "The ID of the related product comment rating",
+                                        "type": "integer"
+                                    },
+                                    "product_conversation_id": {
+                                        "description": "The ID of the related product conversation",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Admin reply created successfully"
+                    },
+                    "400": {
+                        "description": "Invalid input data"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-comments/admin-reply/{replyId}": {
+            "delete": {
+                "tags": [
+                    "Admin Product Comments"
+                ],
+                "summary": "Delete an admin reply",
+                "operationId": "3cbfa3c528aad9c37f330e3af9fb7c28",
+                "parameters": [
+                    {
+                        "name": "replyId",
+                        "in": "path",
+                        "description": "The ID of the admin reply",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin reply deleted successfully"
+                    },
+                    "404": {
+                        "description": "Admin reply not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations": {
+            "get": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Get all product conversations",
+                "operationId": "c32c8095ae186fc2e839f1ee81215972",
+                "parameters": [
+                    {
+                        "name": "is_approved",
+                        "in": "query",
+                        "description": "Filter by approval status",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product conversations"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/{id}": {
+            "get": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Get a specific product conversation",
+                "operationId": "a8cedd347e964065c8869aa0feb2747f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product conversation details"
+                    },
+                    "404": {
+                        "description": "Conversation not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Delete a product conversation",
+                "operationId": "1d44994b31ca6000520d7792da617eae",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Conversation deleted"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/product/{productId}": {
+            "get": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Get product conversations by product ID",
+                "operationId": "887872742abb2bc0600e3c06ec610f2d",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The ID of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_approved",
+                        "in": "query",
+                        "description": "Filter by approval status",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of product conversations for the specified product"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/{conversationId}/replies": {
+            "get": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Get replies for a conversation",
+                "operationId": "eebcb6df5486c2ad41b98a27742b4992",
+                "parameters": [
+                    {
+                        "name": "conversationId",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_approved",
+                        "in": "query",
+                        "description": "Filter by approval status",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of replies for the specified conversation"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/{id}/approval": {
+            "put": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Approve a product conversation",
+                "operationId": "594ea80f44ccfa8f2db6a069ef880726",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Conversation approved"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/{id}/admin-reply": {
+            "post": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Add an admin reply to a conversation",
+                "operationId": "81eb3d7fd64ed5dec931f67f0d62ab54",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "description": "Reply text",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Admin reply added"
+                    }
+                }
+            }
+        },
+        "/api/admin/product-conversations/{conversationId}/admin-reply/{replyId}": {
+            "delete": {
+                "tags": [
+                    "Admin Product Conversations"
+                ],
+                "summary": "Delete an admin reply from a conversation",
+                "operationId": "b2cfd86c6028f83350f55b390c4f2cc9",
+                "parameters": [
+                    {
+                        "name": "conversationId",
+                        "in": "path",
+                        "description": "The ID of the conversation",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "replyId",
+                        "in": "path",
+                        "description": "The ID of the reply",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin reply deleted"
+                    }
+                }
+            }
+        },
+        "/api/blogs": {
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "List blogs",
+                "operationId": "52e391c5fd6ace0b723f97c41741b181",
+                "responses": {
+                    "200": {
+                        "description": "List of blogs"
+                    }
+                }
+            }
+        },
+        "/api/admin/blogs": {
+            "post": {
+                "tags": [
+                    "Admin Blogs"
+                ],
+                "summary": "Create a new blog",
+                "operationId": "ecf4ff13d7d208d864d9af8afb548dd9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "slug",
+                                    "content"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    },
+                                    "excerpt": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "cover_image": {
+                                        "type": "string"
+                                    },
+                                    "author_id": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "draft",
+                                            "published"
+                                        ]
+                                    },
+                                    "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Blog created successfully"
+                    }
+                }
+            }
+        },
+        "/api/blogs/{id}": {
+            "get": {
+                "tags": [
+                    "Blogs"
+                ],
+                "summary": "Get a single blog by ID",
+                "operationId": "7a165586ac7a4453caca53c8ee1cbd54",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Blog found"
+                    },
+                    "404": {
+                        "description": "Blog not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/blogs/{id}": {
+            "put": {
+                "tags": [
+                    "Admin Blogs"
+                ],
+                "summary": "Update a blog",
+                "operationId": "e81fe9584a89b2755985fa72eb374c2e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "slug": {
+                                        "type": "string"
+                                    },
+                                    "excerpt": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "cover_image": {
+                                        "type": "string"
+                                    },
+                                    "author_id": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "draft",
+                                            "published"
+                                        ]
+                                    },
+                                    "published_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Blog updated"
+                    },
+                    "404": {
+                        "description": "Blog not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Blogs"
+                ],
+                "summary": "Delete a blog",
+                "operationId": "1669b59221aa4be5c4e9d49bb48d5f05",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully"
+                    },
+                    "404": {
+                        "description": "Blog not found"
+                    }
+                }
+            }
+        },
         "/api/admin/category-attributes": {
             "get": {
                 "tags": [
@@ -529,6 +1247,737 @@
                 }
             }
         },
+        "/api/admin/customers": {
+            "get": {
+                "tags": [
+                    "Admin - Customers"
+                ],
+                "summary": "Get all customers",
+                "operationId": "d4673fd730cc33cff28288a89908297d",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of customers per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of customers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Customer"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/customers/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Customers"
+                ],
+                "summary": "Get single customer by ID",
+                "operationId": "9dbc25f9584c4b06ad89eb256b14097c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Customer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Customers"
+                ],
+                "summary": "Update customer",
+                "operationId": "6d8e456aa22a9996c36d4379e7226c64",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Customer"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Customer updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Customer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Customers"
+                ],
+                "summary": "Delete customer",
+                "operationId": "69240d6358e3c189dd6531f29581ad7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                }
+            }
+        },
+        "/admin/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Display a listing of all orders",
+                "operationId": "1b5c652c58353dc894c6bf03404444dd",
+                "responses": {
+                    "200": {
+                        "description": "List of orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Display the specified order by ID",
+                "operationId": "e7e6d283779bcb33a966e6b60dc73b87",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update the specified order",
+                "operationId": "6a871b138ad8f7767d5b5031385ce402",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed to update order"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Delete the specified order",
+                "operationId": "65fa20f05c86dcf47c4aa4d038aa991b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order deleted"
+                    },
+                    "400": {
+                        "description": "Failed to delete order"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/order-number/{orderNumber}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Display the specified order by order number",
+                "operationId": "95cc7bd47f4c1fa88005f96d602ef837",
+                "parameters": [
+                    {
+                        "name": "orderNumber",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create a new order",
+                "operationId": "ac9de7f6338d9523f477427635b5280e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/customer/{customerId}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get orders for a specific customer",
+                "operationId": "5f86b7a80b6e3aaf7f022ea93273445b",
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer's orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/recent/{limit}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get the most recent orders",
+                "operationId": "275e8b40410a99099012fb962c7ec0b8",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of recent orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/expired": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get expired orders",
+                "operationId": "9b592c9b16dec9eb4fcb48eba66f14f7",
+                "responses": {
+                    "200": {
+                        "description": "List of expired orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/active": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get active orders",
+                "operationId": "0128766a8a4d5035c61537e835be521a",
+                "responses": {
+                    "200": {
+                        "description": "List of active orders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Order"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{id}/paid": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Mark an order as paid",
+                "operationId": "0d6a05ab409210650f7514036895f185",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_method": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order marked as paid"
+                    },
+                    "400": {
+                        "description": "Failed to mark order as paid"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{orderId}/items": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create order items from cart items",
+                "operationId": "56d68b4065c2daa68591ad1bcc3a81fd",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/OrderItem"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order items created"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{orderId}/items/{itemId}": {
+            "delete": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Delete an order item",
+                "operationId": "4e6f1656058af80a2ce40f803863c578",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order item deleted"
+                    },
+                    "404": {
+                        "description": "Order item not found"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{id}/status": {
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update the status of an order",
+                "operationId": "9ce4bdb28ea07a751a86d4f5ca1e0840",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order status updated"
+                    },
+                    "400": {
+                        "description": "Failed to update order status"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{id}/payment-status": {
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update the payment status of an order",
+                "operationId": "387d47cdfc8ce24477e56541a7c3d742",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_status": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment status updated"
+                    },
+                    "400": {
+                        "description": "Failed to update payment status"
+                    }
+                }
+            }
+        },
+        "/api/admin/orders/{id}/payment-method": {
+            "put": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update the payment method of an order",
+                "operationId": "a346f5d2cfc33ae5a9323fb0256595cd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "payment_method": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment method updated"
+                    },
+                    "400": {
+                        "description": "Failed to update payment method"
+                    }
+                }
+            }
+        },
         "/api/admin/products": {
             "post": {
                 "tags": [
@@ -899,6 +2348,1443 @@
                 ]
             }
         },
+        "/api/admin/shipments": {
+            "get": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Get all shipments",
+                "operationId": "3d5efd021b824b5cf6a5ce1e31c5cdb0",
+                "responses": {
+                    "200": {
+                        "description": "List of shipments"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Create a new shipment",
+                "operationId": "1fd921d4e4deb252e39dbbc341cf69a1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreShipmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Shipment created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/shipments/{id}": {
+            "get": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Get shipment by ID",
+                "operationId": "c574bee6873120b0bb3b3e0ae0196871",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shipment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shipment details"
+                    },
+                    "404": {
+                        "description": "Shipment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Update an existing shipment",
+                "operationId": "ac2774c73be02e0b922468014a730df3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shipment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateShipmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Shipment updated"
+                    },
+                    "404": {
+                        "description": "Shipment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Delete a shipment",
+                "operationId": "da72d969228416bda637056a8af4b90c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shipment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Shipment deleted"
+                    },
+                    "404": {
+                        "description": "Shipment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/carriers": {
+            "get": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Get all carriers",
+                "operationId": "8aad4afcb2479c7cc97b1deb683bfd55",
+                "responses": {
+                    "200": {
+                        "description": "List of all carriers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Carrier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Create a new carrier",
+                "operationId": "e8794abd20774cf75af7534d88dff962",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Carrier name",
+                                        "type": "string"
+                                    },
+                                    "tracking_url": {
+                                        "description": "Carrier tracking URL",
+                                        "type": "string"
+                                    },
+                                    "contact_number": {
+                                        "description": "Carrier contact number",
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "description": "Carrier status (active or inactive)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Carrier created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Carrier"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data provided"
+                    }
+                }
+            }
+        },
+        "/api/admin/carriers/{id}": {
+            "get": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Get carrier details by ID",
+                "operationId": "2359166ac7a6b6ee4b98c3c91b7c2653",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the carrier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Carrier details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Carrier"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Carrier not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Update carrier details",
+                "operationId": "0286f342e14f67a9048ddab9d1251ba4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the carrier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Carrier name",
+                                        "type": "string"
+                                    },
+                                    "tracking_url": {
+                                        "description": "Carrier tracking URL",
+                                        "type": "string"
+                                    },
+                                    "contact_number": {
+                                        "description": "Carrier contact number",
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "description": "Carrier status (active or inactive)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Carrier updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Carrier"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Carrier not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Shipments"
+                ],
+                "summary": "Delete a carrier",
+                "operationId": "dce21ddfd06b053994079213b6441fe2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the carrier",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Carrier deleted successfully"
+                    },
+                    "404": {
+                        "description": "Carrier not found"
+                    }
+                }
+            }
+        },
+        "/api/customers/ask-otp": {
+            "post": {
+                "tags": [
+                    "Customer - Authentication"
+                ],
+                "summary": "Request OTP for phone number",
+                "operationId": "2f75efbbeb3a6dd092bb35a3c600236e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP sent successfully"
+                    }
+                }
+            }
+        },
+        "/api/customers/verify-otp": {
+            "post": {
+                "tags": [
+                    "Customer - Authentication"
+                ],
+                "summary": "Verify OTP and login/register",
+                "operationId": "b056790e7e582286ebd7664f69565c9d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09123456789"
+                                    },
+                                    "otp": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful, token returned"
+                    }
+                }
+            }
+        },
+        "/api/customers/reset-password": {
+            "post": {
+                "tags": [
+                    "Customer - Authentication"
+                ],
+                "summary": "Reset customer password using OTP",
+                "operationId": "f8957e8e1bf8ef64e4135b8a4b4889e9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "09123456789"
+                                    },
+                                    "otp": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "newpass"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "newpass"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully"
+                    }
+                }
+            }
+        },
+        "/api/customers/login-password": {
+            "post": {
+                "tags": [
+                    "Customer - Authentication"
+                ],
+                "summary": "Login using email and password",
+                "operationId": "cdf37d0a08fa32c6926599efda6f24aa",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "customer@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    }
+                }
+            }
+        },
+        "/api/customers/show-profile": {
+            "get": {
+                "tags": [
+                    "Customer - Profile"
+                ],
+                "summary": "Get the authenticated customer's profile",
+                "description": "Retrieve the currently authenticated customer's profile",
+                "operationId": "10e43bc6b99eeca5805b1b006e94f8d2",
+                "responses": {
+                    "200": {
+                        "description": "Customer profile retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customers/update-profile": {
+            "post": {
+                "tags": [
+                    "Customer - Profile"
+                ],
+                "summary": "Update authenticated customer's profile",
+                "description": "Update the currently authenticated customer's profile",
+                "operationId": "3e121d2805cb6ba999fdc0eb46e44d58",
+                "requestBody": {
+                    "description": "Customer profile data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Customer profile updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/orders": {
+            "get": {
+                "tags": [
+                    "Customer Orders"
+                ],
+                "summary": "Get all orders for the authenticated customer",
+                "operationId": "a937ee7c3a9e2429f1d853976b2f933d",
+                "responses": {
+                    "200": {
+                        "description": "List of customer's orders"
+                    }
+                },
+                "security": [
+                    {
+                        "customer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Customer Orders"
+                ],
+                "summary": "Create an order from the customer's cart",
+                "operationId": "f1bd737905588e5425a3cad730a83df3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "shipping_address_id"
+                                ],
+                                "properties": {
+                                    "shipping_address_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Leave at the front door"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created from cart"
+                    },
+                    "400": {
+                        "description": "Cart is empty or invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "customer": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/orders/update-from-cart/{orderId}": {
+            "put": {
+                "tags": [
+                    "Customer Orders"
+                ],
+                "summary": "Update an order to match the customer's current cart",
+                "operationId": "6d319061f8f605c0394b8e58490acd2f",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order updated from cart"
+                    },
+                    "400": {
+                        "description": "Cart is empty or update failed"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "customer": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{productId}": {
+            "get": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "List comments and ratings for a product",
+                "operationId": "0080a636d5b6f942db24f78e1714691f",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "ID of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Items per page",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of comments"
+                    }
+                }
+            }
+        },
+        "/api/customer/product-comments/view/{id}": {
+            "get": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Get a specific comment and rating",
+                "operationId": "439e4915d01bedb4fb12c85ed0bbcb3f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment details"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    }
+                }
+            }
+        },
+        "/api/customer/product-comments": {
+            "post": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Create a new comment and rating",
+                "operationId": "3039ddeb20df8734a87f7f1cb9b52cad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "maxLength": 1000
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comment created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{id}": {
+            "put": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Update a customer's comment",
+                "operationId": "993f94f79955487c376d34f4937a7181",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "comment": {
+                                        "type": "string",
+                                        "maxLength": 1000
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update result"
+                    },
+                    "403": {
+                        "description": "Unauthorized or not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Delete a customer's comment",
+                "operationId": "ac69ef4e3c4d6d5cb15c676a2acbfb34",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete result"
+                    },
+                    "403": {
+                        "description": "Unauthorized or not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{id}/like": {
+            "post": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Like a comment",
+                "operationId": "d59dff8615e668674218b3f456cbcaff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Like successful"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{id}/dislike": {
+            "post": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Dislike a comment",
+                "operationId": "564b8debae6d615b232060a72a9133ab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dislike successful"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{id}/unlike": {
+            "post": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Remove like from a comment",
+                "operationId": "2676d4998732d9e588e12dc804a0bf78",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unlike successful"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-comments/{id}/undislike": {
+            "post": {
+                "tags": [
+                    "Customer Product Comment Ratings"
+                ],
+                "summary": "Remove dislike from a comment",
+                "operationId": "e948a747165a8f023962abec5ff720ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Undislike successful"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{productId}": {
+            "get": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Get approved conversations for a product",
+                "operationId": "5d1ad2064334bde8fd51bede88c1c744",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "ID of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of conversations"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations": {
+            "post": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Create a new conversation or reply",
+                "operationId": "fcbad0055c40842163099278d98f8d37",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "message"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "maxLength": 2000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Conversation created"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{id}": {
+            "put": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Update a conversation (only if owned by customer)",
+                "operationId": "c503f7bfc240cb0f5a21d615ffd5f569",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "message"
+                                ],
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "maxLength": 2000
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Conversation updated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Delete a conversation (only if owned by customer)",
+                "operationId": "86e2cb51a0e97c7746379033ab8df789",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Conversation deleted"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{id}/like": {
+            "post": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Like a conversation",
+                "operationId": "fd8030a4a4478a9a1f0eb3f89448eb92",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liked"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{id}/dislike": {
+            "post": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Dislike a conversation",
+                "operationId": "2cd7ffbcffde07ecca4b441864235bc5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Disliked"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{id}/undo-like": {
+            "post": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Undo a like",
+                "operationId": "b53b16b8ca6a737e124a5513bd15b2f8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Undo like success"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customer/product-conversations/{id}/undo-dislike": {
+            "post": {
+                "tags": [
+                    "Customer Product Conversations"
+                ],
+                "summary": "Undo a dislike",
+                "operationId": "5138fc8cdffb27997b7960a2dfc306be",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Undo dislike success"
+                    }
+                },
+                "security": [
+                    {
+                        "customerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/shipments/{shipmentId}": {
+            "get": {
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Get shipment details",
+                "operationId": "d5ed82bdf430d20acb76776e1f19df1a",
+                "parameters": [
+                    {
+                        "name": "shipmentId",
+                        "in": "path",
+                        "description": "ID of the shipment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Shipment details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Shipment"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "You do not have permission to view this shipment."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Update shipment details",
+                "operationId": "da573b19b19af63449e338edd0dd64a6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Shipment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateShipmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Shipment updated"
+                    },
+                    "404": {
+                        "description": "Shipment not found"
+                    }
+                }
+            }
+        },
+        "/api/shipments": {
+            "post": {
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Create a new shipment",
+                "operationId": "9d0982965c99be111636f83c48de72f9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreShipmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Shipment created"
+                    }
+                }
+            }
+        },
+        "/api/carriers": {
+            "get": {
+                "tags": [
+                    "Shipments"
+                ],
+                "summary": "Get all carriers",
+                "operationId": "8ff03e7c9805a362b7328867c98a820a",
+                "responses": {
+                    "200": {
+                        "description": "List of all carriers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Carrier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/payment/pay/{gateway}": {
             "get": {
                 "tags": [
@@ -1005,6 +3891,178 @@
                 }
             }
         },
+        "/api/cart": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get all items in the customer's cart",
+                "operationId": "696ee701284616e88b7f3ca704ec235d",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cart items"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Add product to cart",
+                "operationId": "d8147034f361939fffc3ecb770d3d7ec",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "type": "integer"
+                                    },
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product added to cart"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Clear all items from the customer's cart",
+                "operationId": "872ec38fe555ce2a1b828862fe4ec833",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart cleared"
+                    }
+                }
+            }
+        },
+        "/api/cart/{cartId}": {
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Update quantity of a cart item",
+                "operationId": "328a90edba7c205f93d9f9a54419d6dc",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cart item updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Remove item from cart",
+                "operationId": "a45bbb87c3be3289112f16b8a349785a",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item removed"
+                    }
+                }
+            }
+        },
+        "/api/cart/summary": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get cart subtotal and total quantity",
+                "operationId": "9422b387ec978867b9902cc637dc4f46",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart summary"
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -1013,6 +4071,16 @@
                 "summary": "Get a filtered list of products",
                 "operationId": "getFilteredProducts",
                 "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search query to look for matches",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "samsung"
+                        }
+                    },
                     {
                         "name": "category_id",
                         "in": "query",
@@ -1914,7 +4982,7 @@
         "/api/admin/users/show-profile": {
             "get": {
                 "tags": [
-                    "Profile"
+                    "Users"
                 ],
                 "summary": "Get the authenticated user's profile",
                 "description": "Retrieve the currently authenticated user's profile",
@@ -1968,7 +5036,7 @@
         "/api/admin/users/update-profile": {
             "post": {
                 "tags": [
-                    "Profile"
+                    "Users"
                 ],
                 "summary": "Update authenticated user's profile",
                 "description": "Update the currently authenticated user's profile",
@@ -2086,6 +5154,90 @@
                         "type": "integer",
                         "example": 1,
                         "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "OrderRequest": {
+                "required": [
+                    "customer_id",
+                    "shipping_address_id",
+                    "status",
+                    "payment_status",
+                    "payment_method",
+                    "subtotal",
+                    "shipping_cost",
+                    "total"
+                ],
+                "properties": {
+                    "customer_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "shipping_address_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "order_number": {
+                        "type": "string",
+                        "example": "ORD-20250421-XYZ"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "pending"
+                    },
+                    "payment_status": {
+                        "type": "string",
+                        "example": "unpaid"
+                    },
+                    "payment_method": {
+                        "type": "string",
+                        "example": "online"
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 49.99
+                    },
+                    "discount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 5
+                    },
+                    "tax": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 2.5
+                    },
+                    "shipping_cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 4.99
+                    },
+                    "total": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 52.48
+                    },
+                    "notes": {
+                        "type": "string",
+                        "example": "Leave at front door."
+                    },
+                    "placed_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-21T12:00:00Z"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-22T12:00:00Z"
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderItem"
+                        }
                     }
                 },
                 "type": "object"
@@ -2384,6 +5536,135 @@
                 },
                 "type": "object"
             },
+            "StoreShipmentRequest": {
+                "required": [
+                    "order_id",
+                    "carrier_id",
+                    "shipping_address_id",
+                    "tracking_number",
+                    "cost"
+                ],
+                "properties": {
+                    "order_id": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "carrier_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "shipping_address_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "tracking_number": {
+                        "type": "string",
+                        "example": "TRACK123456"
+                    },
+                    "cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 50.99
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-20T12:00:00Z"
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-22T16:45:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateShipmentRequest": {
+                "properties": {
+                    "carrier_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "shipping_address_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "tracking_number": {
+                        "type": "string",
+                        "example": "TRACK123456"
+                    },
+                    "cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 50.99
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "shipped",
+                            "delivered",
+                            "cancelled"
+                        ],
+                        "example": "shipped"
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-20T12:00:00Z"
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-22T16:45:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "Carrier": {
+                "required": [
+                    "name",
+                    "is_active"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "DHL"
+                    },
+                    "tracking_url": {
+                        "type": "string",
+                        "example": "https://dhl.com/track?number={tracking_number}",
+                        "nullable": true
+                    },
+                    "contact_number": {
+                        "type": "string",
+                        "example": "+1-800-123-4567",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2025-04-21T14:30:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2025-04-21T15:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "Customer": {
                 "required": [
                     "phone",
@@ -2473,6 +5754,15 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-04-17T14:00:00Z"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-17T14:15:00Z"
+                    },
+                    "is_expired": {
+                        "type": "boolean",
+                        "example": false
                     },
                     "created_at": {
                         "type": "string",
@@ -2680,6 +5970,77 @@
                 },
                 "type": "object"
             },
+            "Shipment": {
+                "required": [
+                    "order_id",
+                    "carrier_id",
+                    "shipping_address_id",
+                    "status"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "readOnly": true,
+                        "example": 101
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": 25
+                    },
+                    "carrier_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "shipping_address_id": {
+                        "type": "integer",
+                        "example": 88
+                    },
+                    "tracking_number": {
+                        "type": "string",
+                        "example": "1Z999AA10123456784",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "shipped"
+                    },
+                    "cost": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 12.99
+                    },
+                    "shipped_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-21T10:30:00Z",
+                        "nullable": true
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-23T16:00:00Z",
+                        "nullable": true
+                    },
+                    "notes": {
+                        "type": "string",
+                        "example": "Left at the front desk",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2025-04-21T09:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2025-04-21T09:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "required": [
                     "phone",
@@ -2786,6 +6147,11 @@
                 "description": "Authentication using session cookie (laravel_session)",
                 "name": "laravel_session",
                 "in": "cookie"
+            },
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
@@ -2796,12 +6162,63 @@
     ],
     "tags": [
         {
+            "name": "Admin Product Comments",
+            "description": "APIs for managing product comments and ratings in the admin panel."
+        },
+        {
+            "name": "Admin Product Conversations",
+            "description": "APIs for managing product conversations in the admin panel."
+        },
+        {
+            "name": "Admin Blogs",
+            "description": "Admin blog management"
+        },
+        {
             "name": "Categories",
             "description": "Category management endpoints for the admin panel"
         },
         {
+            "name": "Admin - Customers",
+            "description": "Customer management endpoints for the admin panel"
+        },
+        {
+            "name": "Orders",
+            "description": "Operations related to orders"
+        },
+        {
+            "name": "Admin Shipments",
+            "description": "Admin management for shipments and carriers"
+        },
+        {
+            "name": "Customer - Authentication",
+            "description": "Authentication endpoints for customers"
+        },
+        {
+            "name": "Customer Orders"
+        },
+        {
+            "name": "Customer Product Comment Ratings",
+            "description": "Endpoints for managing customer product comments and ratings"
+        },
+        {
+            "name": "Customer Product Conversations",
+            "description": "Customer endpoints for managing product conversations"
+        },
+        {
+            "name": "Shipments",
+            "description": "Operations related to customer shipments"
+        },
+        {
+            "name": "Cart",
+            "description": "Shopping cart management"
+        },
+        {
             "name": "Roles",
             "description": "Role management (admin only)"
+        },
+        {
+            "name": "Blogs",
+            "description": "Blogs"
         },
         {
             "name": "Category Attributes",
@@ -2810,6 +6227,10 @@
         {
             "name": "Products",
             "description": "Products"
+        },
+        {
+            "name": "Customer - Profile",
+            "description": "Customer - Profile"
         },
         {
             "name": "Payments",
@@ -2822,10 +6243,6 @@
         {
             "name": "Users",
             "description": "Users"
-        },
-        {
-            "name": "Profile",
-            "description": "Profile"
         }
     ]
 }

@@ -67,8 +67,6 @@ class ShipmentService
 
         $this->shipmentRepository->deleteShipment($shipment);
 
-        $this->updateOrderShipmentCost($orderId);
-
         return true;
     }
 
