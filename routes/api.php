@@ -1,15 +1,25 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProductCommentRatingController;
+use App\Http\Controllers\Admin\AdminProductConversationController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryAttributeController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\Customer\Auth\AuthController as CustomerAuthController;
+use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CustomerOrderController;
+use App\Http\Controllers\Customer\CustomerProductCommentRatingController;
+use App\Http\Controllers\Customer\CustomerProductConversationController;
+use App\Http\Controllers\Customer\CustomerShipmentController as CustomerShipmentController;
+use App\Http\Controllers\Shop\ProductController as ShopProductController;
 use App\Http\Controllers\User\Auth\AuthController;
+use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Shop\ProductController as ShopProductController;
-use App\Http\Controllers\User\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,9 +125,7 @@ Route::prefix('categories')->group(function () {
     Route::get('{id}/attributes', [CategoryController::class, 'attributes'])->name('attributes'); // Get attributes of a category
 });
 
-use App\Http\Controllers\Shop\CartController;
-
-Route::prefix('cart')->middleware(['auth:customer'])->group(function () {
+Route::prefix('customer/cart')->middleware(['auth:customer'])->group(function () {
     Route::get('/', [CartController::class, 'index']); // Get all cart items
     Route::post('/', [CartController::class, 'store']); // Add to cart
     Route::put('{cartId}', [CartController::class, 'update']); // Update cart item quantity
@@ -126,8 +134,6 @@ Route::prefix('cart')->middleware(['auth:customer'])->group(function () {
     Route::get('/summary', [CartController::class, 'summary']); // Get cart summary
 });
 
-use App\Http\Controllers\Customer\ShipmentController as CustomerShipmentController;
-
 Route::prefix('customer')->middleware(['auth:customer'])->group(function () {
     Route::get('/shipments/{shipmentId}', [CustomerShipmentController::class, 'show']);
     Route::post('/shipments', [CustomerShipmentController::class, 'store']);
@@ -135,8 +141,6 @@ Route::prefix('customer')->middleware(['auth:customer'])->group(function () {
     Route::get('/carriers', [CustomerShipmentController::class, 'getAllCarriers']);
 
 });
-
-use App\Http\Controllers\Admin\ShipmentController;
 
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     // Shipments Routes
@@ -160,8 +164,6 @@ Route::prefix('customer/orders')->middleware('auth:customer')->group(function ()
     Route::put('/update-from-cart/{orderId}', [CustomerOrderController::class, 'update']);
 });
 
-
-use App\Http\Controllers\Admin\OrderController;
 
 // Order Routes
 Route::prefix('admin/orders')->middleware(['auth:user'])->group(function () {
@@ -192,16 +194,12 @@ Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->middleware('permission:blogs,delete');
 });
 
-use App\Http\Controllers\Admin\CustomerController;
-
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->middleware('permission:customers,read');
     Route::get('/customers/{id}', [CustomerController::class, 'show'])->middleware('permission:customers,read');
     Route::put('/customers/{id}', [CustomerController::class, 'update'])->middleware('permission:customers,update');
     Route::delete('/customers/{id}', [CustomerController::class, 'destroy'])->middleware('permission:customers,delete');
 });
-
-use App\Http\Controllers\Customer\Auth\AuthController as CustomerAuthController;
 
 Route::prefix('customers')->group(function () {
     // Public routes
@@ -217,8 +215,6 @@ Route::prefix('customers')->group(function () {
     });
 });
 
-use App\Http\Controllers\Customer\CustomerProductCommentRatingController;
-
 Route::prefix('customer/product-comments')->group(function () {
     Route::get('/{productId}', [CustomerProductCommentRatingController::class, 'index']);
     Route::get('/view/{id}', [CustomerProductCommentRatingController::class, 'show']);
@@ -233,8 +229,6 @@ Route::prefix('customer/product-comments')->group(function () {
     });
 });
 
-use App\Http\Controllers\Admin\AdminProductCommentRatingController;
-
 
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::get('product-comments', [AdminProductCommentRatingController::class, 'index'])->middleware('permission:comments,read');
@@ -243,8 +237,6 @@ Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::delete('product-comments/{id}', [AdminProductCommentRatingController::class, 'destroy'])->middleware('permission:comments,delete');
     Route::put('product-comments/{id}/approval', [AdminProductCommentRatingController::class, 'setApprovalStatus'])->middleware('permission:comments,update');
 });
-
-use App\Http\Controllers\Customer\CustomerProductConversationController;
 
 Route::prefix('customer')->group(function () {
     Route::get('product-conversations/{productId}', [CustomerProductConversationController::class, 'index']);
@@ -258,8 +250,6 @@ Route::prefix('customer')->group(function () {
         Route::post('product-conversations/{id}/undo-dislike', [CustomerProductConversationController::class, 'undoDislike']);
     });
 });
-
-use App\Http\Controllers\Admin\AdminProductConversationController;
 
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::get('product-conversations', [AdminProductConversationController::class, 'getAllConversations'])->middleware('permission:conversations,read');

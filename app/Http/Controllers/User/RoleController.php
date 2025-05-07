@@ -9,8 +9,8 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Tag(
- *     name="Roles",
- *     description="Role management (admin only)"
+ *     name="Admin Roles",
+ *     description="Role management"
  * )
  */
 class RoleController extends Controller
@@ -26,7 +26,7 @@ class RoleController extends Controller
      * @OA\Get(
      *     path="/api/admin/roles",
      *     summary="Get all roles",
-     *     tags={"Roles"},
+     *     tags={"Admin Roles"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
@@ -44,7 +44,7 @@ class RoleController extends Controller
      * @OA\Get(
      *     path="/api/admin/roles/{id}",
      *     summary="Get a specific role by ID",
-     *     tags={"Roles"},
+     *     tags={"Admin Roles"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -70,7 +70,7 @@ class RoleController extends Controller
      * @OA\Post(
      *     path="/api/admin/roles",
      *     summary="Create a new role",
-     *     tags={"Roles"},
+     *     tags={"Admin Roles"},
      *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(ref="#/components/requestBodies/StoreOrUpdateRoleRequest"),
      *     @OA\Response(
@@ -91,7 +91,7 @@ class RoleController extends Controller
      * @OA\Put(
      *     path="/api/admin/roles/{id}",
      *     summary="Update an existing role",
-     *     tags={"Roles"},
+     *     tags={"Admin Roles"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -120,7 +120,7 @@ class RoleController extends Controller
      * @OA\Delete(
      *     path="/api/admin/roles/{id}",
      *     summary="Delete a role",
-     *     tags={"Roles"},
+     *     tags={"Admin Roles"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",

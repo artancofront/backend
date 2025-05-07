@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Shop;
+namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Services\CartService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
- *     name="Cart",
+ *     name="Customer Cart",
  *     description="Shopping cart management"
  * )
  */
@@ -24,9 +24,9 @@ class CartController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/cart",
+     *     path="/api/customer/cart",
      *     summary="Get all items in the customer's cart",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",
@@ -48,9 +48,9 @@ class CartController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/cart",
+     *     path="/api/customer/cart",
      *     summary="Add product to cart",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -85,9 +85,9 @@ class CartController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/cart/{cartId}",
+     *     path="/api/customer/cart/{cartId}",
      *     summary="Update quantity of a cart item",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\Parameter(
      *         name="cartId",
      *         in="path",
@@ -119,9 +119,9 @@ class CartController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/cart/{cartId}",
+     *     path="/api/customer/cart/{cartId}",
      *     summary="Remove item from cart",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\Parameter(
      *         name="cartId",
      *         in="path",
@@ -142,9 +142,9 @@ class CartController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/cart",
+     *     path="/api/customer/cart",
      *     summary="Clear all items from the customer's cart",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",
@@ -169,9 +169,9 @@ class CartController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/cart/summary",
+     *     path="/api/customer/cart/summary",
      *     summary="Get cart subtotal and total quantity",
-     *     tags={"Cart"},
+     *     tags={"Customer Cart"},
      *     @OA\Parameter(
      *         name="customer_id",
      *         in="query",

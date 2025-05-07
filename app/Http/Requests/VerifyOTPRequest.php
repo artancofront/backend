@@ -15,7 +15,7 @@ class VerifyOTPRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|digits:10',
+            'phone' => 'required|digits:11',
             'otp' => 'required|digits:6',
         ];
     }

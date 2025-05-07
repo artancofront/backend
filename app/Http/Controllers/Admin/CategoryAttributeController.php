@@ -21,7 +21,7 @@ class CategoryAttributeController extends Controller
      * @OA\Get(
      *     path="/api/admin/category-attributes",
      *     summary="List all category attributes",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Response(response=200, description="Success")
      * )
      */
@@ -34,7 +34,7 @@ class CategoryAttributeController extends Controller
      * @OA\Get(
      *     path="/api/admin/category-attributes/{id}",
      *     summary="Get a specific category attribute by ID",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Success"),
      *     @OA\Response(response=404, description="Not found")
@@ -52,7 +52,7 @@ class CategoryAttributeController extends Controller
      * @OA\Post(
      *     path="/api/admin/category-attributes",
      *     summary="Create a new category attribute",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\RequestBody(required=true, @OA\JsonContent(
      *         required={"category_id", "name"},
      *         @OA\Property(property="category_id", type="integer"),
@@ -77,7 +77,7 @@ class CategoryAttributeController extends Controller
      * @OA\Put(
      *     path="/api/admin/category-attributes/{id}",
      *     summary="Update a category attribute",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(required=true, @OA\JsonContent(
      *         @OA\Property(property="name", type="string")
@@ -103,7 +103,7 @@ class CategoryAttributeController extends Controller
      * @OA\Delete(
      *     path="/api/admin/category-attributes/{id}",
      *     summary="Delete a category attribute",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=204, description="Deleted"),
      *     @OA\Response(response=404, description="Not found")
@@ -122,7 +122,7 @@ class CategoryAttributeController extends Controller
      * @OA\Get(
      *     path="/api/admin/category-attributes/{id}/values",
      *     summary="Get all values for a specific category attribute",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Success")
      * )
@@ -136,7 +136,7 @@ class CategoryAttributeController extends Controller
      * @OA\Post(
      *     path="/api/admin/category-attributes/values",
      *     summary="Create a new value for a category attribute",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\RequestBody(required=true, @OA\JsonContent(
      *         required={"category_attribute_id", "value"},
      *         @OA\Property(property="category_attribute_id", type="integer"),
@@ -161,7 +161,7 @@ class CategoryAttributeController extends Controller
      * @OA\Post(
      *     path="/api/admin/category-attributes/values/{id}",
      *     summary="Update a category attribute value",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(required=true, @OA\JsonContent(
      *         required={"value"},
@@ -185,7 +185,7 @@ class CategoryAttributeController extends Controller
      * @OA\Delete(
      *     path="/api/admin/category-attributes/values/{id}",
      *     summary="Delete a category attribute value",
-     *     tags={"Category Attributes"},
+     *     tags={"Admin Category Attributes"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=204, description="Deleted"),
      *     @OA\Response(response=404, description="Not found")

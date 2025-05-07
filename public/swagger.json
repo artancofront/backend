@@ -732,7 +732,7 @@
         "/api/admin/category-attributes": {
             "get": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "List all category attributes",
                 "operationId": "d9acb502fb766de372a3c0652aa52ee9",
@@ -744,7 +744,7 @@
             },
             "post": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Create a new category attribute",
                 "operationId": "f88a783afa83081624628e8cfcdf53dc",
@@ -780,7 +780,7 @@
         "/api/admin/category-attributes/{id}": {
             "get": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Get a specific category attribute by ID",
                 "operationId": "977a6a87362ec4194dffe1160127f97a",
@@ -805,7 +805,7 @@
             },
             "put": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Update a category attribute",
                 "operationId": "7691117a43b6358a82935059ac9fcbe5",
@@ -845,7 +845,7 @@
             },
             "delete": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Delete a category attribute",
                 "operationId": "448f24a0f0d8c5ee7169147926fc1e76",
@@ -872,7 +872,7 @@
         "/api/admin/category-attributes/{id}/values": {
             "get": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Get all values for a specific category attribute",
                 "operationId": "d69b52a1a0beb71b3ac72060922860fe",
@@ -896,7 +896,7 @@
         "/api/admin/category-attributes/values": {
             "post": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Create a new value for a category attribute",
                 "operationId": "91b402ba3bf42079fd18bec93b81b3fa",
@@ -932,7 +932,7 @@
         "/api/admin/category-attributes/values/{id}": {
             "post": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Update a category attribute value",
                 "operationId": "c8c5a8c58345ad96720e01d2712aff32",
@@ -972,7 +972,7 @@
             },
             "delete": {
                 "tags": [
-                    "Category Attributes"
+                    "Admin Category Attributes"
                 ],
                 "summary": "Delete a category attribute value",
                 "operationId": "77666c6b4d148d0254a99c81f683990c",
@@ -1013,7 +1013,7 @@
         "/api/admin/categories": {
             "post": {
                 "tags": [
-                    "Categories"
+                    "Admin Categories"
                 ],
                 "summary": "Create a new category",
                 "operationId": "b6debc8966a8a9c67c05b11372ba5d86",
@@ -1064,7 +1064,7 @@
         "/api/admin/categories/{id}": {
             "put": {
                 "tags": [
-                    "Categories"
+                    "Admin Categories"
                 ],
                 "summary": "Update a category",
                 "operationId": "e71fc0468144def0740c0fea7a736e50",
@@ -1099,7 +1099,7 @@
             },
             "delete": {
                 "tags": [
-                    "Categories"
+                    "Admin Categories"
                 ],
                 "summary": "Delete a category",
                 "operationId": "758ac4f7cb5b21e5640e6dd136f3d77c",
@@ -1202,7 +1202,7 @@
         "/api/admin/categories/{id}/products": {
             "get": {
                 "tags": [
-                    "Categories"
+                    "Admin Categories"
                 ],
                 "summary": "Get products of a category",
                 "operationId": "7e5ed00bbbc7471a481ef8be3c8e8f88",
@@ -1432,13 +1432,13 @@
                 }
             }
         },
-        "/admin/orders": {
+        "/api/admin/orders": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Display a listing of all orders",
-                "operationId": "1b5c652c58353dc894c6bf03404444dd",
+                "operationId": "f954f3dfa0d14a0dbea3336954f7bace",
                 "responses": {
                     "200": {
                         "description": "List of orders",
@@ -1454,12 +1454,41 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Admin Orders"
+                ],
+                "summary": "Create a new order",
+                "operationId": "ac9de7f6338d9523f477427635b5280e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/OrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/admin/orders/{id}": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Display the specified order by ID",
                 "operationId": "e7e6d283779bcb33a966e6b60dc73b87",
@@ -1488,7 +1517,7 @@
             },
             "put": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Update the specified order",
                 "operationId": "6a871b138ad8f7767d5b5031385ce402",
@@ -1530,7 +1559,7 @@
             },
             "delete": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Delete the specified order",
                 "operationId": "65fa20f05c86dcf47c4aa4d038aa991b",
@@ -1557,7 +1586,7 @@
         "/api/admin/orders/order-number/{orderNumber}": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Display the specified order by order number",
                 "operationId": "95cc7bd47f4c1fa88005f96d602ef837",
@@ -1585,41 +1614,10 @@
                 }
             }
         },
-        "/api/admin/orders": {
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Create a new order",
-                "operationId": "ac9de7f6338d9523f477427635b5280e",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OrderRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Order created",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Order"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/admin/orders/customer/{customerId}": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Get orders for a specific customer",
                 "operationId": "5f86b7a80b6e3aaf7f022ea93273445b",
@@ -1653,7 +1651,7 @@
         "/api/admin/orders/recent/{limit}": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Get the most recent orders",
                 "operationId": "275e8b40410a99099012fb962c7ec0b8",
@@ -1688,7 +1686,7 @@
         "/api/admin/orders/expired": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Get expired orders",
                 "operationId": "9b592c9b16dec9eb4fcb48eba66f14f7",
@@ -1712,7 +1710,7 @@
         "/api/admin/orders/active": {
             "get": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Get active orders",
                 "operationId": "0128766a8a4d5035c61537e835be521a",
@@ -1736,7 +1734,7 @@
         "/api/admin/orders/{id}/paid": {
             "post": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Mark an order as paid",
                 "operationId": "0d6a05ab409210650f7514036895f185",
@@ -1778,7 +1776,7 @@
         "/api/admin/orders/{orderId}/items": {
             "post": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Create order items from cart items",
                 "operationId": "56d68b4065c2daa68591ad1bcc3a81fd",
@@ -1820,7 +1818,7 @@
         "/api/admin/orders/{orderId}/items/{itemId}": {
             "delete": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Delete an order item",
                 "operationId": "4e6f1656058af80a2ce40f803863c578",
@@ -1855,7 +1853,7 @@
         "/api/admin/orders/{id}/status": {
             "put": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Update the status of an order",
                 "operationId": "9ce4bdb28ea07a751a86d4f5ca1e0840",
@@ -1897,7 +1895,7 @@
         "/api/admin/orders/{id}/payment-status": {
             "put": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Update the payment status of an order",
                 "operationId": "387d47cdfc8ce24477e56541a7c3d742",
@@ -1939,7 +1937,7 @@
         "/api/admin/orders/{id}/payment-method": {
             "put": {
                 "tags": [
-                    "Orders"
+                    "Admin Orders"
                 ],
                 "summary": "Update the payment method of an order",
                 "operationId": "a346f5d2cfc33ae5a9323fb0256595cd",
@@ -1981,7 +1979,7 @@
         "/api/admin/products": {
             "post": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Create a new product",
                 "operationId": "ff11d12615a68edd8d75eb6fe4d5f885",
@@ -2010,7 +2008,7 @@
         "/api/admin/products/{id}": {
             "put": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Update an existing product",
                 "operationId": "1234c087b21bd1df187ed757f67000ea",
@@ -2053,7 +2051,7 @@
             },
             "delete": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Delete a product",
                 "operationId": "07ca3329005fedce634d7afd90df29f5",
@@ -2082,7 +2080,7 @@
         "/api/admin/products/{parentId}/variants": {
             "post": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Add a variant to a product",
                 "operationId": "bdd5fd0cee3f6880523fc96f5ad899e5",
@@ -2121,7 +2119,7 @@
         "/api/admin/products/variants/{variantId}": {
             "put": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Update a product variant",
                 "operationId": "6b393b15e69cda69902916d4c8e0f45e",
@@ -2158,7 +2156,7 @@
             },
             "delete": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Delete a variant",
                 "operationId": "da2ce9d65fdf6f662e4b813c36e9e49a",
@@ -2187,7 +2185,7 @@
         "/api/admin/products/upload-image/upload": {
             "post": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Upload a product image to temp",
                 "operationId": "74ac30589d97897c800c25596da64699",
@@ -2225,7 +2223,7 @@
         "/api/admin/products/{id}/image": {
             "post": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Attach uploaded image to product",
                 "operationId": "4dfa8852ccbd18c64f94db46a0519833",
@@ -2278,7 +2276,7 @@
         "/api/admin/products/image/{id}": {
             "put": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Update image metadata",
                 "operationId": "048a66200ee8a9bebbd366120961ec8f",
@@ -2322,7 +2320,7 @@
             },
             "delete": {
                 "tags": [
-                    "Products"
+                    "Admin Products"
                 ],
                 "summary": "Delete product image",
                 "operationId": "944108322da0a4e82bb8df5a125ab623",
@@ -2908,7 +2906,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/User"
+                                "$ref": "#/components/schemas/UpdateProfileRequest"
                             }
                         }
                     }
@@ -2963,6 +2961,178 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/customer/cart": {
+            "get": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Get all items in the customer's cart",
+                "operationId": "ab26dc762893d78c787a6b85e3f5ff27",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cart items"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Add product to cart",
+                "operationId": "32f2c88334449be2f957c771bf39447e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "customer_id",
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "customer_id": {
+                                        "type": "integer"
+                                    },
+                                    "product_id": {
+                                        "type": "integer"
+                                    },
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product added to cart"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Clear all items from the customer's cart",
+                "operationId": "e56395ac1f1f10b8afeda4f5367068a1",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart cleared"
+                    }
+                }
+            }
+        },
+        "/api/customer/cart/{cartId}": {
+            "put": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Update quantity of a cart item",
+                "operationId": "e2f8d2dde7dbaf46b1587feae5a1817f",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cart item updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Remove item from cart",
+                "operationId": "181169ea94f118bb183d4be7e5b0bdfc",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item removed"
+                    }
+                }
+            }
+        },
+        "/api/customer/cart/summary": {
+            "get": {
+                "tags": [
+                    "Customer Cart"
+                ],
+                "summary": "Get cart subtotal and total quantity",
+                "operationId": "1428bdad7a23809be5a764848cd01c59",
+                "parameters": [
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart summary"
+                    }
+                }
             }
         },
         "/api/customer/orders": {
@@ -3653,13 +3823,13 @@
                 ]
             }
         },
-        "/api/shipments/{shipmentId}": {
+        "/api/customer/shipments/{shipmentId}": {
             "get": {
                 "tags": [
-                    "Shipments"
+                    "Customer Shipments"
                 ],
                 "summary": "Get shipment details",
-                "operationId": "d5ed82bdf430d20acb76776e1f19df1a",
+                "operationId": "5143759adf83d92773b8dd66a35f8d09",
                 "parameters": [
                     {
                         "name": "shipmentId",
@@ -3702,10 +3872,10 @@
             },
             "put": {
                 "tags": [
-                    "Shipments"
+                    "Customer Shipments"
                 ],
                 "summary": "Update shipment details",
-                "operationId": "da573b19b19af63449e338edd0dd64a6",
+                "operationId": "181b70036d3fc34589f1dea1bbef11d4",
                 "parameters": [
                     {
                         "name": "id",
@@ -3737,13 +3907,13 @@
                 }
             }
         },
-        "/api/shipments": {
+        "/api/customer/shipments": {
             "post": {
                 "tags": [
-                    "Shipments"
+                    "Customer Shipments"
                 ],
                 "summary": "Create a new shipment",
-                "operationId": "9d0982965c99be111636f83c48de72f9",
+                "operationId": "d87d1ab1be99a0ae9775a48b99a53a39",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -3761,13 +3931,13 @@
                 }
             }
         },
-        "/api/carriers": {
+        "/api/customer/carriers": {
             "get": {
                 "tags": [
-                    "Shipments"
+                    "Customer Shipments"
                 ],
                 "summary": "Get all carriers",
-                "operationId": "8ff03e7c9805a362b7328867c98a820a",
+                "operationId": "37643804777a2ea8e656785d45b8d8bf",
                 "responses": {
                     "200": {
                         "description": "List of all carriers",
@@ -3887,178 +4057,6 @@
                 "responses": {
                     "200": {
                         "description": "Returns the payment result view"
-                    }
-                }
-            }
-        },
-        "/api/cart": {
-            "get": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Get all items in the customer's cart",
-                "operationId": "696ee701284616e88b7f3ca704ec235d",
-                "parameters": [
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of cart items"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Add product to cart",
-                "operationId": "d8147034f361939fffc3ecb770d3d7ec",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "customer_id",
-                                    "product_id",
-                                    "quantity"
-                                ],
-                                "properties": {
-                                    "customer_id": {
-                                        "type": "integer"
-                                    },
-                                    "product_id": {
-                                        "type": "integer"
-                                    },
-                                    "quantity": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Product added to cart"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Clear all items from the customer's cart",
-                "operationId": "872ec38fe555ce2a1b828862fe4ec833",
-                "parameters": [
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cart cleared"
-                    }
-                }
-            }
-        },
-        "/api/cart/{cartId}": {
-            "put": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Update quantity of a cart item",
-                "operationId": "328a90edba7c205f93d9f9a54419d6dc",
-                "parameters": [
-                    {
-                        "name": "cartId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "quantity"
-                                ],
-                                "properties": {
-                                    "quantity": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Cart item updated"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Remove item from cart",
-                "operationId": "a45bbb87c3be3289112f16b8a349785a",
-                "parameters": [
-                    {
-                        "name": "cartId",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Item removed"
-                    }
-                }
-            }
-        },
-        "/api/cart/summary": {
-            "get": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Get cart subtotal and total quantity",
-                "operationId": "9422b387ec978867b9902cc637dc4f46",
-                "parameters": [
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cart summary"
                     }
                 }
             }
@@ -4256,7 +4254,7 @@
         "/api/admin/users/ask-otp": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Admin Authentication"
                 ],
                 "summary": "Request OTP for phone number",
                 "description": "Request an OTP to be sent to the user's phone number for registration.",
@@ -4325,7 +4323,7 @@
         "/api/admin/users/verify-otp": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Admin Authentication"
                 ],
                 "summary": "Verify OTP and get a token",
                 "description": "Verify OTP sent to the user's phone number and return a JWT token.",
@@ -4398,7 +4396,7 @@
         "/api/admin/users/reset-password": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Admin Authentication"
                 ],
                 "summary": "Reset password using OTP",
                 "description": "Reset a user's password using OTP sent to their phone.",
@@ -4479,7 +4477,7 @@
         "/api/admin/users/login-password": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Admin Authentication"
                 ],
                 "summary": "Login using email and password",
                 "description": "Login with email and password and receive a JWT token.",
@@ -4552,7 +4550,7 @@
         "/api/admin/roles": {
             "get": {
                 "tags": [
-                    "Roles"
+                    "Admin Roles"
                 ],
                 "summary": "Get all roles",
                 "operationId": "db9b757c18c06baa33005fe130707670",
@@ -4579,7 +4577,7 @@
             },
             "post": {
                 "tags": [
-                    "Roles"
+                    "Admin Roles"
                 ],
                 "summary": "Create a new role",
                 "operationId": "cdf78dd8787ac42c2172b58a66664146",
@@ -4611,7 +4609,7 @@
         "/api/admin/roles/{id}": {
             "get": {
                 "tags": [
-                    "Roles"
+                    "Admin Roles"
                 ],
                 "summary": "Get a specific role by ID",
                 "operationId": "16021c1c73274afd8a5f4ac3b49a7dcf",
@@ -4649,7 +4647,7 @@
             },
             "put": {
                 "tags": [
-                    "Roles"
+                    "Admin Roles"
                 ],
                 "summary": "Update an existing role",
                 "operationId": "fe27eece6de1e600f01817fc7798c8a8",
@@ -4693,7 +4691,7 @@
             },
             "delete": {
                 "tags": [
-                    "Roles"
+                    "Admin Roles"
                 ],
                 "summary": "Delete a role",
                 "operationId": "815ce55eee2b234b4467c10785655961",
@@ -4726,7 +4724,7 @@
         "/api/admin/users": {
             "get": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Get all users",
                 "description": "Retrieve a list of all users",
@@ -4775,7 +4773,7 @@
         "/api/admin/users/{id}": {
             "get": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Get single user by ID",
                 "description": "Retrieve a user by their ID",
@@ -4838,7 +4836,7 @@
             },
             "put": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Update user by ID",
                 "description": "Update the user information by ID",
@@ -4916,7 +4914,7 @@
             },
             "delete": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Delete user by ID",
                 "description": "Delete a user by their ID",
@@ -4982,7 +4980,7 @@
         "/api/admin/users/show-profile": {
             "get": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Get the authenticated user's profile",
                 "description": "Retrieve the currently authenticated user's profile",
@@ -5036,7 +5034,7 @@
         "/api/admin/users/update-profile": {
             "post": {
                 "tags": [
-                    "Users"
+                    "Admin Users"
                 ],
                 "summary": "Update authenticated user's profile",
                 "description": "Update the currently authenticated user's profile",
@@ -5047,7 +5045,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/User"
+                                "$ref": "#/components/schemas/UpdateProfileRequest"
                             }
                         }
                     }
@@ -5575,6 +5573,26 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-04-22T16:45:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateProfileRequest": {
+                "title": "Update Profile Request",
+                "description": "Request body for updating user profile",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "John Doe",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255,
+                        "example": "john@example.com",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -6174,7 +6192,7 @@
             "description": "Admin blog management"
         },
         {
-            "name": "Categories",
+            "name": "Admin Categories",
             "description": "Category management endpoints for the admin panel"
         },
         {
@@ -6182,8 +6200,8 @@
             "description": "Customer management endpoints for the admin panel"
         },
         {
-            "name": "Orders",
-            "description": "Operations related to orders"
+            "name": "Admin Orders",
+            "description": "Admin's Operations related to orders"
         },
         {
             "name": "Admin Shipments",
@@ -6192,6 +6210,10 @@
         {
             "name": "Customer - Authentication",
             "description": "Authentication endpoints for customers"
+        },
+        {
+            "name": "Customer Cart",
+            "description": "Shopping cart management"
         },
         {
             "name": "Customer Orders"
@@ -6205,28 +6227,36 @@
             "description": "Customer endpoints for managing product conversations"
         },
         {
-            "name": "Shipments",
+            "name": "Customer Shipments",
             "description": "Operations related to customer shipments"
         },
         {
-            "name": "Cart",
-            "description": "Shopping cart management"
+            "name": "Admin Authentication",
+            "description": "User Authentication endpoints for the admin panel"
         },
         {
-            "name": "Roles",
-            "description": "Role management (admin only)"
+            "name": "Admin Roles",
+            "description": "Role management"
+        },
+        {
+            "name": "Admin Users",
+            "description": "User management endpoints for the admin panel"
         },
         {
             "name": "Blogs",
             "description": "Blogs"
         },
         {
-            "name": "Category Attributes",
-            "description": "Category Attributes"
+            "name": "Admin Category Attributes",
+            "description": "Admin Category Attributes"
         },
         {
-            "name": "Products",
-            "description": "Products"
+            "name": "Categories",
+            "description": "Categories"
+        },
+        {
+            "name": "Admin Products",
+            "description": "Admin Products"
         },
         {
             "name": "Customer - Profile",
@@ -6237,12 +6267,8 @@
             "description": "Payments"
         },
         {
-            "name": "Authentication",
-            "description": "Authentication"
-        },
-        {
-            "name": "Users",
-            "description": "Users"
+            "name": "Products",
+            "description": "Products"
         }
     ]
 }

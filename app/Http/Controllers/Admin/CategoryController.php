@@ -12,9 +12,18 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Tag(
  *     name="Categories",
+ *     description="Common Category endpoints"
+ * )
+ */
+
+/**
+ * @OA\Tag(
+ *     name="Admin Categories",
  *     description="Category management endpoints for the admin panel"
  * )
  */
+
+
 class CategoryController extends Controller
 {
     protected CategoryService $categoryService;
@@ -42,7 +51,7 @@ class CategoryController extends Controller
      * @OA\Post(
      *     path="/api/admin/categories",
      *     summary="Create a new category",
-     *     tags={"Categories"},
+     *     tags={"Admin Categories"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
@@ -83,7 +92,7 @@ class CategoryController extends Controller
      * @OA\Put(
      *     path="/api/admin/categories/{id}",
      *     summary="Update a category",
-     *     tags={"Categories"},
+     *     tags={"Admin Categories"},
      *     @OA\Parameter(
      *         name="id", in="path", required=true, @OA\Schema(type="integer")
      *     ),
@@ -110,7 +119,7 @@ class CategoryController extends Controller
      * @OA\Delete(
      *     path="/api/admin/categories/{id}",
      *     summary="Delete a category",
-     *     tags={"Categories"},
+     *     tags={"Admin Categories"},
      *     @OA\Parameter(
      *         name="id", in="path", required=true, @OA\Schema(type="integer")
      *     ),
@@ -187,7 +196,7 @@ class CategoryController extends Controller
      * @OA\Get(
      *     path="/api/admin/categories/{id}/products",
      *     summary="Get products of a category",
-     *     tags={"Categories"},
+     *     tags={"Admin Categories"},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Products retrieved")
      * )

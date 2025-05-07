@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Tag(
- *     name="Admin - Users",
+ *     name="Admin Users",
  *     description="User management endpoints for the admin panel"
  * )
  */
@@ -34,7 +35,7 @@ class UserController extends Controller
      *     path="/api/admin/users",
      *     summary="Get all users",
      *     description="Retrieve a list of all users",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\Parameter(
      *         name="per_page",
      *         in="query",
@@ -76,7 +77,7 @@ class UserController extends Controller
      *     path="/api/admin/users/{id}",
      *     summary="Get single user by ID",
      *     description="Retrieve a user by their ID",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -133,7 +134,7 @@ class UserController extends Controller
      *     path="/api/admin/users/show-profile",
      *     summary="Get the authenticated user's profile",
      *     description="Retrieve the currently authenticated user's profile",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\Response(
      *         response=200,
      *         description="User profile retrieved successfully",
@@ -173,7 +174,7 @@ class UserController extends Controller
      *     path="/api/admin/users/{id}",
      *     summary="Update user by ID",
      *     description="Update the user information by ID",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -245,11 +246,11 @@ class UserController extends Controller
      *     path="/api/admin/users/update-profile",
      *     summary="Update authenticated user's profile",
      *     description="Update the currently authenticated user's profile",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User profile data to update",
-     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateProfileRequest")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -278,7 +279,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function updateProfile(UpdateUserRequest $request): JsonResponse
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $user = $request->user();
         $validated = $request->validated();
@@ -298,7 +299,7 @@ class UserController extends Controller
      *     path="/api/admin/users/{id}",
      *     summary="Delete user by ID",
      *     description="Delete a user by their ID",
-     *     tags={"Users"},
+     *     tags={"Admin Users"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

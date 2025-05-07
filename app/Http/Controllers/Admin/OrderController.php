@@ -7,10 +7,11 @@ use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
+
 /**
  * @OA\Tag(
- *     name="Orders",
- *     description="Operations related to orders"
+ *     name="Admin Orders",
+ *     description="Admin's Operations related to orders"
  * )
  */
 class OrderController extends Controller
@@ -24,9 +25,9 @@ class OrderController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/admin/orders",
+     *     path="/api/admin/orders",
      *     summary="Display a listing of all orders",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Response(
      *         response=200,
      *         description="List of orders",
@@ -44,7 +45,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/{id}",
      *     summary="Display the specified order by ID",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -68,7 +69,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/order-number/{orderNumber}",
      *     summary="Display the specified order by order number",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="orderNumber",
      *         in="path",
@@ -92,7 +93,7 @@ class OrderController extends Controller
      * @OA\Post(
      *     path="/api/admin/orders",
      *     summary="Create a new order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/OrderRequest")
@@ -115,7 +116,7 @@ class OrderController extends Controller
      * @OA\Put(
      *     path="/api/admin/orders/{id}",
      *     summary="Update the specified order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -154,7 +155,7 @@ class OrderController extends Controller
      * @OA\Delete(
      *     path="/api/admin/orders/{id}",
      *     summary="Delete the specified order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -187,7 +188,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/customer/{customerId}",
      *     summary="Get orders for a specific customer",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="customerId",
      *         in="path",
@@ -211,7 +212,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/recent/{limit}",
      *     summary="Get the most recent orders",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="limit",
      *         in="path",
@@ -235,7 +236,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/expired",
      *     summary="Get expired orders",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Response(
      *         response=200,
      *         description="List of expired orders",
@@ -253,7 +254,7 @@ class OrderController extends Controller
      * @OA\Get(
      *     path="/api/admin/orders/active",
      *     summary="Get active orders",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Response(
      *         response=200,
      *         description="List of active orders",
@@ -271,7 +272,7 @@ class OrderController extends Controller
      * @OA\Post(
      *     path="/api/admin/orders/{id}/paid",
      *     summary="Mark an order as paid",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -309,7 +310,7 @@ class OrderController extends Controller
      * @OA\Post(
      *     path="/api/admin/orders/{orderId}/items",
      *     summary="Create order items from cart items",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="orderId",
      *         in="path",
@@ -338,7 +339,7 @@ class OrderController extends Controller
      * @OA\Delete(
      *     path="/api/admin/orders/{orderId}/items/{itemId}",
      *     summary="Delete an order item",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="orderId",
      *         in="path",
@@ -378,7 +379,7 @@ class OrderController extends Controller
      * @OA\Put(
      *     path="/api/admin/orders/{id}/status",
      *     summary="Update the status of an order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -416,7 +417,7 @@ class OrderController extends Controller
      * @OA\Put(
      *     path="/api/admin/orders/{id}/payment-status",
      *     summary="Update the payment status of an order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -454,7 +455,7 @@ class OrderController extends Controller
      * @OA\Put(
      *     path="/api/admin/orders/{id}/payment-method",
      *     summary="Update the payment method of an order",
-     *     tags={"Orders"},
+     *     tags={"Admin Orders"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

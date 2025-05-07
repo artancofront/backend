@@ -14,7 +14,7 @@ class AskOTPRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|digits:10',
+            'phone' => 'required|digits:11',
         ];
     }
 }

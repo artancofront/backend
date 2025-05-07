@@ -10,11 +10,11 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Tag(
- *     name="Shipments",
+ *     name="Customer Shipments",
  *     description="Operations related to customer shipments"
  * )
  */
-class ShipmentController extends Controller
+class CustomerShipmentController extends Controller
 {
     protected ShipmentService $shipmentService;
 
@@ -25,9 +25,9 @@ class ShipmentController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/shipments/{shipmentId}",
+     *     path="/api/customer/shipments/{shipmentId}",
      *     summary="Get shipment details",
-     *     tags={"Shipments"},
+     *     tags={"Customer Shipments"},
      *     @OA\Parameter(
      *         name="shipmentId",
      *         in="path",
@@ -62,9 +62,9 @@ class ShipmentController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/shipments",
+     *     path="/api/customer/shipments",
      *     summary="Create a new shipment",
-     *     tags={"Shipments"},
+     *     tags={"Customer Shipments"},
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/StoreShipmentRequest")
@@ -87,9 +87,9 @@ class ShipmentController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/shipments/{shipmentId}",
+     *     path="/api/customer/shipments/{shipmentId}",
      *     summary="Update shipment details",
-     *     tags={"Shipments"},
+     *     tags={"Customer Shipments"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -122,9 +122,9 @@ class ShipmentController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/carriers",
+     *     path="/api/customer/carriers",
      *     summary="Get all carriers",
-     *     tags={"Shipments"},
+     *     tags={"Customer Shipments"},
      *     @OA\Response(
      *         response=200,
      *         description="List of all carriers",

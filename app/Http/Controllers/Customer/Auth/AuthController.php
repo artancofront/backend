@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AskOTPRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\VerifyOTPRequest;
 use App\Services\CustomerAuthService;
@@ -213,7 +214,7 @@ class AuthController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         description="Customer profile data to update",
-     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *         @OA\JsonContent(ref="#/components/schemas/UpdateProfileRequest")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -238,7 +239,7 @@ class AuthController extends Controller
      *     )
      * )
      */
-    public function updateProfile(UpdateUserRequest $request): JsonResponse
+    public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
         $customer = Auth::guard('customer')->user();
         $validated = $request->validated();

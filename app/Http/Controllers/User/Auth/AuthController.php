@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Tag(
- *      name="Admin - Authentication",
+ *      name="Admin Authentication",
  *      description="User Authentication endpoints for the admin panel"
  * )
  */
@@ -30,7 +30,7 @@ class AuthController extends Controller
      *     path="/api/admin/users/ask-otp",
      *     summary="Request OTP for phone number",
      *     description="Request an OTP to be sent to the user's phone number for registration.",
-     *     tags={"Authentication"},
+     *     tags={"Admin Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User's phone number to send OTP",
@@ -72,7 +72,7 @@ class AuthController extends Controller
      *     path="/api/admin/users/verify-otp",
      *     summary="Verify OTP and get a token",
      *     description="Verify OTP sent to the user's phone number and return a JWT token.",
-     *     tags={"Authentication"},
+     *     tags={"Admin Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="User's phone number and OTP to verify",
@@ -122,7 +122,7 @@ class AuthController extends Controller
      *     path="/api/admin/users/reset-password",
      *     summary="Reset password using OTP",
      *     description="Reset a user's password using OTP sent to their phone.",
-     *     tags={"Authentication"},
+     *     tags={"Admin Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Password reset data including OTP and new password",
@@ -174,7 +174,7 @@ class AuthController extends Controller
      *     path="/api/admin/users/login-password",
      *     summary="Login using email and password",
      *     description="Login with email and password and receive a JWT token.",
-     *     tags={"Authentication"},
+     *     tags={"Admin Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Login credentials (email and password)",

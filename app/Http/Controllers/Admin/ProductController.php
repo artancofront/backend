@@ -26,7 +26,7 @@ class ProductController extends Controller
      * @OA\Post(
      *     path="/api/admin/products",
      *     summary="Create a new product",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
@@ -52,7 +52,7 @@ class ProductController extends Controller
      * @OA\Put(
      *     path="/api/admin/products/{id}",
      *     summary="Update an existing product",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -94,7 +94,7 @@ class ProductController extends Controller
      * @OA\Delete(
      *     path="/api/admin/products/{id}",
      *     summary="Delete a product",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -121,7 +121,7 @@ class ProductController extends Controller
      * @OA\Post(
      *     path="/api/admin/products/{parentId}/variants",
      *     summary="Add a variant to a product",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="parentId",
@@ -149,7 +149,7 @@ class ProductController extends Controller
      * @OA\Put(
      *     path="/api/admin/products/variants/{variantId}",
      *     summary="Update a product variant",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="variantId",
@@ -177,7 +177,7 @@ class ProductController extends Controller
      * @OA\Delete(
      *     path="/api/admin/products/variants/{variantId}",
      *     summary="Delete a variant",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="variantId",
@@ -201,7 +201,7 @@ class ProductController extends Controller
      * @OA\Post(
      *     path="/api/admin/products/upload-image/upload",
      *     summary="Upload a product image to temp",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
@@ -241,7 +241,7 @@ class ProductController extends Controller
      * @OA\Post(
      *     path="/api/admin/products/{id}/image",
      *     summary="Attach uploaded image to product",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -289,7 +289,7 @@ class ProductController extends Controller
      * @OA\Put(
      *     path="/api/admin/products/image/{id}",
      *     summary="Update image metadata",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -325,7 +325,7 @@ class ProductController extends Controller
      * @OA\Delete(
      *     path="/api/admin/products/image/{id}",
      *     summary="Delete product image",
-     *     tags={"Products"},
+     *     tags={"Admin Products"},
      *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
