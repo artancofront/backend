@@ -12,12 +12,13 @@ use App\Http\Requests\VerifyOTPRequest;
 use App\Services\CustomerAuthService;
 use App\Services\CustomerService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @OA\Tag(
- *     name="Customer - Authentication",
+ *     name="Customer Authentication",
  *     description="Authentication endpoints for customers"
  * )
  */
@@ -36,7 +37,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/customers/ask-otp",
      *     summary="Request OTP for phone number",
-     *     tags={"Customer - Authentication"},
+     *     tags={"Customer Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -63,7 +64,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/customers/verify-otp",
      *     summary="Verify OTP and login/register",
-     *     tags={"Customer - Authentication"},
+     *     tags={"Customer Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -98,7 +99,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/customers/reset-password",
      *     summary="Reset customer password using OTP",
-     *     tags={"Customer - Authentication"},
+     *     tags={"Customer Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -135,7 +136,7 @@ class AuthController extends Controller
      * @OA\Post(
      *     path="/api/customers/login-password",
      *     summary="Login using email and password",
-     *     tags={"Customer - Authentication"},
+     *     tags={"Customer Authentication"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -172,8 +173,7 @@ class AuthController extends Controller
      *     path="/api/customers/show-profile",
      *     summary="Get the authenticated customer's profile",
      *     description="Retrieve the currently authenticated customer's profile",
-     *     tags={"Customer - Profile"},
-     *     security={{"bearerAuth":{}}},
+     *     tags={"Customer Profile"},
      *     @OA\Response(
      *         response=200,
      *         description="Customer profile retrieved successfully",
@@ -200,7 +200,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Auth::guard('customer')->user(),
+            'data' => Auth::guard('customer')->user()->load('addresses'),
         ], Response::HTTP_OK);
     }
 
@@ -209,8 +209,7 @@ class AuthController extends Controller
      *     path="/api/customers/update-profile",
      *     summary="Update authenticated customer's profile",
      *     description="Update the currently authenticated customer's profile",
-     *     tags={"Customer - Profile"},
-     *     security={{"bearerAuth":{}}},
+     *     tags={"Customer Profile"},
      *     @OA\RequestBody(
      *         required=true,
      *         description="Customer profile data to update",
@@ -253,5 +252,34 @@ class AuthController extends Controller
             'message' => 'Customer updated successfully',
             'data' => $updatedCustomer
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/customers/logout",
+     *     summary="Logout customers",
+     *     description="Revoke the customers's current access token and log them out.",
+     *     tags={"Customer Authentication"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Customers logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Logged out")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out']);
     }
 }

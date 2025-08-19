@@ -35,7 +35,12 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|unique:products,slug',
+            'slug' => [
+                'required',
+                'string',
+                'regex:/^[\p{Arabic}a-zA-Z0-9\-]+$/u',
+                'unique:products,slug',
+            ],
             'description' => 'nullable|string',
             'weight' => 'nullable|numeric',
             'length' => 'nullable|numeric',

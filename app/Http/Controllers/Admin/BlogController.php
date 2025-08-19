@@ -62,7 +62,12 @@ class BlogController extends Controller
     {
         $data = $request->validate([
             'title'         => 'required|string|max:255',
-            'slug'          => 'required|string|unique:blogs,slug',
+            'slug' => [
+                'required',
+                'string',
+                'regex:/^[\p{Arabic}a-zA-Z0-9\-]+$/u',
+                'unique:blogs,slug',
+            ],
             'excerpt'       => 'nullable|string',
             'content'       => 'required|string',
             'cover_image'   => 'nullable|string',
@@ -128,7 +133,12 @@ class BlogController extends Controller
     {
         $data = $request->validate([
             'title'         => 'sometimes|string|max:255',
-            'slug'          => 'sometimes|string|unique:blogs,slug,' . $id,
+            'slug' => [
+                'required',
+                'string',
+                'regex:/^[\p{Arabic}a-zA-Z0-9\-]+$/u',
+                'unique:blogs,slug,' . $id,
+            ],
             'excerpt'       => 'nullable|string',
             'content'       => 'sometimes|string',
             'cover_image'   => 'nullable|string',

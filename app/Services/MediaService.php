@@ -18,7 +18,7 @@ class MediaService
         $fileName = "{$timestamp}_{$userId}.{$extension}";
         $path = "temp_media/{$fileName}";
 
-        $file->storeAs('temp_media', $fileName);
+        $file->storeAs('temp_media', $fileName, 'public');
 
         return $path; // this is the relative path to the stored file
     }

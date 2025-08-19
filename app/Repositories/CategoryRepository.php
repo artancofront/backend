@@ -84,6 +84,20 @@ class CategoryRepository
     }
 
     /**
+     * Get categories (categories based on parent).
+     *
+     * @return Collection
+     */
+    public function getCategories($id): Collection
+    {
+        if ($id==0){
+            return Category::all();
+        }else{
+            return Category::where('parent_id',$id)->get();
+        }
+    }
+
+    /**
      * Get the breadcrumb (ancestor trail) for a specific category.
      *
      * @param int $categoryId

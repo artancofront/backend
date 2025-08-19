@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @OA\Tag(
@@ -27,21 +28,15 @@ class CartController extends Controller
      *     path="/api/customer/cart",
      *     summary="Get all items in the customer's cart",
      *     tags={"Customer Cart"},
-     *     @OA\Parameter(
-     *         name="customer_id",
-     *         in="query",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="List of cart items"
      *     )
      * )
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $customerId = (int) $request->query('customer_id');
+        $customerId=Auth::guard('customer')->user()->id;
         $items = $this->cartService->getCartItems($customerId);
         return response()->json($items);
     }
@@ -54,8 +49,7 @@ class CartController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"customer_id", "product_id", "quantity"},
-     *             @OA\Property(property="customer_id", type="integer"),
+     *             required={"product_id", "quantity"},
      *             @OA\Property(property="product_id", type="integer"),
      *             @OA\Property(property="quantity", type="integer")
      *         )
@@ -68,14 +62,15 @@ class CartController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        $customerId=Auth::guard('customer')->user()->id;
+
         $request->validate([
-            'customer_id' => 'required|integer',
             'product_id' => 'required|integer',
             'quantity' => 'required|integer|min:1',
         ]);
 
         $item = $this->cartService->addToCart(
-            $request->customer_id,
+            $customerId,
             $request->product_id,
             $request->quantity
         );
@@ -85,11 +80,11 @@ class CartController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/customer/cart/{cartId}",
+     *     path="/api/customer/cart/{itemId}",
      *     summary="Update quantity of a cart item",
      *     tags={"Customer Cart"},
      *     @OA\Parameter(
-     *         name="cartId",
+     *         name="itemId",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -112,18 +107,19 @@ class CartController extends Controller
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
+        $customerId=Auth::guard('customer')->user()->id;
 
-        $updated = $this->cartService->updateCartItem($cartId, $request->quantity);
+        $updated = $this->cartService->updateCartItem($cartId,$customerId, $request->quantity);
         return response()->json(['success' => $updated]);
     }
 
     /**
      * @OA\Delete(
-     *     path="/api/customer/cart/{cartId}",
+     *     path="/api/customer/cart/{itemId}",
      *     summary="Remove item from cart",
      *     tags={"Customer Cart"},
      *     @OA\Parameter(
-     *         name="cartId",
+     *         name="itemId",
      *         in="path",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -136,7 +132,8 @@ class CartController extends Controller
      */
     public function destroy(int $cartId): JsonResponse
     {
-        $deleted = $this->cartService->removeFromCart($cartId);
+        $customerId=Auth::guard('customer')->user()->id;
+        $deleted = $this->cartService->removeFromCart($cartId, $customerId);
         return response()->json(['success' => $deleted]);
     }
 
@@ -145,25 +142,16 @@ class CartController extends Controller
      *     path="/api/customer/cart",
      *     summary="Clear all items from the customer's cart",
      *     tags={"Customer Cart"},
-     *     @OA\Parameter(
-     *         name="customer_id",
-     *         in="query",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Cart cleared"
      *     )
      * )
      */
-    public function clear(Request $request): JsonResponse
+    public function clear(): JsonResponse
     {
-        $request->validate([
-            'customer_id' => 'required|integer'
-        ]);
-
-        $cleared = $this->cartService->clearCart($request->customer_id);
+        $customerId=Auth::guard('customer')->user()->id;
+        $cleared = $this->cartService->clearCart($customerId);
         return response()->json(['success' => $cleared]);
     }
 
@@ -172,25 +160,18 @@ class CartController extends Controller
      *     path="/api/customer/cart/summary",
      *     summary="Get cart subtotal and total quantity",
      *     tags={"Customer Cart"},
-     *     @OA\Parameter(
-     *         name="customer_id",
-     *         in="query",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Cart summary"
      *     )
      * )
      */
-    public function summary(Request $request): JsonResponse
+    public function summary(): JsonResponse
     {
-        $request->validate([
-            'customer_id' => 'required|integer'
-        ]);
 
-        $summary = $this->cartService->getCartSummary($request->customer_id);
+        $customerId=Auth::guard('customer')->user()->id;
+
+        $summary = $this->cartService->getCartSummary($customerId);
         return response()->json($summary);
     }
 }

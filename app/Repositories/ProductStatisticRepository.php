@@ -30,14 +30,15 @@ class ProductStatisticRepository
      */
     public function updateSalesCount(Product $product): void
     {
-        $statistics = ProductStatistic::firstOrCreate(['product_id' => $product->id]);
+        $parentOrSelf = $product->isLeaf() ? $product->parent : $product;
+        $statistics = ProductStatistic::firstOrCreate(['product_id' => $parentOrSelf->id]);
 
         // Sum sales of the parent product
-        $parentSales = $product->orders()->sum('quantity');
+        $parentSales = $product->orderItems()->sum('quantity');
 
         // Sum sales of all variants
-        $variantSales = $product->variants()->with('orders')->get()->sum(function ($variant) {
-            return $variant->orders->sum('quantity');
+        $variantSales = $product->variants()->with('orderItems')->get()->sum(function ($variant) {
+            return $variant->orderItems->sum('quantity');
         });
 
         $statistics->sales_count = $parentSales + $variantSales;

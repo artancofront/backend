@@ -15,6 +15,13 @@ class Category extends Model
         'name',
         'slug',
     ];
+    protected $appends = ['all_products_count'];
+
+    public function getAllProductsCountAttribute()
+    {
+        $categoryIds = $this->descendants()->pluck('id')->push($this->id);
+        return Product::whereIn('category_id', $categoryIds)->count();
+    }
 
     public function discounts()
     {

@@ -10,6 +10,7 @@ use App\Http\Requests\Product\UpdateProductRequest;
 use App\Services\MediaService;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -27,7 +28,6 @@ class ProductController extends Controller
      *     path="/api/admin/products",
      *     summary="Create a new product",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/StoreProductRequest")
@@ -53,7 +53,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/{id}",
      *     summary="Update an existing product",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -95,7 +94,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/{id}",
      *     summary="Delete a product",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -122,7 +120,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/{parentId}/variants",
      *     summary="Add a variant to a product",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="parentId",
      *         in="path",
@@ -150,7 +147,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/variants/{variantId}",
      *     summary="Update a product variant",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="variantId",
      *         in="path",
@@ -178,7 +174,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/variants/{variantId}",
      *     summary="Delete a variant",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="variantId",
      *         in="path",
@@ -199,10 +194,9 @@ class ProductController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/admin/products/upload-image/upload",
+     *     path="/api/admin/products/upload-image",
      *     summary="Upload a product image to temp",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -228,9 +222,8 @@ class ProductController extends Controller
         ]);
 
         $file = $request->file('image');
-        $userId = auth()->id();
+        $userId = auth('user')->user()->id;
         $path = $this->mediaService->uploadToTemp($file, $userId);
-
         return response()->json([
             'message' => 'Image uploaded in temp successfully.',
             'path' => $path,
@@ -242,7 +235,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/{id}/image",
      *     summary="Attach uploaded image to product",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -272,7 +264,7 @@ class ProductController extends Controller
             'is_primary' => 'nullable|boolean',
         ]);
 
-        $finalPath = $this->mediaService->moveToFinal('image_path', "products/{$id}");
+        $finalPath = $this->mediaService->moveToFinal($request->image_path, "products/{$id}");
 
         $this->productService->saveProductImage($id, [
             'path' => $finalPath,
@@ -290,7 +282,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/image/{id}",
      *     summary="Update image metadata",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -326,7 +317,6 @@ class ProductController extends Controller
      *     path="/api/admin/products/image/{id}",
      *     summary="Delete product image",
      *     tags={"Admin Products"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

@@ -1,56 +1,78 @@
 <?php
+
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class OTPService
 {
-    public function sendOTP($phone): void
+    protected int $ttl = 120; // in seconds
+
+    protected function getCacheKey(string $phone): string
+    {
+        return "otp:{$phone}";
+    }
+
+    public function sendOTP(string $phone): void
     {
         $otp = rand(100000, 999999);
-        $otp=123456;
-        $expiresAt = Carbon::now()->addMinutes(2); // Set expiration time (2 minutes from now)
+        $expiresAt = now()->addSeconds($this->ttl);
 
-        // Store OTP, phone, and expiration time in session
-        session([
+        $data = [
             'otp' => $otp,
-            'phone' => $phone,
-            'otp_expires_at' => $expiresAt
-        ]);
+            'expires_at' => $expiresAt->toDateTimeString(),
+        ];
 
-        // Send OTP via FarazSMS Panel
+        // Store in Redis
+        Cache::put($this->getCacheKey($phone), $data, $this->ttl);
+         //Send OTP via FarazSMS Panel
 //        Http::post("https://ippanel.com/patterns/pattern", [
 //            'username' => env('FARAZSMS_USERNAME'),
 //            'password' => env('FARAZSMS_PASSWORD'),
 //            'from' => env('FARAZSMS_FROM'),
-//            'to' => json_encode([$phone]),
-//            'input_data' => json_encode(['otp' => $otp]),
+//            'to' => json_encode(["9364736704"]),
+//            'input_data' => json_encode(['verification-code' => $otp]),
 //            'pattern_code' => env('FARAZSMS_PATTERN_CODE')
 //        ]);
+
+        $username = env('FARAZSMS_USERNAME');
+        $password = env('FARAZSMS_PASSWORD');
+        $from = env('FARAZSMS_FROM');
+        $pattern_code = env('FARAZSMS_PATTERN_CODE');
+        $to = array($phone);
+        $input_data = array("verification-code" => $otp);
+        $url = "https://ippanel.com/patterns/pattern?username=" . $username . "&password=" . urlencode($password) . "&from=$from&to=" . json_encode($to) . "&input_data=" . urlencode(json_encode($input_data)) . "&pattern_code=$pattern_code";
+        $handler = curl_init($url);
+        curl_setopt($handler, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $input_data);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($handler);
     }
 
-
-    public function verifyOTP($phone, $otp): bool
+    public function verifyOTP(string $phone, string $otp): bool
     {
-        // Retrieve stored OTP and expiration time
-        $storedOtp = session('otp');
-        $storedPhone = session('phone');
-        $expiresAt = session('otp_expires_at');
+        $data = Cache::get($this->getCacheKey($phone));
 
-        // Check if OTP is expired
-        if (!$expiresAt || Carbon::now()->greaterThan(Carbon::parse($expiresAt))) {
-            Session::forget(['otp', 'phone', 'otp_expires_at']); // Clear expired OTP
+        if (!$data) {
+            return false; // Not found or expired
+        }
+
+        $expiresAt = Carbon::parse($data['expires_at']);
+
+        if (now()->greaterThan($expiresAt)) {
+            Cache::forget($this->getCacheKey($phone)); // Expired
             return false;
         }
 
-        // Validate OTP and phone number
-        if ($storedPhone == $phone && $storedOtp == $otp) {
-            Session::forget(['otp', 'phone', 'otp_expires_at']); // Clear OTP after successful verification
+        if ($data['otp'] == $otp) {
+            Cache::forget($this->getCacheKey($phone)); // Successful match, remove it
             return true;
         }
 
         return false;
     }
 }
+

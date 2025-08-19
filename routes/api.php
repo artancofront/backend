@@ -15,10 +15,12 @@ use App\Http\Controllers\Customer\CustomerOrderController;
 use App\Http\Controllers\Customer\CustomerProductCommentRatingController;
 use App\Http\Controllers\Customer\CustomerProductConversationController;
 use App\Http\Controllers\Customer\CustomerShipmentController as CustomerShipmentController;
+use App\Http\Controllers\Payments\PaymentController;
 use App\Http\Controllers\Shop\ProductController as ShopProductController;
 use App\Http\Controllers\User\Auth\AuthController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,16 +39,18 @@ use Illuminate\Support\Facades\Route;
 
 // Admin routes------------------------------------------------------------------
 Route::prefix('admin/users')->group(function () {
-    //Register-Login*
-    Route::post('/ask-otp', [AuthController::class, 'askOTP']);
-    Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
-    Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
+         //Register-Login*
+        Route::post('/ask-otp', [AuthController::class, 'askOTP']);
+        Route::post('/verify-otp', [AuthController::class, 'verifyOTP']);
+        Route::post('/login-password', [AuthController::class, 'loginWithPassword']);
 
     Route::middleware(['auth:user'])->group(function () {
         //Authenticated user
         Route::post('/reset-password', [AuthController::class, 'resetPasswordWithOTP']);
         Route::get('/show-profile', [UserController::class, 'showProfile']);
         Route::post('/update-profile', [UserController::class, 'updateProfile']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+
 
         //Users CRUD
         Route::get('/', [UserController::class, 'index'])->middleware('permission:users,read');
@@ -59,6 +63,7 @@ Route::prefix('admin/users')->group(function () {
 
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->middleware('permission:roles,read');         // List all roles
+    Route::get('/roles/permissions', [RoleController::class, 'getPermissions']);
     Route::get('/roles/{id}', [RoleController::class, 'show'])->middleware('permission:roles,read');     // Show role by ID
     Route::post('/roles', [RoleController::class, 'store'])->middleware('permission:roles,create');        // Create new role
     Route::put('/roles/{id}', [RoleController::class, 'update'])->middleware('permission:roles,update');   // Update role
@@ -75,9 +80,9 @@ Route::prefix('admin/products')->middleware(['auth:user'])->group(function () {
     Route::put('variants/{variantId}', [ProductController::class, 'updateVariant'])->middleware('permission:products,update');// Update variant
     Route::delete('variants/{variantId}', [ProductController::class, 'deleteVariant'])->middleware('permission:products,update');// Delete variant
     Route::post('upload-image', [ProductController::class, 'uploadProductImage'])->middleware('permission:products,update');// Upload image to temp directory
-    Route::post('{id}/images', [ProductController::class, 'attachImageToProduct'])->middleware('permission:products,update'); // Attach uploaded image to product
-    Route::put('images/{id}', [ProductController::class, 'updateImage'])->middleware('permission:products,update');// Update image
-    Route::delete('images/{id}', [ProductController::class, 'destroyImage'])->middleware('permission:products,update');// Delete image
+    Route::post('{id}/image', [ProductController::class, 'attachImageToProduct'])->middleware('permission:products,update'); // Attach uploaded image to product
+    Route::put('image/{id}', [ProductController::class, 'updateImage'])->middleware('permission:products,update');// Update image
+    Route::delete('image/{id}', [ProductController::class, 'destroyImage'])->middleware('permission:products,update');// Delete image
 });
 
 
@@ -116,7 +121,8 @@ Route::prefix('products')->controller(ShopProductController::class)->group(funct
 });
 
 Route::prefix('categories')->group(function () {
-    Route::get('/', [CategoryController::class, 'index'])->name('index'); // Get all root categories
+    Route::get('flat/{id?}', [CategoryController::class, 'flat'])->name('flat'); // Get all categories
+    Route::get('root', [CategoryController::class, 'root'])->name('root'); // Get all root categories
     Route::get('leaf', [CategoryController::class, 'leaf'])->name('leaf'); // Get all leaf categories
     Route::get('hierarchy', [CategoryController::class, 'hierarchy'])->name('hierarchy'); // Get category hierarchy
     Route::get('{id}', [CategoryController::class, 'show'])->name('show'); // Get a specific category
@@ -167,16 +173,16 @@ Route::prefix('customer/orders')->middleware('auth:customer')->group(function ()
 
 // Order Routes
 Route::prefix('admin/orders')->middleware(['auth:user'])->group(function () {
-    Route::get('/', [OrderController::class, 'index'])->name('index')->middleware('permission:orders,read');
-    Route::get('{id}', [OrderController::class, 'show'])->name('show')->middleware('permission:orders,read');
+    Route::get('/', [OrderController::class, 'index'])->middleware('permission:orders,read');
     Route::get('order-number/{orderNumber}', [OrderController::class, 'showByOrderNumber'])->name('showByOrderNumber')->middleware('permission:orders,read');
-    Route::post('/', [OrderController::class, 'store'])->name('store')->middleware('permission:orders,create');
-    Route::put('{id}', [OrderController::class, 'update'])->name('update')->middleware('permission:orders,update');
-    Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy')->middleware('permission:orders,delete');
+    Route::post('/', [OrderController::class, 'store'])->middleware('permission:orders,create');
+    Route::put('{id}', [OrderController::class, 'update'])->middleware('permission:orders,update');
+    Route::delete('{id}', [OrderController::class, 'destroy'])->middleware('permission:orders,delete');
     Route::get('customer/{customerId}', [OrderController::class, 'getCustomerOrders'])->name('getCustomerOrders')->middleware('permission:orders,read');
     Route::get('recent/{limit?}', [OrderController::class, 'getRecentOrders'])->name('getRecentOrders')->middleware('permission:orders,read');
     Route::get('expired', [OrderController::class, 'getExpiredOrders'])->name('getExpiredOrders')->middleware('permission:orders,read');
     Route::get('active', [OrderController::class, 'getActiveOrders'])->name('getActiveOrders')->middleware('permission:orders,read');
+    Route::get('{id}', [OrderController::class, 'show'])->middleware('permission:orders,read');
     Route::post('{id}/paid', [OrderController::class, 'markAsPaid'])->name('markAsPaid')->middleware('permission:orders,update');
     Route::post('{orderId}/items', [OrderController::class, 'createOrderItems'])->name('createOrderItems')->middleware('permission:orders,create');
     Route::delete('{orderId}/items/{itemId}', [OrderController::class, 'deleteOrderItem'])->name('deleteOrderItem')->middleware('permission:orders,delete');
@@ -212,6 +218,7 @@ Route::prefix('customers')->group(function () {
         Route::post('/reset-password', [CustomerAuthController::class, 'resetPasswordWithOTP']);
         Route::get('/show-profile', [CustomerAuthController::class, 'showProfile']);
         Route::post('/update-profile', [CustomerAuthController::class, 'updateProfile']);
+        Route::post('/logout', [CustomerAuthController::class, 'logout']);
     });
 });
 
@@ -251,6 +258,7 @@ Route::prefix('customer')->group(function () {
     });
 });
 
+
 Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::get('product-conversations', [AdminProductConversationController::class, 'getAllConversations'])->middleware('permission:conversations,read');
     Route::get('product-conversations/{id}', [AdminProductConversationController::class, 'getConversation'])->middleware('permission:conversations,read');
@@ -262,3 +270,21 @@ Route::prefix('admin')->middleware(['auth:user'])->group(function () {
     Route::delete('product-conversations/{conversationId}/admin-reply/{replyId}', [AdminProductConversationController::class, 'deleteAdminReply'])->middleware('permission:conversations,delete');
 });
 
+
+
+Route::prefix('payment')->middleware(['auth:customer'])->group(function () {
+    Route::get('/pay/{gateway}', [PaymentController::class, 'pay'])->name('payment.pay');
+    Route::post('/verify', [PaymentController::class, 'verify'])->name('payment.verify');
+
+});
+
+use App\Http\Controllers\Customer\CustomerAddressController;
+
+Route::prefix('customer')->middleware('auth:customer')->group(function () {
+    Route::get('addresses', [CustomerAddressController::class, 'index']);
+    Route::get('addresses/default', [CustomerAddressController::class, 'default']);
+    Route::get('addresses/{id}', [CustomerAddressController::class, 'show']);
+    Route::post('addresses', [CustomerAddressController::class, 'store']);
+    Route::put('addresses/{id}', [CustomerAddressController::class, 'update']);
+    Route::delete('addresses/{id}', [CustomerAddressController::class, 'destroy']);
+});

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,18 @@ Route::get('/', function () {
 
 Route::get('/api/documentation', function () {
     return view('swagger.index', [
-        'swaggerJsonUrl' => url('/swagger.json')
+        'swaggerJsonUrl' => url('/swagger.json'),
+        'baseUrl' => url('/')
     ]);
 });
+
+Route::get('/test-session', function () {
+    if (!session()->has('test_key')) {
+        session(['test_key' => now()->toDateTimeString()]);
+        return 'Set session!';
+    }
+
+    return 'Session found: ' . session('test_key');
+});
+
+

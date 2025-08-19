@@ -59,6 +59,7 @@ class Product extends Model
 
     protected $appends = ['final_price'];
 
+
     /*
     |--------------------------------------------------------------------------
     | Relationships
@@ -74,7 +75,14 @@ class Product extends Model
     {
         return $this->children(); // provided by NodeTrait
     }
-
+    public function parentProduct()
+    {
+        return $this->belongsTo(Product::class, 'parent_id');
+    }
+    public function getParentAttribute()
+    {
+        return $this->parentProduct;
+    }
     public function attributes()
     {
         return $this->hasMany(ProductAttribute::class);
@@ -103,6 +111,11 @@ class Product extends Model
     public function commentRatings()
     {
         return $this->hasMany(ProductCommentRating::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
     public function conversations()

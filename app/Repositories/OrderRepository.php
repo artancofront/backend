@@ -48,9 +48,9 @@ class OrderRepository
 
     public function getByCustomer(int $customerId): Collection
     {
-        return Order::with('items')->where('customer_id', $customerId)
-            ->get()
-            ->groupBy('status');
+        return Order::with(['items','shippingAddress','customer','transactions','shipment'])->where('customer_id', $customerId)
+            ->get();
+          //  ->groupBy('status');
     }
 
     public function getRecent(int $limit = 10): Collection

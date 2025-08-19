@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Cart\StockUnavailableException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -71,6 +72,14 @@ class Handler extends ExceptionHandler
                 'success' => false,
                 'message' => 'Unauthenticated. Please log in.'
             ], 401);
+        }
+
+        // Handle StockUnavailableException errors
+        if ($e instanceof StockUnavailableException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient stock for product.'
+            ], 422);
         }
 
         // Handle authorization errors

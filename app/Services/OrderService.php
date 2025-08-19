@@ -8,6 +8,7 @@ use App\Repositories\OrderRepository;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OrderService
 {
@@ -90,7 +91,7 @@ class OrderService
         foreach ($order->items as $item) {
             $product = $item->product;
             if ($product->stock < $item->quantity) {
-                throw new \Exception("Insufficient stock for {$product->name}");
+                throw new \Exception("Insufficient stock for product");
             }
             if($item->quantity > 0){
                 $product->decrement('stock', $item->quantity);
@@ -110,7 +111,7 @@ class OrderService
     }
 
 
-    public function createFromCart(int $customerId, int $shippingAddressId, ?string $notes = null): Order
+    public function createFromCart(int $customerId, int $shippingAddressId, int $shippingCost, ?string $notes = null): Order
     {
         $summary = $this->cartService->getCartSummary($customerId);
         $items = $summary['items'];
@@ -124,11 +125,13 @@ class OrderService
         return DB::transaction(function () use (
             $customerId,
             $shippingAddressId,
+            $shippingCost,
             $items,
             $totals,
             $notes
         ) {
             $order = $this->orderRepository->create([
+                'order_number' => '',
                 'customer_id' => $customerId,
                 'shipping_address_id' => $shippingAddressId,
                 'status' => 'pending',
@@ -136,12 +139,13 @@ class OrderService
                 'subtotal' => $totals['subtotal'],
                 'discount' => $totals['discount'],
                 'tax' => $totals['tax'],
-                'shipping_cost' => null,
+                'shipping_cost' => $shippingCost,
                 'total' => $totals['finalTotal'] ,
                 'notes' => $notes,
             ]);
 
             $this->createOrderItems($order, $items);
+            $cleared = $this->cartService->clearCart($customerId);
 
             return $order->load('items');
         });
@@ -197,10 +201,9 @@ class OrderService
         foreach ($items as $item) {
             $product = $item->product;
             $finalPrice = $product->final_price ?? $product->price;
-
             $order->items()->create([
                 'product_id' => $product->id,
-                'product_name' => $product->name,
+                'product_name' => $product->name??$product->parent->name,
                 'price' => $finalPrice,
                 'quantity' => $item->quantity,
                 'total' => $finalPrice * $item->quantity,

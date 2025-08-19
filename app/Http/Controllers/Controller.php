@@ -12,11 +12,7 @@ use Illuminate\Routing\Controller as BaseController;
  * @OA\OpenApi(
  *      security={{ "BearerAuth": {} }}
  *  )
- * @OA\Info(title="CMS manager", version="0.1")
- * @OA\Server(
- *      url="http://localhost/cms-template/public",
- *      description="Local development server"
- *  )
+ * @OA\Info(title="CMS template", version="0.1")
  * @OA\SecurityScheme(
  *     securityScheme="BearerAuth",
  *     type="http",
@@ -24,16 +20,8 @@ use Illuminate\Routing\Controller as BaseController;
  *     bearerFormat="JWT",
  *     description="Authentication using Bearer token (Sanctum)"
  * )
- * @OA\SecurityScheme(
- *     securityScheme="cookieSession",
- *     type="apiKey",
- *     in="cookie",
- *     name="laravel_session",
- *     description="Authentication using session cookie (laravel_session)"
- * )
- * @OA\Security(
- *     securityScheme="cookieSession"
- * )
+ *
+ *
  * @OA\Schema(
  *     schema="PaginationMeta",
  *     type="object",

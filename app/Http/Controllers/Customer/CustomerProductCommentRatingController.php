@@ -11,13 +11,6 @@ use Illuminate\Http\Request;
  *     name="Customer Product Comment Ratings",
  *     description="Endpoints for managing customer product comments and ratings"
  * )
- *
- * @OA\SecurityScheme(
- *     securityScheme="bearerAuth",
- *     type="http",
- *     scheme="bearer",
- *     bearerFormat="JWT"
- * )
  */
 class CustomerProductCommentRatingController extends Controller
 {
@@ -89,7 +82,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Create a new comment and rating",
-     *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
@@ -120,7 +112,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Update a customer's comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -161,7 +152,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Delete a customer's comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -191,7 +181,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}/like",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Like a comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -211,7 +200,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}/dislike",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Dislike a comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -231,7 +219,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}/unlike",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Remove like from a comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -251,7 +238,6 @@ class CustomerProductCommentRatingController extends Controller
      *     path="/api/customer/product-comments/{id}/undislike",
      *     tags={"Customer Product Comment Ratings"},
      *     summary="Remove dislike from a comment",
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

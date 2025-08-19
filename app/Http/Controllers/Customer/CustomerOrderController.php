@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerAddress;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,13 +27,12 @@ class CustomerOrderController extends Controller
      *     path="/api/customer/orders",
      *     summary="Get all orders for the authenticated customer",
      *     tags={"Customer Orders"},
-     *     security={{"customer":{}}},
      *     @OA\Response(response=200, description="List of customer's orders")
      * )
      */
     public function index(): JsonResponse
     {
-        $customerId = Auth::guard('customer')->id();
+        $customerId = Auth::guard('customer')->user()->id;
         $orders = $this->orderService->getCustomerOrders($customerId);
         return response()->json($orders);
     }
@@ -42,12 +42,12 @@ class CustomerOrderController extends Controller
      *     path="/api/customer/orders",
      *     summary="Create an order from the customer's cart",
      *     tags={"Customer Orders"},
-     *     security={{"customer":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"shipping_address_id"},
+     *             required={"shipping_address_id","shipping_cost"},
      *             @OA\Property(property="shipping_address_id", type="integer", example=1),
+     *             @OA\Property(property="shipping_cost", type="float", example=0),
      *             @OA\Property(property="notes", type="string", example="Leave at the front door")
      *         )
      *     ),
@@ -59,15 +59,20 @@ class CustomerOrderController extends Controller
     {
         $request->validate([
             'shipping_address_id' => 'required|integer|exists:customer_addresses,id',
+            'shipping_cost' => 'required|numeric',
             'notes' => 'nullable|string',
         ]);
 
-        $customerId = Auth::guard('customer')->id();
-        $shippingAddressId = $request->input('shipping_address_id');
+        $customerId = Auth::guard('customer')->user()->id;
+        $shippingAddressId = $request->shipping_address_id;
+        if(CustomerAddress::find($shippingAddressId)->customer->id != $customerId){
+            return response()->json(['message' => "Address doesn't match to customer"], 403);
+        }
+        $shippingCost=  $request->shipping_cost;
         $notes = $request->input('notes');
 
         try {
-            $order = $this->orderService->createFromCart($customerId, $shippingAddressId, $notes);
+            $order = $this->orderService->createFromCart($customerId, $shippingAddressId,$shippingCost, $notes);
             return response()->json($order, 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 400);
@@ -79,7 +84,6 @@ class CustomerOrderController extends Controller
      *     path="/api/customer/orders/update-from-cart/{orderId}",
      *     summary="Update an order to match the customer's current cart",
      *     tags={"Customer Orders"},
-     *     security={{"customer":{}}},
      *     @OA\Parameter(
      *         name="orderId",
      *         in="path",
@@ -93,7 +97,7 @@ class CustomerOrderController extends Controller
      */
     public function update(int $orderId): JsonResponse
     {
-        $customerId = Auth::guard('customer')->id();
+        $customerId = Auth::guard('customer')->user()->id;
         $order = $this->orderService->find($orderId);
 
         if (!$order || $order->customer_id !== $customerId) {

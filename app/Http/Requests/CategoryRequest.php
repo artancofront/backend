@@ -33,7 +33,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:categories,slug,' . $this->route('category')],
+            'slug' => ['required', 'string', 'max:255', 'regex:/^[\p{Arabic}a-zA-Z0-9\-]+$/u', 'unique:categories,slug' . ($this->route('id') ? ',' . $this->route('id') : '')],
             'parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }

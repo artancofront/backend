@@ -1,15 +1,9 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "CMS manager",
+        "title": "CMS template",
         "version": "0.1"
     },
-    "servers": [
-        {
-            "url": "http://localhost/cms-template/public",
-            "description": "Local development server"
-        }
-    ],
     "paths": {
         "/api/admin/product-comments": {
             "get": {
@@ -996,13 +990,37 @@
                 }
             }
         },
-        "/api/categories": {
+        "/api/categories/flat/{id}": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get direct children of a category or flat structure of all",
+                "operationId": "7eecdc4da9227626e1fa5a97e7af208f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer,default=0"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categories retrieved"
+                    }
+                }
+            }
+        },
+        "/api/categories/root": {
             "get": {
                 "tags": [
                     "Categories"
                 ],
                 "summary": "Get all root categories",
-                "operationId": "c9444f461aa6fb5e425e6f416ce52626",
+                "operationId": "e9cddf955d422408ff569762c3f02be2",
                 "responses": {
                     "200": {
                         "description": "List of root categories"
@@ -1997,12 +2015,7 @@
                     "201": {
                         "description": "Product created successfully."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/products/{id}": {
@@ -2042,12 +2055,7 @@
                     "404": {
                         "description": "Product not found."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -2069,12 +2077,7 @@
                     "200": {
                         "description": "Product deleted successfully."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/products/{parentId}/variants": {
@@ -2108,12 +2111,7 @@
                     "200": {
                         "description": "Variant added."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/products/variants/{variantId}": {
@@ -2147,12 +2145,7 @@
                     "200": {
                         "description": "Variant updated."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -2174,21 +2167,16 @@
                     "200": {
                         "description": "Variant deleted."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
-        "/api/admin/products/upload-image/upload": {
+        "/api/admin/products/upload-image": {
             "post": {
                 "tags": [
                     "Admin Products"
                 ],
                 "summary": "Upload a product image to temp",
-                "operationId": "74ac30589d97897c800c25596da64699",
+                "operationId": "e026106ff10a8b1b30f84e01dedc4b19",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2212,12 +2200,7 @@
                     "200": {
                         "description": "Image uploaded in temp successfully."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/products/{id}/image": {
@@ -2265,12 +2248,7 @@
                     "200": {
                         "description": "Image successfully attached to product."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/products/image/{id}": {
@@ -2311,12 +2289,7 @@
                     "200": {
                         "description": "Image updated successfully."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -2338,12 +2311,7 @@
                     "200": {
                         "description": "Image deleted successfully."
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/shipments": {
@@ -2357,12 +2325,7 @@
                     "200": {
                         "description": "List of shipments"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -2384,12 +2347,7 @@
                     "201": {
                         "description": "Shipment created"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/shipments/{id}": {
@@ -2417,12 +2375,7 @@
                     "404": {
                         "description": "Shipment not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -2458,12 +2411,7 @@
                     "404": {
                         "description": "Shipment not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -2489,12 +2437,7 @@
                     "404": {
                         "description": "Shipment not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/carriers": {
@@ -2699,7 +2642,7 @@
         "/api/customers/ask-otp": {
             "post": {
                 "tags": [
-                    "Customer - Authentication"
+                    "Customer Authentication"
                 ],
                 "summary": "Request OTP for phone number",
                 "operationId": "2f75efbbeb3a6dd092bb35a3c600236e",
@@ -2729,7 +2672,7 @@
         "/api/customers/verify-otp": {
             "post": {
                 "tags": [
-                    "Customer - Authentication"
+                    "Customer Authentication"
                 ],
                 "summary": "Verify OTP and login/register",
                 "operationId": "b056790e7e582286ebd7664f69565c9d",
@@ -2763,7 +2706,7 @@
         "/api/customers/reset-password": {
             "post": {
                 "tags": [
-                    "Customer - Authentication"
+                    "Customer Authentication"
                 ],
                 "summary": "Reset customer password using OTP",
                 "operationId": "f8957e8e1bf8ef64e4135b8a4b4889e9",
@@ -2805,7 +2748,7 @@
         "/api/customers/login-password": {
             "post": {
                 "tags": [
-                    "Customer - Authentication"
+                    "Customer Authentication"
                 ],
                 "summary": "Login using email and password",
                 "operationId": "cdf37d0a08fa32c6926599efda6f24aa",
@@ -2839,7 +2782,7 @@
         "/api/customers/show-profile": {
             "get": {
                 "tags": [
-                    "Customer - Profile"
+                    "Customer Profile"
                 ],
                 "summary": "Get the authenticated customer's profile",
                 "description": "Retrieve the currently authenticated customer's profile",
@@ -2884,18 +2827,13 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customers/update-profile": {
             "post": {
                 "tags": [
-                    "Customer - Profile"
+                    "Customer Profile"
                 ],
                 "summary": "Update authenticated customer's profile",
                 "description": "Update the currently authenticated customer's profile",
@@ -2955,12 +2893,51 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
+                }
+            }
+        },
+        "/api/customers/logout": {
+            "post": {
+                "tags": [
+                    "Customer Authentication"
+                ],
+                "summary": "Logout customers",
+                "description": "Revoke the customers's current access token and log them out.",
+                "operationId": "38360068c1ab36b8c637fb386209b94f",
+                "responses": {
+                    "200": {
+                        "description": "Customers logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                ]
+                }
             }
         },
         "/api/customer/cart": {
@@ -2970,16 +2947,6 @@
                 ],
                 "summary": "Get all items in the customer's cart",
                 "operationId": "ab26dc762893d78c787a6b85e3f5ff27",
-                "parameters": [
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "List of cart items"
@@ -2998,14 +2965,10 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "customer_id",
                                     "product_id",
                                     "quantity"
                                 ],
                                 "properties": {
-                                    "customer_id": {
-                                        "type": "integer"
-                                    },
                                     "product_id": {
                                         "type": "integer"
                                     },
@@ -3030,16 +2993,6 @@
                 ],
                 "summary": "Clear all items from the customer's cart",
                 "operationId": "e56395ac1f1f10b8afeda4f5367068a1",
-                "parameters": [
-                    {
-                        "name": "customer_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Cart cleared"
@@ -3047,16 +3000,16 @@
                 }
             }
         },
-        "/api/customer/cart/{cartId}": {
+        "/api/customer/cart/{itemId}": {
             "put": {
                 "tags": [
                     "Customer Cart"
                 ],
                 "summary": "Update quantity of a cart item",
-                "operationId": "e2f8d2dde7dbaf46b1587feae5a1817f",
+                "operationId": "b21026396d9b9e4659eb17b01ac27ac3",
                 "parameters": [
                     {
-                        "name": "cartId",
+                        "name": "itemId",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -3093,10 +3046,10 @@
                     "Customer Cart"
                 ],
                 "summary": "Remove item from cart",
-                "operationId": "181169ea94f118bb183d4be7e5b0bdfc",
+                "operationId": "693699b280134a74e12bfb767763197a",
                 "parameters": [
                     {
-                        "name": "cartId",
+                        "name": "itemId",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -3118,10 +3071,60 @@
                 ],
                 "summary": "Get cart subtotal and total quantity",
                 "operationId": "1428bdad7a23809be5a764848cd01c59",
+                "responses": {
+                    "200": {
+                        "description": "Cart summary"
+                    }
+                }
+            }
+        },
+        "/api/customer/addresses": {
+            "get": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Get all addresses for the authenticated customer",
+                "operationId": "1e2d4aa50c7bd042ab570b4810f71b94",
+                "responses": {
+                    "200": {
+                        "description": "List of addresses"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Store a new address",
+                "operationId": "5c129322ec4e04bfb091931e4482dc56",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreAddressRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Address created"
+                    }
+                }
+            }
+        },
+        "/api/customer/addresses/{id}": {
+            "get": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Get a specific address",
+                "operationId": "7f66ca14f66677e53af652eb790cb012",
                 "parameters": [
                     {
-                        "name": "customer_id",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -3130,7 +3133,87 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Cart summary"
+                        "description": "Address details"
+                    },
+                    "404": {
+                        "description": "Address not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Update an address",
+                "operationId": "06fb1f34ca688ef458f4f980afe5ff27",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateAddressRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Address updated"
+                    },
+                    "404": {
+                        "description": "Address not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Delete an address",
+                "operationId": "65808a9527e0849e5d6087eb6bfdde59",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address deleted successfully"
+                    },
+                    "404": {
+                        "description": "Address not found"
+                    }
+                }
+            }
+        },
+        "/api/customer/addresses/default": {
+            "get": {
+                "tags": [
+                    "Customer Addresses"
+                ],
+                "summary": "Get the default address",
+                "operationId": "d07e4dc451a992db75af61e9e71e7d58",
+                "responses": {
+                    "200": {
+                        "description": "Default address"
+                    },
+                    "404": {
+                        "description": "No default address found"
                     }
                 }
             }
@@ -3146,12 +3229,7 @@
                     "200": {
                         "description": "List of customer's orders"
                     }
-                },
-                "security": [
-                    {
-                        "customer": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -3165,12 +3243,18 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "shipping_address_id"
+                                    "shipping_address_id",
+                                    "shipping_cost"
                                 ],
                                 "properties": {
                                     "shipping_address_id": {
                                         "type": "integer",
                                         "example": 1
+                                    },
+                                    "shipping_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0
                                     },
                                     "notes": {
                                         "type": "string",
@@ -3189,12 +3273,7 @@
                     "400": {
                         "description": "Cart is empty or invalid input"
                     }
-                },
-                "security": [
-                    {
-                        "customer": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/orders/update-from-cart/{orderId}": {
@@ -3224,12 +3303,7 @@
                     "403": {
                         "description": "Unauthorized"
                     }
-                },
-                "security": [
-                    {
-                        "customer": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{productId}": {
@@ -3333,12 +3407,7 @@
                     "201": {
                         "description": "Comment created"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{id}": {
@@ -3386,12 +3455,7 @@
                     "403": {
                         "description": "Unauthorized or not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -3417,12 +3481,7 @@
                     "403": {
                         "description": "Unauthorized or not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{id}/like": {
@@ -3446,12 +3505,7 @@
                     "200": {
                         "description": "Like successful"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{id}/dislike": {
@@ -3475,12 +3529,7 @@
                     "200": {
                         "description": "Dislike successful"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{id}/unlike": {
@@ -3504,12 +3553,7 @@
                     "200": {
                         "description": "Unlike successful"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-comments/{id}/undislike": {
@@ -3533,12 +3577,7 @@
                     "200": {
                         "description": "Undislike successful"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/customer/product-conversations/{productId}": {
@@ -3955,7 +3994,7 @@
                 }
             }
         },
-        "/payment/pay/{gateway}": {
+        "/api/payment/pay/{gateway}": {
             "get": {
                 "tags": [
                     "Payments"
@@ -4042,6 +4081,137 @@
                 "responses": {
                     "302": {
                         "description": "Redirects to payment result page"
+                    }
+                }
+            }
+        },
+        "/api/payment/verify": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Verify payment by Authority and gateway",
+                "operationId": "2b9c41a49a26feccd19a6765e7c13484",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "Authority"
+                                ],
+                                "properties": {
+                                    "Authority": {
+                                        "type": "string",
+                                        "example": "A123456789"
+                                    },
+                                    "gateway": {
+                                        "description": "Payment gateway (default: zarinpal)",
+                                        "type": "string",
+                                        "example": "zarinpal"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Verification result",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "order_id": {
+                                            "type": "integer",
+                                            "example": 123
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "order": {
+                                            "description": "Order details",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing Authority parameter",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Missing Authority parameter"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Transaction or Order not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Transaction not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Verification error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Verification error: ..."
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "order_id": {
+                                            "type": "integer",
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -4268,7 +4438,7 @@
                                 "properties": {
                                     "phone": {
                                         "type": "string",
-                                        "example": "1234567890"
+                                        "example": "01234567890"
                                     }
                                 },
                                 "type": "object"
@@ -4337,7 +4507,7 @@
                                 "properties": {
                                     "phone": {
                                         "type": "string",
-                                        "example": "1234567890"
+                                        "example": "01234567890"
                                     },
                                     "otp": {
                                         "type": "string",
@@ -4547,6 +4717,50 @@
                 }
             }
         },
+        "/api/admin/users/logout": {
+            "post": {
+                "tags": [
+                    "Admin Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Revoke the user's current access token and log them out.",
+                "operationId": "cfe90aec91721bb58860c38b56d1da14",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/admin/roles": {
             "get": {
                 "tags": [
@@ -4568,12 +4782,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -4598,12 +4807,7 @@
                     "422": {
                         "description": "Validation error"
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/admin/roles/{id}": {
@@ -4638,12 +4842,7 @@
                     "404": {
                         "description": "Role not found"
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -4682,12 +4881,7 @@
                     "404": {
                         "description": "Role not found"
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -4713,12 +4907,44 @@
                     "404": {
                         "description": "Role not found"
                     }
-                },
-                "security": [
-                    {
-                        "BearerAuth": []
+                }
+            }
+        },
+        "/api/admin/roles/permissions": {
+            "get": {
+                "tags": [
+                    "Admin Roles"
+                ],
+                "summary": "Get available permission categories and actions",
+                "operationId": "69ed11cd694b14fa49be85e5edc5b45f",
+                "responses": {
+                    "200": {
+                        "description": "List of permission categories and actions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "category": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "users"
+                                            }
+                                        },
+                                        "action": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "read"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                ]
+                }
             }
         },
         "/api/admin/users": {
@@ -5534,6 +5760,84 @@
                 },
                 "type": "object"
             },
+            "StoreAddressRequest": {
+                "required": [
+                    "title",
+                    "first_name",
+                    "last_name",
+                    "phone",
+                    "email",
+                    "country",
+                    "province",
+                    "city",
+                    "postal_code",
+                    "address_line_1"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Home"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "John"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Doe"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "+1234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255,
+                        "example": "john.doe@example.com"
+                    },
+                    "country": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "USA"
+                    },
+                    "province": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "California"
+                    },
+                    "city": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Los Angeles"
+                    },
+                    "postal_code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "90001"
+                    },
+                    "address_line_1": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "123 Main St"
+                    },
+                    "address_line_2": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Apt 4B",
+                        "nullable": true
+                    },
+                    "is_default": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "StoreShipmentRequest": {
                 "required": [
                     "order_id",
@@ -5573,6 +5877,72 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-04-22T16:45:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateAddressRequest": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Home"
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "John"
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Doe"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "+1234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255,
+                        "example": "john.doe@example.com"
+                    },
+                    "country": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "USA"
+                    },
+                    "province": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "California"
+                    },
+                    "city": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "Los Angeles"
+                    },
+                    "postal_code": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "example": "90001"
+                    },
+                    "address_line_1": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "123 Main St"
+                    },
+                    "address_line_2": {
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Apt 4B",
+                        "nullable": true
+                    },
+                    "is_default": {
+                        "type": "boolean",
+                        "example": true
                     }
                 },
                 "type": "object"
@@ -6159,17 +6529,6 @@
                 "description": "Authentication using Bearer token (Sanctum)",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
-            },
-            "cookieSession": {
-                "type": "apiKey",
-                "description": "Authentication using session cookie (laravel_session)",
-                "name": "laravel_session",
-                "in": "cookie"
-            },
-            "bearerAuth": {
-                "type": "http",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
             }
         }
     },
@@ -6208,7 +6567,7 @@
             "description": "Admin management for shipments and carriers"
         },
         {
-            "name": "Customer - Authentication",
+            "name": "Customer Authentication",
             "description": "Authentication endpoints for customers"
         },
         {
@@ -6259,8 +6618,12 @@
             "description": "Admin Products"
         },
         {
-            "name": "Customer - Profile",
-            "description": "Customer - Profile"
+            "name": "Customer Profile",
+            "description": "Customer Profile"
+        },
+        {
+            "name": "Customer Addresses",
+            "description": "Customer Addresses"
         },
         {
             "name": "Payments",

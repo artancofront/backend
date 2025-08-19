@@ -35,13 +35,29 @@ class CategoryController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/categories",
+     *     path="/api/categories/flat/{id}",
+     *     summary="Get direct children of a category or flat structure of all",
+     *     tags={"Categories"},
+     *     @OA\Parameter(name="id", in="path", required=false, @OA\Schema(type="integer,default=0")),
+     *     @OA\Response(response=200, description="Categories retrieved")
+     * )
+     */
+    public function flat($id = null): JsonResponse
+    {
+        $id = is_numeric($id) ? (int)$id : 0;
+        $categories = $this->categoryService->getCategories($id);
+        return response()->json($categories);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/categories/root",
      *     summary="Get all root categories",
      *     tags={"Categories"},
      *     @OA\Response(response=200, description="List of root categories")
      * )
      */
-    public function index(): JsonResponse
+    public function root(): JsonResponse
     {
         $categories = $this->categoryService->getRootCategories();
         return response()->json($categories);

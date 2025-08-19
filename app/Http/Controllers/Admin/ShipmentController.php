@@ -30,7 +30,6 @@ class ShipmentController extends Controller
      *     path="/api/admin/shipments",
      *     summary="Get all shipments",
      *     tags={"Admin Shipments"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="List of shipments")
      * )
      */
@@ -44,7 +43,6 @@ class ShipmentController extends Controller
      *     path="/api/admin/shipments/{id}",
      *     summary="Get shipment by ID",
      *     tags={"Admin Shipments"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -71,7 +69,6 @@ class ShipmentController extends Controller
      *     path="/api/admin/shipments",
      *     summary="Create a new shipment",
      *     tags={"Admin Shipments"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(ref="#/components/schemas/StoreShipmentRequest")
@@ -90,7 +87,6 @@ class ShipmentController extends Controller
      *     path="/api/admin/shipments/{id}",
      *     summary="Update an existing shipment",
      *     tags={"Admin Shipments"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -122,7 +118,6 @@ class ShipmentController extends Controller
      *     path="/api/admin/shipments/{id}",
      *     summary="Delete a shipment",
      *     tags={"Admin Shipments"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

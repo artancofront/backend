@@ -64,6 +64,14 @@ class CategoryService
     }
 
     /**
+     * Get  categories (based on  parent).
+     */
+    public function getCategories($id=0): Collection
+    {
+        return $this->categoryRepository->getCategories($id);
+    }
+
+    /**
      * Get breadcrumb trail for a category.
      */
     public function getBreadcrumb(int $categoryId): Collection

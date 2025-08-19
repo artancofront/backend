@@ -6,6 +6,7 @@ use App\Exceptions\Cart\StockUnavailableException;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Repositories\CartRepository;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 
 class CartService
@@ -37,9 +38,12 @@ class CartService
     }
 
 
-    public function updateCartItem(int $cartId, int $quantity): bool
+    public function updateCartItem(int $cartId,int $customerId, int $quantity): bool
     {
         $cartItem = Cart::with('product')->findOrFail($cartId);
+        if($cartItem->customer_id != $customerId){
+            throw new AuthorizationException("Customer id doesn't match with card");
+        }
         $product = $cartItem->product;
 
         $this->checkStockAvailability($product,$quantity);
@@ -50,13 +54,17 @@ class CartService
     private function checkStockAvailability(Product $product, int $quantity): void
     {
         if (!$product->is_active || $product->stock < $quantity) {
-            throw new StockUnavailableException("Insufficient stock for product: {$product->name}");
+            throw new StockUnavailableException("Insufficient stock for product-id: {$product->id}");
         }
     }
 
 
-    public function removeFromCart(int $cartId): bool
+    public function removeFromCart(int $cartId, int $customerId): bool
     {
+        $cartItem = Cart::with('product')->findOrFail($cartId);
+        if($cartItem->customer_id != $customerId){
+            throw new AuthorizationException("Customer id doesn't match with card");
+        }
         return $this->cartRepository->removeItem($cartId);
     }
 

@@ -10,7 +10,7 @@ class CartRepository
 {
     public function getCustomerCartItems(int $customerId): Collection
     {
-        return Cart::with('product')->where('customer_id', $customerId)->get();
+        return Cart::with('product.parentProduct')->where('customer_id', $customerId)->get();
     }
 
     public function getItem(int $customerId, int $productId): ?Cart

@@ -27,7 +27,6 @@ class RoleController extends Controller
      *     path="/api/admin/roles",
      *     summary="Get all roles",
      *     tags={"Admin Roles"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Response(
      *         response=200,
      *         description="List of roles",
@@ -45,7 +44,6 @@ class RoleController extends Controller
      *     path="/api/admin/roles/{id}",
      *     summary="Get a specific role by ID",
      *     tags={"Admin Roles"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -71,7 +69,6 @@ class RoleController extends Controller
      *     path="/api/admin/roles",
      *     summary="Create a new role",
      *     tags={"Admin Roles"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\RequestBody(ref="#/components/requestBodies/StoreOrUpdateRoleRequest"),
      *     @OA\Response(
      *         response=201,
@@ -92,7 +89,6 @@ class RoleController extends Controller
      *     path="/api/admin/roles/{id}",
      *     summary="Update an existing role",
      *     tags={"Admin Roles"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -121,7 +117,6 @@ class RoleController extends Controller
      *     path="/api/admin/roles/{id}",
      *     summary="Delete a role",
      *     tags={"Admin Roles"},
-     *     security={{"BearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -137,6 +132,59 @@ class RoleController extends Controller
     {
         $this->roleService->deleteRole($id);
         return response()->json(['message' => 'Role deleted successfully.']);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/roles/permissions",
+     *     summary="Get available permission categories and actions",
+     *     tags={"Admin Roles"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of permission categories and actions",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="category",
+     *                 type="array",
+     *                 @OA\Items(type="string", example="users")
+     *             ),
+     *             @OA\Property(
+     *                 property="action",
+     *                 type="array",
+     *                 @OA\Items(type="string", example="read")
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function getPermissions(): JsonResponse
+    {
+        $permissions = [
+            'category' => [
+                'all',
+                'users',
+                'roles',
+                'products',
+                'categories',
+                'category_attributes',
+                'shipments',
+                'orders',
+                'blogs',
+                'customers',
+                'comments',
+                'conversations',
+            ],
+            'action' => [
+                'all',
+                'read',
+                'create',
+                'update',
+                'delete',
+            ],
+        ];
+
+        return response()->json($permissions);
     }
 }
 

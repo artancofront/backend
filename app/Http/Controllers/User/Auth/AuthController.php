@@ -8,6 +8,7 @@ use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\VerifyOTPRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -35,7 +36,7 @@ class AuthController extends Controller
      *         required=true,
      *         description="User's phone number to send OTP",
      *         @OA\JsonContent(
-     *             @OA\Property(property="phone", type="string", example="1234567890")
+     *             @OA\Property(property="phone", type="string", example="01234567890")
      *         )
      *     ),
      *     @OA\Response(
@@ -77,7 +78,7 @@ class AuthController extends Controller
      *         required=true,
      *         description="User's phone number and OTP to verify",
      *         @OA\JsonContent(
-     *             @OA\Property(property="phone", type="string", example="1234567890"),
+     *             @OA\Property(property="phone", type="string", example="01234567890"),
      *             @OA\Property(property="otp", type="string", example="123456")
      *         )
      *     ),
@@ -218,5 +219,36 @@ class AuthController extends Controller
             'token' => $token
         ], Response::HTTP_OK);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/admin/users/logout",
+     *     summary="Logout user",
+     *     description="Revoke the user's current access token and log them out.",
+     *     tags={"Admin Authentication"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Logged out")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out']);
+    }
+
 }
 
