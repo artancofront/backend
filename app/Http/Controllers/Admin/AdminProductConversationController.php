@@ -113,6 +113,7 @@ class AdminProductConversationController extends Controller
      *     )
      * )
      */
+
     public function getConversationsByProduct(Request $request, int $productId)
     {
         $isApproved = $request->boolean('is_approved', null);
@@ -151,6 +152,7 @@ class AdminProductConversationController extends Controller
      *     )
      * )
      */
+    
     public function getReplies(Request $request, int $conversationId)
     {
         $isApproved = $request->boolean('is_approved', null);

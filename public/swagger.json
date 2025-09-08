@@ -38,6 +38,56 @@
                 }
             }
         },
+        "/api/customer/favorites/{productId}": {
+        "post": {
+            "tags": ["Customer Favorites"],
+            "summary": "Add product to favorites",
+            "operationId": "addToFavorites",
+            "parameters": [
+            {
+                "name": "productId",
+                "in": "path",
+                "description": "ID of the product to add to favorites",
+                "required": true,
+                "schema": {
+                "type": "integer",
+                "example": 1
+                }
+            }
+            ],
+            "responses": {
+            "201": {
+                "description": "Product added to favorites"
+            }
+            }
+        },
+        "delete": {
+            "tags": ["Customer Favorites"],
+            "summary": "Remove product from favorites",
+            "operationId": "removeFromFavorites",
+            "parameters": [
+            {
+                "name": "productId",
+                "in": "path",
+                "description": "ID of the product to remove from favorites",
+                "required": true,
+                "schema": {
+                "type": "integer",
+                "example": 1
+                }
+            }
+            ],
+            "responses": {
+            "200": {
+                "description": "Product removed from favorites"
+            },
+            "404": {
+                "description": "Favorite not found"
+            }
+            }
+        }
+        },
+
         "/api/admin/product-comments/{productId}": {
             "get": {
                 "tags": [

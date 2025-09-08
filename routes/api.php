@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\Admin\FavoriteController;
+
 use App\Http\Controllers\Customer\Auth\AuthController as CustomerAuthController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CustomerOrderController;
@@ -130,6 +132,16 @@ Route::prefix('categories')->group(function () {
     Route::get('{id}/descendants', [CategoryController::class, 'descendants'])->name('descendants'); // Get descendants of a category
     Route::get('{id}/attributes', [CategoryController::class, 'attributes'])->name('attributes'); // Get attributes of a category
 });
+
+Route::prefix('favorites')
+    ->middleware(['auth:customer'])
+    ->group(function () {
+        Route::get('/', [FavoriteController::class, 'index']); 
+        Route::post('{productId}', [FavoriteController::class, 'store']);
+        Route::delete('{productId}', [FavoriteController::class, 'destroy']);
+    });
+
+
 
 Route::prefix('customer/cart')->middleware(['auth:customer'])->group(function () {
     Route::get('/', [CartController::class, 'index']); // Get all cart items
