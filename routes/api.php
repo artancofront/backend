@@ -134,9 +134,9 @@ Route::prefix('categories')->group(function () {
 });
 
 Route::prefix('favorites')
-    ->middleware(['auth:customer'])
+    ->middleware('auth:customer')
     ->group(function () {
-        Route::get('/', [FavoriteController::class, 'index']); 
+        Route::get('{productId}', [FavoriteController::class, 'index']); 
         Route::post('{productId}', [FavoriteController::class, 'store']);
         Route::delete('{productId}', [FavoriteController::class, 'destroy']);
     });

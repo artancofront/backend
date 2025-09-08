@@ -10,27 +10,23 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(int $productId): JsonResponse
         {
             $customer = auth('customer')->user(); 
-            
+
             if (!$customer) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
 
-            $favorites = \App\Models\Favorite::with('product')
-                ->where('customer_id', $customer->id)
-                ->get();
+            $exists = \App\Models\Favorite::where('customer_id', $customer->id)
+                ->where('product_id', $productId)
+                ->exists(); 
 
             return response()->json([
-                'favorites' => $favorites->map(function ($fav) {
-                    return [
-                        'favorite_id' => $fav->id,
-                        'product_id'  => $fav->product->id ?? null,
-                    ];
-                }),
+                'exists' => $exists
             ]);
         }
+
 
     public function store(int $productId): JsonResponse
     {
