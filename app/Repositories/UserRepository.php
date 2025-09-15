@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\User;
+
+class UserRepository
+{
+    public function findByPhone($phone)
+    {
+        return User::where('phone', $phone)->first();
+    }
+
+    public function paginate($excludeId,$perPage=10)
+    {
+        return User::where('id','!=', $excludeId)->with('role')->paginate($perPage);
+    }
+
+    public function findById(int $id)
+    {
+        return User::with('role')->find($id);
+    }
+
+    public function create(array $data)
+    {
+        return User::create($data);
+    }
+
+    public function update(User $user, array $data)
+    {
+        $user->update($data);
+        return $user;
+    }
+
+    public function delete(User $user)
+    {
+        return $user->delete();
+    }
+}
+
