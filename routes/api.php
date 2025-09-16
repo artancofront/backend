@@ -19,7 +19,9 @@ use App\Http\Controllers\Customer\CustomerProductConversationController;
 use App\Http\Controllers\Customer\CustomerShipmentController as CustomerShipmentController;
 use App\Http\Controllers\Payments\PaymentController;
 use App\Http\Controllers\Shop\ProductController as ShopProductController;
-use App\Http\Controllers\User\Auth\AuthController;
+// use App\Http\Controllers\User\Auth\AuthController;
+use App\Http\Controllers\Customer\Auth\AuthController;
+
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Session\Middleware\StartSession;
@@ -233,6 +235,12 @@ Route::prefix('customers')->group(function () {
         Route::post('/logout', [CustomerAuthController::class, 'logout']);
     });
 });
+
+
+Route::middleware(['auth:customer'])->group(function () {
+    Route::get('customers/show-profile', [AuthController::class, 'showProfile']);
+});
+
 
 Route::prefix('customer/product-comments')->group(function () {
     Route::get('/{productId}', [CustomerProductCommentRatingController::class, 'index']);
